@@ -210,32 +210,33 @@
 	$logo_id = get_theme_mod('custom_logo');
 
 	if ($logo_id) {
-			$logo_url = wp_get_attachment_image_url($logo_id, 'full');
-			
-			echo '<a href="' . esc_url(home_url()) . '">';
-			echo '<img src="' . esc_url($logo_url) . '" ';
-			echo 'alt="' . esc_attr(get_bloginfo('name')) . '" ';
-			echo 'class="h-[34px] w-auto object-contain hover:opacity-90 transition-opacity">';
-			echo '</a>';
-	}
+	  $logo_url = wp_get_attachment_image_url($logo_id, 'full');
+	    echo '<a href="' . esc_url(home_url()) . '">';
+	    echo '<img src="' . esc_url($logo_url) . '" ';
+	    echo 'alt="' . esc_attr(get_bloginfo('name')) . '" ';
+	    echo 'class="h-[34px] w-auto object-contain hover:opacity-90 transition-opacity">';
+	    echo '</a>';
+	  }
 	?>
     <!-- Desktop Nav -->
     <nav class="hide-mobile items-center gap-7 hidden lg:flex">
-					<?php wp_nav_menu([
-						'menu' => 'main-menu',       
-						'menu_class' => 'flex items-center transition',
-						'container' => false,
-						'link_before' => '<span class="text-[15px] text-[#2D2926] font-medium hover:text-[#E8872C] transition-all mx-[10px]">',
-						'link_after' => '</span>',
-						]);
-					?>
+      <?php wp_nav_menu([
+	'menu' => 'main-menu',       
+	'menu_class' => 'flex items-center transition',
+	'container' => false,
+	'link_before' => '<span class="text-[15px] text-[#2D2926] font-medium hover:text-[#E8872C] transition-all mx-[10px]">',
+	'link_after' => '</span>',
+	  ]);
+      ?>
     </nav>
     
     <!-- Right -->
     <div class="flex items-center gap-3">
-      <a href="#" class="btn-primary text-base min-w-[250px] min-h-[52px]">Купить билет</a>
+      <div class="hidden md:flex">
+	<a href="#" class="btn-primary text-base block min-w-[250px] min-h-[52px]">Купить билет</a>
+      </div>
       <button class="relative p-2" aria-label="Корзина">
-				<img src="<?php echo esc_url( get_template_directory_uri() . '/img/cart.svg' ); ?>" alt="cart" class="w-[30px]" />
+	<img src="<?php echo esc_url( get_template_directory_uri() . '/img/cart.svg' ); ?>" alt="cart" class="w-[30px]" />
         <span class="absolute -top-0.5 -right-0.5 text-[#E8872C] bg-[#FAF6EF] text-[13px] w-[24px] h-[24px] border border-[1px] border-[#E8872C] rounded-full flex items-center justify-center font-semibold">1</span>
       </button>
       <!-- Mobile burger -->
@@ -251,9 +252,9 @@
 </header>
 
 <div class="bg-[#FBF4EA] border-b border-[#E8D5BE]/50">
-  <div class="container-main py-2.5 text-center text-lg text-[#2D2926]">
+  <div class="container-main py-2.5 text-center text-sm md:text-lg text-[#2D2926]">
     <span class="inline-flex items-center gap-2">
-			<img src="<?php echo esc_url( get_template_directory_uri() . '/img/alarm-outline.svg' ); ?>" alt="clock" class="" />
+      <img src="<?php echo esc_url( get_template_directory_uri() . '/img/alarm-outline.svg' ); ?>" alt="clock" class="" />
       сегодня музей работает с 10:00 до 22:00
     </span>
   </div>
