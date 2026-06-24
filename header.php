@@ -32,7 +32,7 @@
       --brand-orange-dark: #D1731F;
       --brand-cream: #FBF4EA;
       --brand-cream-dark: #F5EADB;
-      --brand-text: #3A2E24;
+      --brand-text: #2D2926;
       --brand-text-light: #6B5A4A;
     }
     
@@ -57,7 +57,7 @@
       font-family: 'Literata', serif;
       color: var(--brand-text);
       line-height: 1.15;
-      font-weight: 600;
+      font-weight: 400;
     }
     
     .container-main {
@@ -70,7 +70,7 @@
     .btn-primary {
       background-color: var(--brand-orange);
       color: #fff;
-      padding: 14px 28px;
+      padding: 12px 28px;
       border-radius: 12px;
       font-weight: 500;
       transition: all .2s;
@@ -84,10 +84,10 @@
     }
     
     .btn-outline {
-      border: 1.5px solid var(--brand-orange);
+      border: 2px solid var(--brand-orange);
       color: var(--brand-orange);
-      padding: 14px 28px;
-      border-radius: 999px;
+      padding: 12px 28px;
+      border-radius: 12px;
       font-weight: 500;
       transition: all .2s;
       display: inline-flex;
@@ -203,7 +203,7 @@
 <body>
 
 <!-- ============ HEADER ============ -->
-<header class="sticky top-0 z-50 bg-[#FBF4EA]/95 backdrop-blur border-b border-[#E8D5BE]">
+<header class="sticky top-0 z-50 bg-[#FAF6EF]/95 backdrop-blur">
   <div class="container-main flex items-center justify-between py-4">
     <!-- Logo -->
 	<?php
@@ -251,7 +251,7 @@
   </div>
 </header>
 
-<div class="bg-[#FBF4EA] border-b border-[#E8D5BE]/50">
+<div class="bg-[#FAF6EF]">
   <div class="container-main py-2.5 text-center text-sm md:text-lg text-[#2D2926]">
     <span class="inline-flex items-center gap-2">
       <img src="<?php echo esc_url( get_template_directory_uri() . '/img/alarm-outline.svg' ); ?>" alt="clock" class="" />

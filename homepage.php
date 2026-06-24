@@ -3,512 +3,503 @@
  * Template Name: Homepage 
  * Template for home page
  */
+
+$hero_title = get_field('hero_title');
+$hero_description = get_field('hero_description');
+$hero_image = get_field('hero_image');
+$hero_cta_primary = get_field('hero_cta_primary');
+$hero_cta_secondary = get_field('hero_cta_secondary');
+$preview_events = get_field('preview_events');
+
+$upcoming_title = get_field('upcoming_title');
+$upcoming_link_text = get_field('upcoming_link_text');
+$upcoming_link_url = get_field('upcoming_link_url');
+$upcoming_events = get_field('upcoming_events');
+
+$about_title = get_field('about_title');
+$about_description = get_field('about_description');
+$about_image = get_field('about_image');
+$about_image_bg = get_field('about_image_bg');
+
+$expositions_title = get_field('expositions_title');
+$expositions_link_text = get_field('expositions_link_text');
+$expositions_link_url = get_field('expositions_link_url');
+$expositions_list = get_field('expositions_list');
+
+$special_badge = get_field('special_badge');
+$special_title = get_field('special_title');
+$special_description = get_field('special_description');
+$special_image = get_field('special_image');
+$special_button_text = get_field('special_button_text');
+$special_button_link = get_field('special_button_link');
+
+$classes_title = get_field('classes_title');
+$classes_link_text = get_field('classes_link_text');
+$classes_link_url = get_field('classes_link_url');
+$classes_main = get_field('classes_main');
+$classes_list = get_field('classes_list');
+
+$shop_title = get_field('shop_title');
+$shop_link_text = get_field('shop_link_text');
+$shop_link_url = get_field('shop_link_url');
+$shop_products = get_field('shop_products');
+
+$why_us_title = get_field('why_us_title');
+$why_us_items = get_field('why_us_items');
+
+$cta_background_image = get_field('cta_background_image');
+$cta_title = get_field('cta_title');
+$cta_primary = get_field('cta_primary');
+$cta_secondary = get_field('cta_secondary');
+
+// Вспомогательная функция для иконки типа события
+function get_event_type_icon($type) {
+    $icons = array(
+        'masterclass' => '<img src="' . esc_url(get_template_directory_uri() . '/img/palette-line.svg') . '">',
+        'lecture' => '<img src="' . esc_url(get_template_directory_uri() . '/img/book-open-line.svg') . '">',
+        'meeting' => '<img src="' . esc_url(get_template_directory_uri() . '/img/chat-3-line.svg') . '">',
+        'family' => '<img src="' . esc_url(get_template_directory_uri() . '/img/palette-line.svg') . '">',
+    );
+    return $icons[$type] ?? $icons['masterclass'];
+}
+
+// Вспомогательная функция для перевода типа события
+function get_event_type_label($type) {
+    $labels = array(
+        'masterclass' => 'Мастер-класс',
+        'lecture' => 'Лекция',
+        'meeting' => 'Встреча',
+        'family' => 'Семейное занятие',
+    );
+    return $labels[$type] ?? 'Событие';
+}
 ?>
-<?php get_header();
-?>
+
+<?php get_header(); ?>
+
 <!-- ============ HERO ============ -->
-<section class="py-10 lg:py-16">
-  <div class="container-main">
-    <div class="grid lg:grid-cols-[1fr_1fr] gap-8 lg:gap-12 items-center">
-      <div>
-        <h1 class="text-[34px] sm:text-[44px] lg:text-[56px] leading-[1.05] mb-6">
-          Музей наивного искусства, где хочется не только смотреть, но и участвовать
+<?php if ($hero_title || $hero_description || $hero_cta_primary || $hero_cta_secondary): ?>
+<section class="py-10 lg:py-16 relative md:min-h-[900px] overflow-hidden h-full">
+  <div class="container-main flex flex-col justify-between h-full">
+    <div class="">
+      <div class="flex flex-col md:max-w-[57%] h-full items-start">
+        <?php if ($hero_title): ?>
+        <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] leading-[1.05] mb-6 !font-medium">
+          <?php echo esc_html($hero_title); ?>
         </h1>
-        <p class="text-[17px] text-[#6B5A4A] mb-8 max-w-xl">
-          Выставки, мастер-классы, лекции и творческие встречи для детей и взрослых в теплом и живом пространстве музея.
+        <?php endif; ?>
+        <?php if ($hero_description): ?>
+        <p class="text-[16px] md:text-[20px] text-[#2D2926] mb-8">
+          <?php echo esc_html($hero_description); ?>
         </p>
-        <div class="flex flex-col sm:flex-row gap-3">
-          <a href="#events" class="btn-primary">
-            Смотреть афишу
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a href="#classes" class="btn-outline">Записаться на мастер-класс</a>
+        <?php endif; ?>
+        <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
+          <?php if ($hero_cta_primary): ?>
+            <a href="/афиша" class="btn-primary w-[285px]">
+              <?php echo esc_html($hero_cta_primary); ?>
+            </a>
+          <?php endif; ?>
+          <?php if ($hero_cta_secondary): ?>
+            <a href="#classes" class="btn-outline">
+              <?php echo esc_html($hero_cta_secondary); ?>
+            </a>
+          <?php endif; ?>
         </div>
       </div>
       
-      <!-- Hero image with offset -->
-      <div class="relative">
-        <div class="ph ph-hero rounded-2xl aspect-[4/5] lg:aspect-[5/6] w-full lg:w-[120%] lg:-ml-[10%] shadow-lg"></div>
+      <!-- Hero image -->
+      <div class="absolute right-[-60px] top-[40px] max-w-[42%]">
+        <?php if ($hero_image): ?>
+          <img src="<?php echo esc_url($hero_image); ?>" 
+               alt="<?php echo esc_attr($hero_title); ?>" 
+               class="rounded-2xl aspect-[4/5] lg:aspect-[5/6] w-full lg:w-[120%] lg:-ml-[10%] shadow-lg object-cover">
+        <?php else: ?>
+          <div class="ph ph-hero rounded-2xl aspect-[4/5] lg:aspect-[5/6] w-full lg:w-[120%] lg:-ml-[10%] shadow-lg"></div>
+        <?php endif; ?>
       </div>
     </div>
     
     <!-- Event preview cards -->
-    <div class="mt-12 grid md:grid-cols-3 gap-5">
-      <!-- Card 1 -->
-      <div class="bg-white rounded-2xl p-5 flex gap-4 items-start shadow-sm">
+    <?php if ($preview_events): ?>
+    <div class="relative mt-12 h-full grid md:grid-cols-3 gap-5 z-10">
+      <?php foreach ($preview_events as $event): ?>
+      <div class="bg-white rounded-3xl p-5 flex gap-4 items-start shadow-sm">
         <div class="flex-1">
           <div class="flex items-center justify-between mb-2">
-            <span class="event-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2Z"/><path d="M7 12c1-1 2-1 3-1s2 0 3 1 2 1 3 0M8 16c1-1 2-1 4-1s3 0 4 1"/></svg>
-              Мастер-класс
+            <span class="event-badge text-[13px] text-[#2D2926] font-medium">
+              <?php echo get_event_type_icon($event['type']); ?>
+              <?php echo esc_html(get_event_type_label($event['type'])); ?>
             </span>
-            <span class="text-xs text-[#6B5A4A] font-medium">18 мая</span>
+            <span class="text-[13px] text-[#2D2926] font-medium"><?php echo esc_html($event['date']); ?></span>
           </div>
-          <h3 class="font-['Literata'] text-base font-semibold mb-3">Рисуем город мечты</h3>
-          <a href="#" class="link-arrow text-sm">Записаться
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-        <div class="ph ph-art1 w-20 h-20 rounded-xl flex-shrink-0"></div>
-      </div>
-      <!-- Card 2 -->
-      <div class="bg-white rounded-2xl p-5 flex gap-4 items-start shadow-sm">
-        <div class="flex-1">
-          <div class="flex items-center justify-between mb-2">
-            <span class="event-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v4M16 4v4"/></svg>
-              Лекция
-            </span>
-            <span class="text-xs text-[#6B5A4A] font-medium">22 мая</span>
+          <div class="flex justify-between">
+          <div class="flex flex-1 flex-col justify-between">
+            <p class="text-[22px] leading-[1.2] font-medium mb-3"><?php echo esc_html($event['title']); ?></p>
+            <a href="#" class="link-arrow text-base">Записаться
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
           </div>
-          <h3 class="font-['Literata'] text-base font-semibold mb-3">Что такое наивное искусство</h3>
-          <a href="#" class="link-arrow text-sm">Подробнее
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-        <div class="ph ph-art2 w-20 h-20 rounded-xl flex-shrink-0"></div>
-      </div>
-      <!-- Card 3 -->
-      <div class="bg-white rounded-2xl p-5 flex gap-4 items-start shadow-sm">
-        <div class="flex-1">
-          <div class="flex items-center justify-between mb-2">
-            <span class="event-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2Z"/><path d="M8 12h8M12 8v8"/></svg>
-              Встреча
-            </span>
-            <span class="text-xs text-[#6B5A4A] font-medium">25 мая</span>
+          <?php if (!empty($event['image'])): ?>
+          <img src="<?php echo esc_url($event['image']); ?>" 
+               alt="<?php echo esc_attr($event['title']); ?>" 
+               class="flex-1 w-[164px] h-[117px] rounded-xl flex-shrink-0 object-cover">
+          <?php else: ?>
+          <div class="ph ph-art1 w-20 h-20 rounded-xl flex-shrink-0"></div>
+          <?php endif; ?>
           </div>
-          <h3 class="font-['Literata'] text-base font-semibold mb-3">Разговор с художником</h3>
-          <a href="#" class="link-arrow text-sm">Подробнее
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
         </div>
-        <div class="ph ph-art3 w-20 h-20 rounded-xl flex-shrink-0"></div>
       </div>
+      <?php endforeach; ?>
     </div>
+    <?php endif; ?>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- ============ UPCOMING EVENTS ============ -->
+<?php if ($upcoming_events): ?>
 <section id="events" class="py-16 lg:py-20">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">Ближайшие события</h2>
-      <a href="#" class="link-arrow text-sm">Смотреть все события
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
+      <h2 class="text-[32px] lg:text-[44px]">
+        <?php echo esc_html($upcoming_title ?: 'Ближайшие события'); ?>
+      </h2>
+      <?php if ($upcoming_link_url): ?>
+        <a href="<?php echo esc_url($upcoming_link_url); ?>" class="link-arrow text-sm">
+          <?php echo esc_html($upcoming_link_text ?: 'Смотреть все события'); ?>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      <?php endif; ?>
     </div>
     
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <!-- Event card -->
+      <?php foreach ($upcoming_events as $event): ?>
       <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-art1 aspect-square"></div>
+        <?php if (!empty($event['image'])): ?>
+          <img src="<?php echo esc_url($event['image']); ?>" 
+               alt="<?php echo esc_attr($event['title']); ?>" 
+               class="aspect-square object-cover w-full">
+        <?php else: ?>
+          <div class="ph ph-art1 aspect-square"></div>
+        <?php endif; ?>
         <div class="p-5">
           <div class="flex items-center justify-between mb-3">
             <span class="event-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2Z"/><path d="M7 12c1-1 2-1 3-1s2 0 3 1 2 1 3 0"/></svg>
-              Мастер-класс
+              <?php echo get_event_type_icon($event['type']); ?>
+              <?php echo esc_html(get_event_type_label($event['type'])); ?>
             </span>
-            <span class="text-xs text-[#6B5A4A] font-medium">19 мая, вс · 12:00</span>
+            <span class="text-xs text-[#6B5A4A] font-medium"><?php echo esc_html($event['datetime']); ?></span>
           </div>
-          <h3 class="font-['Literata'] text-lg font-semibold mb-3">Мастер-класс: Рисуем сказочный дом</h3>
-          <p class="text-sm text-[#6B5A4A] mb-5">Создаем яркий домик из красок и фантазий. Для детей от 6 лет.</p>
-          <a href="#" class="btn-outline w-full !py-2.5 text-sm">Записаться</a>
+          <h3 class="font-['Literata'] text-lg font-semibold mb-3"><?php echo esc_html($event['title']); ?></h3>
+          <p class="text-sm text-[#6B5A4A] mb-5"><?php echo esc_html($event['description']); ?></p>
+          <a href="#" class="btn-outline w-full !py-2.5 text-sm">
+            <?php echo esc_html($event['button_text']); ?>
+          </a>
         </div>
       </div>
-      <!-- Event card 2 -->
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-art2 aspect-square"></div>
-        <div class="p-5">
-          <div class="flex items-center justify-between mb-3">
-            <span class="event-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v4M16 4v4"/></svg>
-              Лекция
-            </span>
-            <span class="text-xs text-[#6B5A4A] font-medium">21 мая, вт · 18:30</span>
-          </div>
-          <h3 class="font-['Literata'] text-lg font-semibold mb-3">Лекция: Как понимать наивное искусство</h3>
-          <p class="text-sm text-[#6B5A4A] mb-5">О языке, символах и особой искренности наивного искусства.</p>
-          <a href="#" class="btn-outline w-full !py-2.5 text-sm">Подробнее</a>
-        </div>
-      </div>
-      <!-- Event card 3 -->
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-art3 aspect-square"></div>
-        <div class="p-5">
-          <div class="flex items-center justify-between mb-3">
-            <span class="event-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2Z"/><path d="M8 12h8M12 8v8"/></svg>
-              Встреча
-            </span>
-            <span class="text-xs text-[#6B5A4A] font-medium">24 мая, пт · 19:00</span>
-          </div>
-          <h3 class="font-['Literata'] text-lg font-semibold mb-3">Встреча: Диалог с художником</h3>
-          <p class="text-sm text-[#6B5A4A] mb-5">О творческом пути и вдохновении. В формате живого общения.</p>
-          <a href="#" class="btn-outline w-full !py-2.5 text-sm">Подробнее</a>
-        </div>
-      </div>
-      <!-- Event card 4 -->
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-art4 aspect-square"></div>
-        <div class="p-5">
-          <div class="flex items-center justify-between mb-3">
-            <span class="event-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              Семейное занятие
-            </span>
-            <span class="text-xs text-[#6B5A4A] font-medium">26 мая, вс · 13:00</span>
-          </div>
-          <h3 class="font-['Literata'] text-lg font-semibold mb-3">Семейное занятие: Цвет и фантазия</h3>
-          <p class="text-sm text-[#6B5A4A] mb-5">Творчество вдвоем: взрослые и дети придумывают свою историю в цвете.</p>
-          <a href="#" class="btn-outline w-full !py-2.5 text-sm">Подробнее</a>
-        </div>
-      </div>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- ============ ABOUT MUSEUM ============ -->
-<section id="about" class="py-16 lg:py-20 bg-[#F5EADB]">
+<?php if ($about_title || $about_description || $about_image): ?>
+<section id="about" class="py-16 lg:py-20 relative">
+  <img src="<?php echo esc_url($about_image_bg); ?>" class="absolute bottom-20 right-0 w-full max-w-[1050px]" /> 
   <div class="container-main">
-    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+    <div class="grid lg:grid-cols-2 gap-0 lg:gap-0 items-start">
       <div class="order-2 lg:order-1">
-        <div class="ph ph-museum rounded-2xl aspect-[4/5] w-full lg:w-[110%] lg:-ml-[5%]"></div>
+        <?php if ($about_image): ?>
+          <img src="<?php echo esc_url($about_image); ?>" 
+               alt="<?php echo esc_attr($about_title); ?>" 
+               class="rounded-2xl w-full lg:w-[110%] lg:-ml-[22%] object-cover relative lg:min-h-[720px]">
+        <?php else: ?>
+          <div class="ph ph-museum rounded-2xl aspect-[4/5] w-full lg:w-[110%] lg:-ml-[5%]"></div>
+        <?php endif; ?>
       </div>
-      <div class="order-1 lg:order-2 relative">
-        <h2 class="text-[32px] lg:text-[44px] mb-6">О музее</h2>
-        <p class="text-[17px] text-[#6B5A4A] mb-6">
-          Naif Arts– музей наивного искусства в Минске, посвященный самобытным художникам и искреннему художественному высказыванию. Здесь соседствуют детское творчество, произведения пожилых авторов и мировое наивное искусство, раскрывающее разные взгляды на мир вне академических правил. Музей - это не только пространство экспозиций, но и место, где проходят мастер-классы, лекции и встречи.
+      <div class="order-1 lg:order-2 relative lg:-ml-[18%] max-w-[684px]">
+        <?php if ($about_title): ?>
+        <h2 class="text-[32px] lg:text-[44px] mb-6">
+          <?php echo esc_html($about_title); ?>
+        </h2>
+        <?php endif; ?>
+        <?php if ($about_description): ?>
+        <p class="text-[16px] md:text-[20px] text-[#6B5A4A] mb-6">
+          <?php echo esc_html($about_description); ?>
         </p>
+        <?php endif; ?>
         <!-- Decorative illustration -->
-        <div class="relative mt-10">
-          <div class="hill-shape h-40 w-full"></div>
-          <div class="absolute inset-0 flex items-end justify-around pb-2 px-4">
-            <!-- SVG illustrations placeholder -->
-            <svg width="60" height="80" viewBox="0 0 60 80" fill="none" stroke="#3A2E24" stroke-width="1.5">
-              <circle cx="30" cy="15" r="10"/>
-              <path d="M30 25v30M20 55h20M20 25l-10 15M40 25l10 15M20 55v15M40 55v15"/>
-            </svg>
-            <svg width="50" height="70" viewBox="0 0 50 70" fill="none" stroke="#3A2E24" stroke-width="1.5">
-              <circle cx="25" cy="12" r="8"/>
-              <path d="M25 20v25M18 45h14M18 20l-7 12M32 20l7 12M18 45v12M32 45v12"/>
-            </svg>
-            <svg width="60" height="80" viewBox="0 0 60 80" fill="none" stroke="#3A2E24" stroke-width="1.5">
-              <circle cx="30" cy="15" r="10"/>
-              <path d="M30 25v30M20 55h20M20 25l-10 15M40 25l10 15M20 55v15M40 55v15"/>
-            </svg>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- ============ EXPOSITIONS ============ -->
+<?php if ($expositions_list): ?>
 <section id="expositions" class="py-16 lg:py-20">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">Экспозиции музея</h2>
-      <a href="#" class="link-arrow text-sm">Все экспозиции
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
+      <h2 class="text-[32px] lg:text-[44px]">
+        <?php echo esc_html($expositions_title ?: 'Экспозиции музея'); ?>
+      </h2>
+      <?php if ($expositions_link_url): ?>
+        <a href="<?php echo esc_url($expositions_link_url); ?>" class="link-arrow text-sm">
+          <?php echo esc_html($expositions_link_text ?: 'Все экспозиции'); ?>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      <?php endif; ?>
     </div>
     
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <!-- Expo card -->
+      <?php foreach ($expositions_list as $expo): ?>
       <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-art1 aspect-[4/3]"></div>
+        <?php if (!empty($expo['image'])): ?>
+          <img src="<?php echo esc_url($expo['image']); ?>" 
+               alt="<?php echo esc_attr($expo['title']); ?>" 
+               class="aspect-[4/3] object-cover w-full">
+        <?php else: ?>
+          <div class="ph ph-art1 aspect-[4/3]"></div>
+        <?php endif; ?>
         <div class="p-5">
-          <h3 class="font-['Literata'] text-lg font-semibold mb-2">Наивное искусство без правил</h3>
-          <p class="text-sm text-[#6B5A4A] mb-4">Работы художников-примитивистов, в которых особенно чувствуется искренность, свобода взгляда и отсутствие академических рамок.</p>
-          <a href="#" class="link-arrow text-sm">Все экспозиции
+          <h3 class="font-['Literata'] text-lg font-semibold mb-2"><?php echo esc_html($expo['title']); ?></h3>
+          <p class="text-sm text-[#6B5A4A] mb-4"><?php echo esc_html($expo['description']); ?></p>
+          <a href="#" class="link-arrow text-sm">
+            <?php echo esc_html($expositions_link_text ?: 'Все экспозиции'); ?>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
       </div>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-art2 aspect-[4/3]"></div>
-        <div class="p-5">
-          <h3 class="font-['Literata'] text-lg font-semibold mb-2">Наивное искусство без правил</h3>
-          <p class="text-sm text-[#6B5A4A] mb-4">Работы художников-примитивистов, в которых особенно чувствуется искренность, свобода взгляда и отсутствие академических рамок.</p>
-          <a href="#" class="link-arrow text-sm">Все экспозиции
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-art3 aspect-[4/3]"></div>
-        <div class="p-5">
-          <h3 class="font-['Literata'] text-lg font-semibold mb-2">Наивное искусство без правил</h3>
-          <p class="text-sm text-[#6B5A4A] mb-4">Работы художников-примитивистов, в которых особенно чувствуется искренность, свобода взгляда и отсутствие академических рамок.</p>
-          <a href="#" class="link-arrow text-sm">Все экспозиции
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-art4 aspect-[4/3]"></div>
-        <div class="p-5">
-          <h3 class="font-['Literata'] text-lg font-semibold mb-2">Наивное искусство без правил</h3>
-          <p class="text-sm text-[#6B5A4A] mb-4">Работы художников-примитивистов, в которых особенно чувствуется искренность, свобода взгляда и отсутствие академических рамок.</p>
-          <a href="#" class="link-arrow text-sm">Все экспозиции
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- ============ SPECIAL EXPOSITION BANNER ============ -->
+<?php if ($special_title || $special_description): ?>
 <section class="py-12">
-  <div class="container-main">
-    <div class="relative rounded-3xl overflow-hidden bg-[#E8872C]/10">
+  <div class="">
+    <div class="relative overflow-hidden bg-[#E8872C]/10">
       <div class="grid md:grid-cols-2">
         <div class="p-8 md:p-12 lg:p-14 flex flex-col justify-center">
-          <span class="text-sm font-medium text-[#E8872C] mb-3 uppercase tracking-wide">Особая постоянная экспозиция</span>
-          <h2 class="text-[28px] lg:text-[40px] mb-4">СССР: Сокровища счастливого советского ребенка</h2>
-          <p class="text-[17px] text-[#6B5A4A] mb-7">Особая постоянная экспозиция музея, посвященная памяти детства, советским игрушка, предметам быта и визуальной культуре прошлого.</p>
-          <div>
-            <a href="#" class="btn-primary">Подробнее об экспозиции
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>
+          <?php if ($special_badge): ?>
+          <span class="text-sm font-medium text-[#E8872C] mb-3 uppercase tracking-wide">
+            <?php echo esc_html($special_badge); ?>
+          </span>
+          <?php endif; ?>
+          <?php if ($special_title): ?>
+          <h2 class="text-[28px] lg:text-[40px] mb-4">
+            <?php echo esc_html($special_title); ?>
+          </h2>
+          <?php endif; ?>
+          <?php if ($special_description): ?>
+          <p class="text-[17px] text-[#6B5A4A] mb-7">
+            <?php echo esc_html($special_description); ?>
+          </p>
+          <?php endif; ?>
+          <?php if ($special_button_link && $special_button_text): ?>
+            <div>
+              <a href="<?php echo esc_url($special_button_link); ?>" class="btn-primary">
+                <?php echo esc_html($special_button_text); ?>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          <?php endif; ?>
         </div>
         <div class="relative">
-          <div class="ph ph-ussr aspect-[4/3] md:aspect-auto md:h-full"></div>
+          <?php if ($special_image): ?>
+            <img src="<?php echo esc_url($special_image); ?>" 
+                 alt="<?php echo esc_attr($special_title); ?>" 
+                 class="aspect-[4/3] md:aspect-auto md:h-full object-cover w-full">
+          <?php else: ?>
+            <div class="ph ph-ussr aspect-[4/3] md:aspect-auto md:h-full"></div>
+          <?php endif; ?>
         </div>
       </div>
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- ============ MASTER CLASSES AND LECTURES ============ -->
+<?php if ($classes_main || $classes_list): ?>
 <section id="classes" class="py-16 lg:py-20">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">Мастер-классы и лекции</h2>
-      <a href="#" class="link-arrow text-sm">Все мастер-классы и лекции
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
+      <h2 class="text-[32px] lg:text-[44px]">
+        <?php echo esc_html($classes_title ?: 'Мастер-классы и лекции'); ?>
+      </h2>
+      <?php if ($classes_link_url): ?>
+        <a href="<?php echo esc_url($classes_link_url); ?>" class="link-arrow text-sm">
+          <?php echo esc_html($classes_link_text ?: 'Все мастер-классы и лекции'); ?>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      <?php endif; ?>
     </div>
     
     <div class="grid lg:grid-cols-2 gap-5">
-      <!-- Big master class card -->
+      <!-- Main class card -->
+      <?php if ($classes_main): ?>
       <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-art1 aspect-[16/10]"></div>
+        <?php if (!empty($classes_main['image'])): ?>
+          <img src="<?php echo esc_url($classes_main['image']); ?>" 
+               alt="<?php echo esc_attr($classes_main['title']); ?>" 
+               class="aspect-[16/10] object-cover w-full">
+        <?php else: ?>
+          <div class="ph ph-art1 aspect-[16/10]"></div>
+        <?php endif; ?>
         <div class="p-6">
           <div class="flex items-center justify-between mb-3">
             <span class="event-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2Z"/><path d="M7 12c1-1 2-1 3-1s2 0 3 1 2 1 3 0"/></svg>
-              Мастер-класс
+              <?php echo get_event_type_icon($classes_main['type']); ?>
+              <?php echo esc_html(get_event_type_label($classes_main['type'])); ?>
             </span>
-            <span class="text-xs text-[#6B5A4A] font-medium">19 мая, вс · 12:00</span>
+            <span class="text-xs text-[#6B5A4A] font-medium"><?php echo esc_html($classes_main['datetime']); ?></span>
           </div>
-          <h3 class="font-['Literata'] text-xl font-semibold mb-3">Живопись акрилом: весенний пейзаж</h3>
-          <p class="text-sm text-[#6B5A4A] mb-5">Пишем яркий пейзаж под руководством преподавателя. Для взрослых и подростков.</p>
-          <a href="#" class="btn-outline w-full !py-2.5 text-sm">Записаться</a>
+          <h3 class="font-['Literata'] text-xl font-semibold mb-3"><?php echo esc_html($classes_main['title']); ?></h3>
+          <p class="text-sm text-[#6B5A4A] mb-5"><?php echo esc_html($classes_main['description']); ?></p>
+          <a href="#" class="btn-outline w-full !py-2.5 text-sm">
+            <?php echo esc_html($classes_main['button_text']); ?>
+          </a>
         </div>
       </div>
+      <?php endif; ?>
       
-      <!-- Right column - lecture list -->
+      <!-- Right column - classes list -->
+      <?php if ($classes_list): ?>
       <div class="flex flex-col gap-5">
+        <?php foreach ($classes_list as $class): ?>
         <div class="bg-white rounded-2xl overflow-hidden shadow-sm grid grid-cols-[1fr_1fr]">
-          <div class="ph ph-art2"></div>
+          <?php if (!empty($class['image'])): ?>
+            <img src="<?php echo esc_url($class['image']); ?>" 
+                 alt="<?php echo esc_attr($class['title']); ?>" 
+                 class="object-cover w-full h-full">
+          <?php else: ?>
+            <div class="ph ph-art2"></div>
+          <?php endif; ?>
           <div class="p-5 flex flex-col justify-between">
             <div>
               <div class="flex items-center justify-between mb-3">
                 <span class="event-badge">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v4M16 4v4"/></svg>
-                  Лекция
+                  <?php echo get_event_type_icon($class['type']); ?>
+                  <?php echo esc_html(get_event_type_label($class['type'])); ?>
                 </span>
-                <span class="text-xs text-[#6B5A4A] font-medium">21 мая, вт · 18:30</span>
+                <span class="text-xs text-[#6B5A4A] font-medium"><?php echo esc_html($class['datetime']); ?></span>
               </div>
-              <h3 class="font-['Literata'] text-base font-semibold mb-2">Лекция: Как понимать наивное искусство</h3>
-              <p class="text-sm text-[#6B5A4A]">О языке, символах и особой искренности наивного искусства.</p>
+              <h3 class="font-['Literata'] text-base font-semibold mb-2"><?php echo esc_html($class['title']); ?></h3>
+              <p class="text-sm text-[#6B5A4A]"><?php echo esc_html($class['description']); ?></p>
             </div>
-            <a href="#" class="btn-outline w-full !py-2 text-sm mt-4">Подробнее</a>
+            <a href="#" class="btn-outline w-full !py-2 text-sm mt-4">
+              <?php echo esc_html($class['button_text']); ?>
+            </a>
           </div>
         </div>
-        
-        <div class="bg-white rounded-2xl overflow-hidden shadow-sm grid grid-cols-[1fr_1fr]">
-          <div class="ph ph-art3"></div>
-          <div class="p-5 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between mb-3">
-                <span class="event-badge">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2Z"/><path d="M8 12h8M12 8v8"/></svg>
-                  Встреча
-                </span>
-                <span class="text-xs text-[#6B5A4A] font-medium">21 мая, вт · 18:30</span>
-              </div>
-              <h3 class="font-['Literata'] text-base font-semibold mb-2">Лекция: Как понимать наивное искусство</h3>
-              <p class="text-sm text-[#6B5A4A]">О языке, символах и особой искренности наивного искусства.</p>
-            </div>
-            <a href="#" class="btn-outline w-full !py-2 text-sm mt-4">Подробнее</a>
-          </div>
-        </div>
-        
-        <div class="bg-white rounded-2xl overflow-hidden shadow-sm grid grid-cols-[1fr_1fr]">
-          <div class="ph ph-art4"></div>
-          <div class="p-5 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between mb-3">
-                <span class="event-badge">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v4M16 4v4"/></svg>
-                  Лекция
-                </span>
-                <span class="text-xs text-[#6B5A4A] font-medium">21 мая, вт · 18:30</span>
-              </div>
-              <h3 class="font-['Literata'] text-base font-semibold mb-2">Лекция: Как понимать наивное искусство</h3>
-              <p class="text-sm text-[#6B5A4A]">О языке, символах и особой искренности наивного искусства.</p>
-            </div>
-            <a href="#" class="btn-outline w-full !py-2 text-sm mt-4">Подробнее</a>
-          </div>
-        </div>
+        <?php endforeach; ?>
       </div>
+      <?php endif; ?>
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- ============ MUSEUM SHOP ============ -->
+<?php if ($shop_products): ?>
 <section id="shop" class="py-16 lg:py-20 bg-[#F5EADB]">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">Магазин музея</h2>
-      <a href="#" class="link-arrow text-sm">В магазин
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
+      <h2 class="text-[32px] lg:text-[44px]">
+        <?php echo esc_html($shop_title ?: 'Магазин музея'); ?>
+      </h2>
+      <?php if ($shop_link_url): ?>
+        <a href="<?php echo esc_url($shop_link_url); ?>" class="link-arrow text-sm">
+          <?php echo esc_html($shop_link_text ?: 'В магазин'); ?>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      <?php endif; ?>
     </div>
     
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <!-- Product card -->
+      <?php foreach ($shop_products as $product): ?>
       <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-shop aspect-square"></div>
+        <?php if (!empty($product['image'])): ?>
+          <img src="<?php echo esc_url($product['image']); ?>" 
+               alt="<?php echo esc_attr($product['title']); ?>" 
+               class="aspect-square object-cover w-full">
+        <?php else: ?>
+          <div class="ph ph-shop aspect-square"></div>
+        <?php endif; ?>
         <div class="p-5">
-          <h3 class="font-['Literata'] text-base font-semibold mb-2">Каталоги выставки</h3>
-          <p class="text-sm text-[#6B5A4A] mb-4">«Истории в цвете»: иллюстрированный каталог с текстами о наивном искусстве.</p>
+          <h3 class="font-['Literata'] text-base font-semibold mb-2"><?php echo esc_html($product['title']); ?></h3>
+          <p class="text-sm text-[#6B5A4A] mb-4"><?php echo esc_html($product['description']); ?></p>
           <div class="flex items-center gap-3">
-            <span class="font-semibold text-lg">00 BYN</span>
-            <a href="#" class="btn-primary !py-2 !px-4 text-sm ml-auto">В корзину</a>
+            <span class="font-semibold text-lg"><?php echo esc_html($product['price']); ?></span>
+            <a href="#" class="btn-primary !py-2 !px-4 text-sm ml-auto">
+              <?php echo esc_html($product['button_text']); ?>
+            </a>
           </div>
         </div>
       </div>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-shop aspect-square"></div>
-        <div class="p-5">
-          <h3 class="font-['Literata'] text-base font-semibold mb-2">Каталоги выставки</h3>
-          <p class="text-sm text-[#6B5A4A] mb-4">«Истории в цвете»: иллюстрированный каталог с текстами о наивном искусстве.</p>
-          <div class="flex items-center gap-3">
-            <span class="font-semibold text-lg">00 BYN</span>
-            <a href="#" class="btn-primary !py-2 !px-4 text-sm ml-auto">В корзину</a>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-shop aspect-square"></div>
-        <div class="p-5">
-          <h3 class="font-['Literata'] text-base font-semibold mb-2">Каталоги выставки</h3>
-          <p class="text-sm text-[#6B5A4A] mb-4">«Истории в цвете»: иллюстрированный каталог с текстами о наивном искусстве.</p>
-          <div class="flex items-center gap-3">
-            <span class="font-semibold text-lg">00 BYN</span>
-            <a href="#" class="btn-primary !py-2 !px-4 text-sm ml-auto">В корзину</a>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div class="ph ph-shop aspect-square"></div>
-        <div class="p-5">
-          <h3 class="font-['Literata'] text-base font-semibold mb-2">Каталоги выставки</h3>
-          <p class="text-sm text-[#6B5A4A] mb-4">«Истории в цвете»: иллюстрированный каталог с текстами о наивном искусстве.</p>
-          <div class="flex items-center gap-3">
-            <span class="font-semibold text-lg">00 BYN</span>
-            <a href="#" class="btn-primary !py-2 !px-4 text-sm ml-auto">В корзину</a>
-          </div>
-        </div>
-      </div>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- ============ WHY US ============ -->
+<?php if ($why_us_items): ?>
 <section class="py-16 lg:py-20">
   <div class="container-main">
-    <h2 class="text-[32px] lg:text-[44px] mb-12 text-center">Почему приходят к нам</h2>
+    <h2 class="text-[32px] lg:text-[44px] mb-12 text-center">
+      <?php echo esc_html($why_us_title ?: 'Почему приходят к нам'); ?>
+    </h2>
     
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <?php foreach ($why_us_items as $item): ?>
       <div class="text-center">
         <div class="mx-auto mb-5 w-20 h-20 flex items-center justify-center">
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="#E8872C" stroke-width="2" stroke-linecap="round">
-            <path d="M32 8c-8 0-16 8-16 18 0 14 12 22 16 22s16-8 16-22c0-10-8-18-16-18z"/>
-            <path d="M22 20l8 8M42 20l-8 8M20 34h24"/>
-            <circle cx="52" cy="12" r="2" fill="#E8872C"/>
-            <circle cx="10" cy="46" r="1.5" fill="#E8872C"/>
-          </svg>
+          <?php echo $item['icon']; // Raw SVG allowed ?>
         </div>
-        <h3 class="font-['Literata'] text-xl font-semibold mb-3">Живая атмосфера</h3>
-        <p class="text-sm text-[#6B5A4A]">Уютное пространство, где искусство становится ближе, музей воспринимается неформально и по-домашнему.</p>
+        <h3 class="font-['Literata'] text-xl font-semibold mb-3"><?php echo esc_html($item['title']); ?></h3>
+        <p class="text-sm text-[#6B5A4A]"><?php echo esc_html($item['description']); ?></p>
       </div>
-      <div class="text-center">
-        <div class="mx-auto mb-5 w-20 h-20 flex items-center justify-center">
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="#E8872C" stroke-width="2" stroke-linecap="round">
-            <circle cx="22" cy="22" r="8"/>
-            <path d="M14 44c0-4 4-8 8-8s8 4 8 8v4H14v-4z"/>
-            <circle cx="42" cy="18" r="6"/>
-            <path d="M36 40c0-3 3-6 6-6s6 3 6 6v4h-12v-4z"/>
-          </svg>
-        </div>
-        <h3 class="font-['Literata'] text-xl font-semibold mb-3">Интересно всей семье</h3>
-        <p class="text-sm text-[#6B5A4A]">Программы события для детей, взрослых, семейные посещения с возможностью совместного творческого опыта.</p>
-      </div>
-      <div class="text-center">
-        <div class="mx-auto mb-5 w-20 h-20 flex items-center justify-center">
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="#E8872C" stroke-width="2" stroke-linecap="round">
-            <path d="M8 50c12-4 20-8 24-20"/>
-            <path d="M32 30l10-10 14 4-4 14z"/>
-            <circle cx="56" cy="14" r="4"/>
-            <path d="M48 22l-6-6"/>
-          </svg>
-        </div>
-        <h3 class="font-['Literata'] text-xl font-semibold mb-3">Можно не только смотреть</h3>
-        <p class="text-sm text-[#6B5A4A]">Мастер-классы, лекции, встречи с творческими людьми — знакомитесь с искусством, а становитесь его участником.</p>
-      </div>
-      <div class="text-center">
-        <div class="mx-auto mb-5 w-20 h-20 flex items-center justify-center">
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="#E8872C" stroke-width="2" stroke-linecap="round">
-            <rect x="8" y="12" width="48" height="40" rx="4"/>
-            <path d="M8 22h48M18 8v8M46 8v8"/>
-            <circle cx="32" cy="40" r="6"/>
-            <path d="M32 37l-3 4 3 4 3-4z" fill="#E8872C"/>
-          </svg>
-        </div>
-        <h3 class="font-['Literata'] text-xl font-semibold mb-3">События круглый год</h3>
-        <p class="text-sm text-[#6B5A4A]">Постоянная афиша, выставки, образовательные форматы и специальные проекты — всегда есть повод прийти снова.</p>
-      </div>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- ============ CTA SECTION ============ -->
+<?php if ($cta_title || $cta_primary || $cta_secondary): ?>
 <section class="py-20 lg:py-28 relative">
-  <div class="ph ph-cta absolute inset-0"></div>
-  <div class="absolute inset-0 bg-[#3A2E24]/50"></div>
+  <?php if ($cta_background_image): ?>
+    <div class="absolute inset-0" style="background-image: url('<?php echo esc_url($cta_background_image); ?>'); background-size: cover; background-position: center;"></div>
+    <div class="absolute inset-0 bg-[#3A2E24]/50"></div>
+  <?php else: ?>
+    <div class="ph ph-cta absolute inset-0"></div>
+    <div class="absolute inset-0 bg-[#3A2E24]/50"></div>
+  <?php endif; ?>
   <div class="container-main relative text-center">
+    <?php if ($cta_title): ?>
     <h2 class="text-[32px] sm:text-[40px] lg:text-[52px] text-white mb-8 max-w-3xl mx-auto leading-tight">
-      Проведите день в мире искреннего искусства
+      <?php echo esc_html($cta_title); ?>
     </h2>
+    <?php endif; ?>
     <div class="flex flex-col sm:flex-row gap-3 justify-center">
-      <a href="#" class="btn-primary">
-        Купить билет
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <a href="#" class="btn-outline !bg-white/10 !border-white/40 !text-white hover:!bg-white hover:!text-[#3A2E24] hover:!border-white">
-        Посмотреть афишу
-      </a>
+      <?php if ($cta_primary): ?>
+        <a href="#" class="btn-primary">
+          <?php echo esc_html($cta_primary); ?>
+        </a>
+      <?php endif; ?>
+      <?php if ($cta_secondary): ?>
+        <a href="#" class="btn-outline !bg-white/10 !border-white/40 !text-white hover:!bg-white hover:!text-[#3A2E24] hover:!border-white">
+          <?php echo esc_html($cta_secondary); ?>
+        </a>
+      <?php endif; ?>
     </div>
   </div>
 </section>
-<?php
-/* get_template_part( 'template-parts/home/form', 'form' ); */
-get_footer();
+<?php endif; ?>
 
+<?php get_footer(); ?>

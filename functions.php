@@ -176,3 +176,13 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+/**
+ * Load ACF Field Groups.
+ */
+require get_template_directory() . '/inc/acf-fields.php';
+
+/**
+ * Load Events Custom Post Type.
+ */
+require get_template_directory() . '/inc/events-cpt.php';
+
