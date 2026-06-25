@@ -13,7 +13,6 @@ $preview_events = get_field('preview_events');
 
 $upcoming_title = get_field('upcoming_title');
 $upcoming_link_text = get_field('upcoming_link_text');
-$upcoming_link_url = get_field('upcoming_link_url');
 $upcoming_events = get_field('upcoming_events');
 
 $about_title = get_field('about_title');
@@ -23,7 +22,6 @@ $about_image_bg = get_field('about_image_bg');
 
 $expositions_title = get_field('expositions_title');
 $expositions_link_text = get_field('expositions_link_text');
-$expositions_link_url = get_field('expositions_link_url');
 $expositions_list = get_field('expositions_list');
 
 $special_badge = get_field('special_badge');
@@ -31,23 +29,26 @@ $special_title = get_field('special_title');
 $special_description = get_field('special_description');
 $special_image = get_field('special_image');
 $special_button_text = get_field('special_button_text');
-$special_button_link = get_field('special_button_link');
 
 $classes_title = get_field('classes_title');
 $classes_link_text = get_field('classes_link_text');
-$classes_link_url = get_field('classes_link_url');
 $classes_main = get_field('classes_main');
 $classes_list = get_field('classes_list');
 
 $shop_title = get_field('shop_title');
 $shop_link_text = get_field('shop_link_text');
-$shop_link_url = get_field('shop_link_url');
-$shop_products = get_field('shop_products');
+$shop_products = wc_get_products(array(
+    'status' => 'publish',
+    'limit'  => 4,
+    'order'  => 'DESC',
+    'orderby' => 'date',
+));
 
 $why_us_title = get_field('why_us_title');
 $why_us_items = get_field('why_us_items');
 
 $cta_background_image = get_field('cta_background_image');
+$cta_background_image_mobile = get_field('cta_background_image_mobile');
 $cta_title = get_field('cta_title');
 $cta_primary = get_field('cta_primary');
 $cta_secondary = get_field('cta_secondary');
@@ -164,12 +165,10 @@ function get_event_type_label($type) {
       <h2 class="text-[32px] lg:text-[44px]">
         <?php echo esc_html($upcoming_title ?: 'Ближайшие события'); ?>
       </h2>
-      <?php if ($upcoming_link_url): ?>
-        <a href="<?php echo esc_url($upcoming_link_url); ?>" class="link-arrow text-sm">
-          <?php echo esc_html($upcoming_link_text ?: 'Смотреть все события'); ?>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      <?php endif; ?>
+      <a href="<?php echo esc_url(home_url('/events/')); ?>" class="link-arrow text-sm">
+        <?php echo esc_html($upcoming_link_text ?: 'Смотреть все события'); ?>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
     
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -244,12 +243,10 @@ function get_event_type_label($type) {
       <h2 class="text-[32px] lg:text-[44px]">
         <?php echo esc_html($expositions_title ?: 'Экспозиции музея'); ?>
       </h2>
-      <?php if ($expositions_link_url): ?>
-        <a href="<?php echo esc_url($expositions_link_url); ?>" class="link-arrow text-sm">
-          <?php echo esc_html($expositions_link_text ?: 'Все экспозиции'); ?>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      <?php endif; ?>
+      <a href="<?php echo esc_url(home_url('/expositions/')); ?>" class="link-arrow text-sm">
+        <?php echo esc_html($expositions_link_text ?: 'Все экспозиции'); ?>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
     
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -299,9 +296,9 @@ function get_event_type_label($type) {
             <?php echo esc_html($special_description); ?>
           </p>
           <?php endif; ?>
-          <?php if ($special_button_link && $special_button_text): ?>
+          <?php if ($special_button_text): ?>
             <div>
-              <a href="<?php echo esc_url($special_button_link); ?>" class="btn-primary">
+              <a href="<?php echo esc_url(home_url('/special/')); ?>" class="btn-primary">
                 <?php echo esc_html($special_button_text); ?>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </a>
@@ -331,12 +328,10 @@ function get_event_type_label($type) {
       <h2 class="text-[32px] lg:text-[44px]">
         <?php echo esc_html($classes_title ?: 'Мастер-классы и лекции'); ?>
       </h2>
-      <?php if ($classes_link_url): ?>
-        <a href="<?php echo esc_url($classes_link_url); ?>" class="link-arrow text-sm">
-          <?php echo esc_html($classes_link_text ?: 'Все мастер-классы и лекции'); ?>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      <?php endif; ?>
+      <a href="<?php echo esc_url(home_url('/classes/')); ?>" class="link-arrow text-sm">
+        <?php echo esc_html($classes_link_text ?: 'Все мастер-классы и лекции'); ?>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
     
     <div class="grid lg:grid-cols-2 gap-5">
@@ -409,38 +404,56 @@ function get_event_type_label($type) {
 <section id="shop" class="py-16 lg:py-20 bg-[#F5EADB]">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">
+      <h2 class="text-[26px] lg:text-[48px]">
         <?php echo esc_html($shop_title ?: 'Магазин музея'); ?>
       </h2>
-      <?php if ($shop_link_url): ?>
-        <a href="<?php echo esc_url($shop_link_url); ?>" class="link-arrow text-sm">
-          <?php echo esc_html($shop_link_text ?: 'В магазин'); ?>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      <?php endif; ?>
+      <a href="<?php echo esc_url(home_url('/shop/')); ?>" class="link-arrow text-sm">
+        <?php echo esc_html($shop_link_text ?: 'В магазин'); ?>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
     
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
       <?php foreach ($shop_products as $product): ?>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <?php if (!empty($product['image'])): ?>
-          <img src="<?php echo esc_url($product['image']); ?>" 
-               alt="<?php echo esc_attr($product['title']); ?>" 
-               class="aspect-square object-cover w-full">
-        <?php else: ?>
-          <div class="ph ph-shop aspect-square"></div>
-        <?php endif; ?>
-        <div class="p-5">
-          <h3 class="font-['Literata'] text-base font-semibold mb-2"><?php echo esc_html($product['title']); ?></h3>
-          <p class="text-sm text-[#6B5A4A] mb-4"><?php echo esc_html($product['description']); ?></p>
-          <div class="flex items-center gap-3">
-            <span class="font-semibold text-lg"><?php echo esc_html($product['price']); ?></span>
-            <a href="#" class="btn-primary !py-2 !px-4 text-sm ml-auto">
-              <?php echo esc_html($product['button_text']); ?>
-            </a>
+        <?php
+        $p_id = $product->get_id();
+        $p_name = $product->get_name();
+        $p_price = $product->get_price_html();
+        $p_desc = $product->get_short_description();
+        $p_image = wp_get_attachment_url($product->get_image_id());
+        $p_link = get_permalink($p_id);
+        ?>
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
+          <a href="<?php echo esc_url($p_link); ?>" class="block">
+            <?php if ($p_image): ?>
+              <img src="<?php echo esc_url($p_image); ?>"
+                   alt="<?php echo esc_attr($p_name); ?>"
+                   class="aspect-square object-cover w-full">
+            <?php else: ?>
+              <div class="ph ph-shop aspect-square"></div>
+            <?php endif; ?>
+          </a>
+          <div class="p-5 flex flex-col flex-1">
+            <h3 class="font-['Literata'] text-base mb-2 leading-snug">
+              <a href="<?php echo esc_url($p_link); ?>" class="hover:text-[#E8872C] transition">
+                <?php echo esc_html($p_name); ?>
+              </a>
+            </h3>
+            <?php if ($p_desc): ?>
+              <p class="text-sm text-[#6B5A4A] mb-4 leading-snug line-clamp-3">
+                <?php echo wp_kses_post($p_desc); ?>
+              </p>
+            <?php endif; ?>
+            <div class="mt-auto flex items-center gap-3">
+              <?php if ($p_price): ?>
+                <span class="font-semibold text-lg"><?php echo wp_kses_post($p_price); ?></span>
+              <?php endif; ?>
+              <a href="<?php echo esc_url($p_link); ?>" class="btn-primary !py-2 !px-4 text-sm ml-auto whitespace-nowrap">
+                В корзину
+              </a>
+            </div>
           </div>
         </div>
-      </div>
       <?php endforeach; ?>
     </div>
   </div>
@@ -451,18 +464,20 @@ function get_event_type_label($type) {
 <?php if ($why_us_items): ?>
 <section class="py-16 lg:py-20">
   <div class="container-main">
-    <h2 class="text-[32px] lg:text-[44px] mb-12 text-center">
+    <h2 class="text-[26px] lg:text-[48px] mb-12 text-start lg:mb-15 !font-medium text-black">
       <?php echo esc_html($why_us_title ?: 'Почему приходят к нам'); ?>
     </h2>
     
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
       <?php foreach ($why_us_items as $item): ?>
       <div class="text-center">
-        <div class="mx-auto mb-5 w-20 h-20 flex items-center justify-center">
-          <?php echo $item['icon']; // Raw SVG allowed ?>
+        <div class="mx-auto mb-5 lg:mb-10 w-auto h-[75px] lg:h-[150px] flex items-center justify-center">
+          <?php if ($item['icon']): ?>
+          <img src="<?php echo esc_url($item['icon']); ?>" alt="" class="w-full h-full object-contain" />
+          <?php endif; ?>
         </div>
-        <h3 class="font-['Literata'] text-xl font-semibold mb-3"><?php echo esc_html($item['title']); ?></h3>
-        <p class="text-sm text-[#6B5A4A]"><?php echo esc_html($item['description']); ?></p>
+        <h3 class="!font-body text-lg lg:text-[28px] !font-medium mb-5"><?php echo esc_html($item['title']); ?></h3>
+        <p class="text-[15px] lg:text-lg text-[#2D2926] leading-[1.2]"><?php echo esc_html($item['description']); ?></p>
       </div>
       <?php endforeach; ?>
     </div>
@@ -472,28 +487,30 @@ function get_event_type_label($type) {
 
 <!-- ============ CTA SECTION ============ -->
 <?php if ($cta_title || $cta_primary || $cta_secondary): ?>
-<section class="py-20 lg:py-28 relative">
-  <?php if ($cta_background_image): ?>
-    <div class="absolute inset-0" style="background-image: url('<?php echo esc_url($cta_background_image); ?>'); background-size: cover; background-position: center;"></div>
-    <div class="absolute inset-0 bg-[#3A2E24]/50"></div>
-  <?php else: ?>
-    <div class="ph ph-cta absolute inset-0"></div>
-    <div class="absolute inset-0 bg-[#3A2E24]/50"></div>
-  <?php endif; ?>
-  <div class="container-main relative text-center">
+<section class="relative h-[347px] lg:h-[300px]">
+    <?php if ($cta_background_image): ?>
+    <div class="absolute inset-0 hidden lg:block" style="background-image: url('<?php echo esc_url($cta_background_image); ?>'); background-size: cover; background-position: center;"></div>
+    <?php endif; ?>
+    <?php
+    $cta_bg_mobile = $cta_background_image_mobile ?: $cta_background_image;
+    if ($cta_bg_mobile):
+    ?>
+    <div class="absolute inset-0 block lg:hidden" style="background-image: url('<?php echo esc_url($cta_bg_mobile); ?>'); background-size: cover; background-position: center;"></div>
+    <?php endif; ?>
+  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col items-center justify-center h-full relative text-center">
     <?php if ($cta_title): ?>
-    <h2 class="text-[32px] sm:text-[40px] lg:text-[52px] text-white mb-8 max-w-3xl mx-auto leading-tight">
+    <h2 class="text-[26px] lg:text-[48px] text-white mb-6 mx-auto !leading-[1.4] max-w-[260px] md:max-w-full">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>
-    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+    <div class="flex flex-col sm:flex-row gap-[10px] md:gap-5 justify-center w-full">
       <?php if ($cta_primary): ?>
-        <a href="#" class="btn-primary">
+        <a href="#" class="btn-primary md:max-w-[285px]">
           <?php echo esc_html($cta_primary); ?>
         </a>
       <?php endif; ?>
       <?php if ($cta_secondary): ?>
-        <a href="#" class="btn-outline !bg-white/10 !border-white/40 !text-white hover:!bg-white hover:!text-[#3A2E24] hover:!border-white">
+        <a href="/poster" class="btn-secondary md:max-w-[285px]">
           <?php echo esc_html($cta_secondary); ?>
         </a>
       <?php endif; ?>

@@ -13,47 +13,53 @@
 
 <footer id="contacts" class="bg-[#F2E8DA] text-black pt-16 pb-8">
   <div class="container-main">
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+    <div class="flex flex-col lg:flex-row justify-start items-start gap-9">
       <!-- Logo column -->
-      <div>
+      <div class="flex flex-col md:flex-row w-full justify-between lg:justify-start items-start gap-9">
+      <div class="min-w-[350px]">
             <!-- Logo -->
-	<?php
-	$logo_id = get_theme_mod('custom_logo');
-
-	if ($logo_id) {
-	  $logo_url = wp_get_attachment_image_url($logo_id, 'full');
-	    echo '<a href="' . esc_url(home_url()) . '">';
-	    echo '<img src="' . esc_url($logo_url) . '" ';
-	    echo 'alt="' . esc_attr(get_bloginfo('name')) . '" ';
-	    echo 'class="h-[34px] w-auto object-contain hover:opacity-90 transition-opacity">';
-	    echo '</a>';
-	  }
-	?>
+        <a href="/" class="">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/footer-logo.png" class="w-[340px] mb-5" />
+        </a>
         <div class="flex items-center gap-3 mb-6">
-          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition" aria-label="Instagram">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+          <a href="https://www.instagram.com/naifartsmuseum" class="w-10 h-10 p-[6px] flex items-center justify-center transition" aria-label="Instagram">
+            <img src="<?php echo get_template_directory_uri(); ?>/img/instagram.png" class="" />
           </a>
-          <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition" aria-label="Telegram">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          <a href="https://www.tiktok.com/@naifartsmuseum" class="w-10 h-10 p-[6px] flex items-center justify-center transition" aria-label="TikTok">
+            <img src="<?php echo get_template_directory_uri(); ?>/img/tiktok.png" class="" />
           </a>
         </div>
+              <div class="mt-9">
+          <?php wp_nav_menu([
+              'menu' => 'left-menu',       
+              'menu_class' => '',
+              'container' => false,
+              'link_before' => '<span class="flex items-center justify-between mb-5 text-[15px] font-medium hover:text-[#f28a2e] transition">',
+              'link_after' => '</span>',
+	  ]);
+          ?>
+          <p class="mb-5 text-[15px] font-medium hover:text-[#f28a2e] transition">©Джордж Эйджи, 2026. Все права защищены.</p>
+      </div>
+
       </div>
       
       <!-- Navigation -->
       <div>
-        <p class="text-2xl font-medium mb-5">Навигация</p>
+        <p class="text-xl lg:text-3xl font-medium mb-5 min-w-[350px] lg:min-w-0">Навигация</p>
           <?php wp_nav_menu([
-              'menu' => 'main-menu',       
+              'menu' => 'footer-menu',       
               'menu_class' => '',
               'container' => false,
-              'link_before' => '<span class="flex items-center justify-between py-2 text-[15px] font-medium">',
+              'link_before' => '<span class="flex items-center justify-between mb-5 text-[15px] font-medium hover:text-[#F28A2E] transition">',
               'link_after' => '</span>',
 	  ]);
   ?>
+        </div>
       </div>
       
       <!-- Contacts -->
-      <div>
+      <div class="flex flex-col md:flex-row w-full justify-between lg:justify-start items-start gap-9">
+      <div class="min-w-[350px] lg:min-w-0">
         <p class="text-2xl font-medium mb-5">Контакты</p>
         <ul class="space-y-4 text-[15px] font-medium text-black">
           <li class="flex items-start gap-3">
@@ -72,35 +78,36 @@
       </div>
       
       <!-- Hours -->
-      <div>
+      <div class="min-w-[350px] lg:min-w-0">
         <p class="text-2xl font-medium mb-5">Часы работы</p>
         <p class="text-[15px] font-medium leading-relaxed text-black mb-6">
           сегодня музей работает с<br> 10:00 до 22:00</span>
         </p>
       </div>
     </div>
-    
-    <!-- Payment methods -->
-    <div class="border-t border-white/10 pt-8 mb-8">
-      <div class="flex flex-wrap items-center gap-4">
-        <span class="text-[15px] text-[15px] mr-2">Принимаем к оплате:</span>
-        <svg width="50" height="24" viewBox="0 0 50 24"><rect width="50" height="24" rx="3" fill="#fff"/><text x="25" y="15" text-anchor="middle" font-size="8" font-weight="bold" fill="#000" font-family="Arial">VISA</text></svg>
-        <svg width="50" height="24" viewBox="0 0 50 24"><rect width="50" height="24" rx="3" fill="#fff"/><text x="25" y="15" text-anchor="middle" font-size="7" font-weight="bold" fill="#EB001B" font-family="Arial">MasterCard</text></svg>
-        <svg width="50" height="24" viewBox="0 0 50 24"><rect width="50" height="24" rx="3" fill="#fff"/><text x="25" y="15" text-anchor="middle" font-size="7" font-weight="bold" fill="#0070C0" font-family="Arial">МИР</text></svg>
-        <svg width="50" height="24" viewBox="0 0 50 24"><rect width="50" height="24" rx="3" fill="#fff"/><text x="25" y="15" text-anchor="middle" font-size="6" font-weight="bold" fill="#333" font-family="Arial">БЕЛКАРТ</text></svg>
-        <svg width="50" height="24" viewBox="0 0 50 24"><rect width="50" height="24" rx="3" fill="#fff"/><text x="25" y="15" text-anchor="middle" font-size="6" font-weight="bold" fill="#333" font-family="Arial">Расчет</text></svg>
-      </div>
-    </div>
-    
-    <!-- Legal text -->
-    <div class="text-[15px] text-black leading-relaxed space-y-3">
-      <p>Закрытое акционерное общество «ЛАТИО» 223018, Минская обл., Минский р-н, Дзержинского с/с, 53. Юридический адрес: Минская обл., Минский р-н, Дзержинского с/с, 53, ком. 201. Республика Беларусь</p>
-      <p>Режим работы ЧУП «Голас»: с 9.00 до 21.00 ежедневно. Интернет-магазина: с 9.00 до 18.00 ежедневно. Телефон для связи: +375 17 311 03 15</p>
-      <p>Дата внесения сведений в Торговый реестр Республики Беларусь - 11.04.2018. № регистрации торговой службы в Торговом реестре: №0010191. Номер свидетельства о регистрации торговой службы в Торговом реестре: №0010191. Согласие на обработку персональных данных посетителей магазина при осуществлении ими покупок товаров и услуг.</p>
-      <p>Доставка по городу и пригороду. Адреса пунктов выдачи — на странице доставки. Возврат товара надлежащего качества возможен в течение 14 дней со дня покупки при сохранении товарного вида, упаковки, этикеток и фабричных пломб.</p>
-      <p>© Дворжак Элли, 2026. Все права защищены.</p>
-    </div>
+</div>
+  <div class="border border-[#D9CCBC] border-[0.5px] mb-4 w-full"></div>
+<div class="grid md:grid-cols-2 lg:grid-cols-3 mt-12 gap-5 text-[13px] lg:text-base text-black leading-[1.2] pb-[10px] lg:pb-[50px]">
+  <p>
+    Закрытое акционерное общество «ПАТИО» 223018, Минская обл., Минский р-н, Ждановичский с/с, 53, вблизи д.Тарасово, оф. 503.1. Свидетельство о государственной регистрации ЗАО «ПАТИО» выдано Мингорисполкомом на основании решения от 18.04.2001 № 491. УНП 100183195. Режим работы интернет-магазина: с 9.00 до 21.00 ежедневно.
+  </p>
+      <p>
+        Дата включения сведений об интернет-магазине 5element.by в Торговый реестр Республики Беларусь - 11.04.2018, № регистрации 412542. Номер телефона работников, уполномоченных рассматривать обращения покупателей в соответствии с законодательством об обращениях граждан и юридических лиц: +375172702914 - Минский районный исполнительный комитет , отдел торговли и услуг.
+  </p>
+  <div>
+        <p class="text-xl text-black">Принимаем к оплате</p>
+        <div class="flex justify-between mt-3">
+  <img src="<?php echo get_template_directory_uri() ?>/img/visa.svg" alt="payment" class="" />
+  <img src="<?php echo get_template_directory_uri() ?>/img/mc.svg" alt="payment" class="" />
+  <img src="<?php echo get_template_directory_uri() ?>/img/belcard.svg" alt="payment" class="" />
+  <img src="<?php echo get_template_directory_uri() ?>/img/raschet.svg" alt="payment" class="" />
+  <img src="<?php echo get_template_directory_uri() ?>/img/bepaid.svg" alt="payment" class="" />
+        </div>
   </div>
+  </div>
+
+</div>
+
 </footer>
 
 <!-- ============ MOBILE MENU ============ -->

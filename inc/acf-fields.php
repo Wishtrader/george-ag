@@ -167,12 +167,6 @@ acf_add_local_field_group( array(
 			'default_value' => 'Смотреть все события',
 		),
 		array(
-			'key'           => 'field_upcoming_link_url',
-			'label'         => 'Ссылка "Все события"',
-			'name'          => 'upcoming_link_url',
-			'type'          => 'url',
-		),
-		array(
 			'key'           => 'field_upcoming_events',
 			'label'         => 'События (до 4 шт)',
 			'name'          => 'upcoming_events',
@@ -325,12 +319,6 @@ acf_add_local_field_group( array(
 			'default_value' => 'Все экспозиции',
 		),
 		array(
-			'key'           => 'field_expositions_link_url',
-			'label'         => 'Ссылка',
-			'name'          => 'expositions_link_url',
-			'type'          => 'url',
-		),
-		array(
 			'key'           => 'field_expositions_list',
 			'label'         => 'Экспозиции (до 4 шт)',
 			'name'          => 'expositions_list',
@@ -422,12 +410,6 @@ acf_add_local_field_group( array(
 			'type'          => 'text',
 			'default_value' => 'Подробнее об экспозиции',
 		),
-		array(
-			'key'           => 'field_special_button_link',
-			'label'         => 'Ссылка кнопки',
-			'name'          => 'special_button_link',
-			'type'          => 'url',
-		),
 	),
 	'location'   => array(
 		array(
@@ -462,12 +444,6 @@ acf_add_local_field_group( array(
 			'name'          => 'classes_link_text',
 			'type'          => 'text',
 			'default_value' => 'Все мастер-классы и лекции',
-		),
-		array(
-			'key'           => 'field_classes_link_url',
-			'label'         => 'Ссылка',
-			'name'          => 'classes_link_url',
-			'type'          => 'url',
 		),
 		array(
 			'key'           => 'field_classes_main',
@@ -634,66 +610,6 @@ acf_add_local_field_group( array(
 			'type'          => 'text',
 			'default_value' => 'В магазин',
 		),
-		array(
-			'key'           => 'field_shop_link_url',
-			'label'         => 'Ссылка',
-			'name'          => 'shop_link_url',
-			'type'          => 'url',
-		),
-		array(
-			'key'           => 'field_shop_products',
-			'label'         => 'Товары (до 4 шт)',
-			'name'          => 'shop_products',
-			'type'          => 'repeater',
-			'layout'        => 'block',
-			'button_label'  => 'Добавить товар',
-			'max'           => 4,
-			'sub_fields'    => array(
-				array(
-					'key'          => 'field_shop_product_title',
-					'label'        => 'Название',
-					'name'         => 'title',
-					'type'         => 'text',
-					'default_value' => 'Каталоги выставки',
-				),
-				array(
-					'key'          => 'field_shop_product_description',
-					'label'        => 'Описание',
-					'name'         => 'description',
-					'type'         => 'textarea',
-					'rows'         => 2,
-					'default_value' => '«Истории в цвете»: иллюстрированный каталог с текстами о наивном искусстве.',
-				),
-				array(
-					'key'          => 'field_shop_product_price',
-					'label'        => 'Цена',
-					'name'         => 'price',
-					'type'         => 'text',
-					'default_value' => '00 BYN',
-				),
-				array(
-					'key'          => 'field_shop_product_image',
-					'label'        => 'Изображение',
-					'name'         => 'image',
-					'type'         => 'image',
-					'return_format' => 'url',
-					'library'       => 'all',
-				),
-				array(
-					'key'          => 'field_shop_product_link',
-					'label'        => 'Ссылка',
-					'name'         => 'link',
-					'type'         => 'url',
-				),
-				array(
-					'key'          => 'field_shop_product_button_text',
-					'label'        => 'Текст кнопки',
-					'name'         => 'button_text',
-					'type'         => 'text',
-					'default_value' => 'В корзину',
-				),
-			),
-		),
 	),
 	'location'   => array(
 		array(
@@ -732,13 +648,13 @@ acf_add_local_field_group( array(
 			'max'           => 4,
 			'sub_fields'    => array(
 				array(
-					'key'          => 'field_why_us_item_icon',
-					'label'        => 'Иконка (SVG код)',
-					'name'         => 'icon',
-					'type'         => 'textarea',
-					'instructions' => 'Вставьте SVG код иконки',
-					'rows'         => 5,
-					'default_value' => '<svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="#E8872C" stroke-width="2" stroke-linecap="round"><path d="M32 8c-8 0-16 8-16 18 0 14 12 22 16 22s16-8 16-22c0-10-8-18-16-18z"/><path d="M22 20l8 8M42 20l-8 8M20 34h24"/><circle cx="52" cy="12" r="2" fill="#E8872C"/><circle cx="10" cy="46" r="1.5" fill="#E8872C"/></svg>',
+					'key'           => 'field_why_us_item_icon',
+					'label'         => 'Иконка',
+					'name'          => 'icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
 				),
 				array(
 					'key'          => 'field_why_us_item_title',
@@ -780,10 +696,19 @@ acf_add_local_field_group( array(
 	'fields'   => array(
 		array(
 			'key'           => 'field_cta_background_image',
-			'label'         => 'Фоновое изображение',
+			'label'         => 'Фоновое изображение (десктоп)',
 			'name'          => 'cta_background_image',
 			'type'          => 'image',
-			'instructions'  => 'Фоновое изображение для CTA секции',
+			'instructions'  => 'Фоновое изображение для CTA секции (десктопная версия, от 1024px и выше)',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_cta_background_image_mobile',
+			'label'         => 'Фоновое изображение (мобильная)',
+			'name'          => 'cta_background_image_mobile',
+			'type'          => 'image',
+			'instructions'  => 'Фоновое изображение для CTA секции (мобильная версия, до 1024px). Если не загружено, используется десктопное.',
 			'return_format' => 'url',
 			'library'       => 'all',
 		),
@@ -819,5 +744,503 @@ acf_add_local_field_group( array(
 		),
 	),
 	'menu_order' => -1,
+	'position'   => 'normal',
+) );
+
+
+// ============================================
+// ГРУППА: О ТОВАРЕ (Фон)
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sp_about',
+	'title'    => 'О товаре: Фон',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sp_about_bg',
+			'label'         => 'Фоновое изображение (десктоп)',
+			'name'          => 'sp_about_bg',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sp_about_bg_mobile',
+			'label'         => 'Фоновое изображение (мобильная)',
+			'name'          => 'sp_about_bg_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'post_type',
+				'operator' => '==',
+				'value'    => 'product',
+			),
+		),
+	),
+	'menu_order' => 1,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ХАРАКТЕРИСТИКИ (Фон)
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sp_chars',
+	'title'    => 'Характеристики: Фон',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sp_char_bg',
+			'label'         => 'Фоновое изображение (десктоп)',
+			'name'          => 'sp_char_bg',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sp_char_bg_mobile',
+			'label'         => 'Фоновое изображение (мобильная)',
+			'name'          => 'sp_char_bg_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'post_type',
+				'operator' => '==',
+				'value'    => 'product',
+			),
+		),
+	),
+	'menu_order' => 2,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ПОЧЕМУ ЭТОТ ТОВАР ВЫБИРАЮТ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sp_why',
+	'title'    => 'Почему этот товар выбирают',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sp_why_bg',
+			'label'         => 'Фоновое изображение (десктоп)',
+			'name'          => 'sp_why_bg',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sp_why_bg_mobile',
+			'label'         => 'Фоновое изображение (мобильная)',
+			'name'          => 'sp_why_bg_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sp_why_title',
+			'label'         => 'Заголовок секции',
+			'name'          => 'sp_why_title',
+			'type'          => 'text',
+			'default_value' => 'Почему этот товар выбирают',
+		),
+		array(
+			'key'           => 'field_sp_why_items',
+			'label'         => 'Пункты',
+			'name'          => 'sp_why_items',
+			'type'          => 'repeater',
+			'layout'        => 'block',
+			'button_label'  => 'Добавить пункт',
+			'sub_fields'    => array(
+				array(
+					'key'           => 'field_sp_why_item_icon',
+					'label'         => 'Иконка',
+					'name'          => 'icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
+				),
+				array(
+					'key'          => 'field_sp_why_item_text',
+					'label'        => 'Текст',
+					'name'         => 'text',
+					'type'         => 'text',
+					'default_value' => 'связан с выставочным проектом музея',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'post_type',
+				'operator' => '==',
+				'value'    => 'product',
+			),
+		),
+	),
+	'menu_order' => 3,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КАК ПОЛУЧИТЬ ЗАКАЗ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sp_delivery',
+	'title'    => 'Как получить заказ',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sp_delivery_title',
+			'label'         => 'Заголовок секции',
+			'name'          => 'sp_delivery_title',
+			'type'          => 'text',
+			'default_value' => 'Как получить заказ',
+		),
+		array(
+			'key'           => 'field_sp_delivery_items',
+			'label'         => 'Способы получения (4 шт)',
+			'name'          => 'sp_delivery_items',
+			'type'          => 'repeater',
+			'layout'        => 'block',
+			'button_label'  => 'Добавить способ',
+			'max'           => 4,
+			'sub_fields'    => array(
+				array(
+					'key'           => 'field_sp_delivery_item_icon',
+					'label'         => 'Иконка',
+					'name'          => 'icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
+				),
+				array(
+					'key'          => 'field_sp_delivery_item_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+					'default_value' => 'Самовывоз из музея',
+				),
+				array(
+					'key'          => 'field_sp_delivery_item_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 2,
+					'default_value' => 'Заберите заказ в музее в удобное для вас время.',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'post_type',
+				'operator' => '==',
+				'value'    => 'product',
+			),
+		),
+	),
+	'menu_order' => 4,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: БАННЕР ВНИЗУ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sp_banner',
+	'title'    => 'Баннер: Продолжите знакомство',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sp_banner_bg',
+			'label'         => 'Фоновое изображение (десктоп)',
+			'name'          => 'sp_banner_bg',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sp_banner_bg_mobile',
+			'label'         => 'Фоновое изображение (мобильная)',
+			'name'          => 'sp_banner_bg_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sp_banner_title',
+			'label'         => 'Заголовок',
+			'name'          => 'sp_banner_title',
+			'type'          => 'text',
+			'default_value' => 'Продолжите знакомство с музеем',
+		),
+		array(
+			'key'           => 'field_sp_banner_button_text',
+			'label'         => 'Текст кнопки',
+			'name'          => 'sp_banner_button_text',
+			'type'          => 'text',
+			'default_value' => 'Посмотреть афишу',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'post_type',
+				'operator' => '==',
+				'value'    => 'product',
+			),
+		),
+	),
+	'menu_order' => 5,
+	'position'   => 'normal',
+) );
+
+
+// ============================================
+// ГРУППА: HERO СЕКЦИЯ КАТАЛОГА
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sc_hero',
+	'title'    => 'Каталог: Hero секция',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sc_title',
+			'label'         => 'Заголовок',
+			'name'          => 'sc_title',
+			'type'          => 'text',
+			'default_value' => 'Магазин музея',
+		),
+		array(
+			'key'           => 'field_sc_description',
+			'label'         => 'Описание',
+			'name'          => 'sc_description',
+			'type'          => 'textarea',
+			'rows'          => 3,
+			'default_value' => 'Каталоги, открытки, принты, сувениры и другие вещи, которые помогают сохранить впечатление от музея и наивного искусства.',
+		),
+		array(
+			'key'           => 'field_sc_hero_bg',
+			'label'         => 'Фоновое изображение (десктоп)',
+			'name'          => 'sc_hero_bg',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sc_hero_bg_mobile',
+			'label'         => 'Фоновое изображение (мобильная)',
+			'name'          => 'sc_hero_bg_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'shop-catalog.php',
+			),
+		),
+	),
+	'menu_order' => 1,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КАК ПОЛУЧИТЬ ЗАКАЗ (Каталог)
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sc_delivery',
+	'title'    => 'Каталог: Как получить заказ',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sc_delivery_title',
+			'label'         => 'Заголовок секции',
+			'name'          => 'sc_delivery_title',
+			'type'          => 'text',
+			'default_value' => 'Как получить заказ',
+		),
+		array(
+			'key'           => 'field_sc_delivery_items',
+			'label'         => 'Способы получения (4 шт)',
+			'name'          => 'sc_delivery_items',
+			'type'          => 'repeater',
+			'layout'        => 'block',
+			'button_label'  => 'Добавить способ',
+			'max'           => 4,
+			'sub_fields'    => array(
+				array(
+					'key'           => 'field_sc_delivery_item_icon',
+					'label'         => 'Иконка',
+					'name'          => 'icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
+				),
+				array(
+					'key'          => 'field_sc_delivery_item_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+					'default_value' => 'Самовывоз из музея',
+				),
+				array(
+					'key'          => 'field_sc_delivery_item_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 2,
+					'default_value' => 'Заберите заказ в музее в удобное для вас время.',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'shop-catalog.php',
+			),
+		),
+	),
+	'menu_order' => 2,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: БАННЕР КАТАЛОГА
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sc_banner',
+	'title'    => 'Каталог: Баннер внизу',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sc_banner_bg',
+			'label'         => 'Фоновое изображение (десктоп)',
+			'name'          => 'sc_banner_bg',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sc_banner_bg_mobile',
+			'label'         => 'Фоновое изображение (мобильная)',
+			'name'          => 'sc_banner_bg_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sc_banner_title',
+			'label'         => 'Заголовок',
+			'name'          => 'sc_banner_title',
+			'type'          => 'text',
+			'default_value' => 'Выберите вещь, которую захочется забрать с собой',
+		),
+		array(
+			'key'           => 'field_sc_banner_btn_primary',
+			'label'         => 'Текст кнопки 1',
+			'name'          => 'sc_banner_btn_primary',
+			'type'          => 'text',
+			'default_value' => 'Перейти в корзину',
+		),
+		array(
+			'key'           => 'field_sc_banner_btn_secondary',
+			'label'         => 'Текст кнопки 2',
+			'name'          => 'sc_banner_btn_secondary',
+			'type'          => 'text',
+			'default_value' => 'Посмотреть афишу',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'shop-catalog.php',
+			),
+		),
+	),
+	'menu_order' => 3,
+	'position'   => 'normal',
+) );
+
+acf_add_local_field_group( array(
+	'key'      => 'group_event_cta',
+	'title'    => 'Событие: CTA-секция',
+	'fields'   => array(
+		array(
+			'key'           => 'field_event_cta_background_image',
+			'label'         => 'Фон изображение (десктоп)',
+			'name'          => 'event_cta_background_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_event_cta_background_image_mobile',
+			'label'         => 'Фон изображение (мобильная)',
+			'name'          => 'event_cta_background_image_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_event_cta_title',
+			'label'         => 'Заголовок',
+			'name'          => 'event_cta_title',
+			'type'          => 'text',
+			'default_value' => 'Выберите событие и приходите в музей',
+		),
+		array(
+			'key'           => 'field_event_cta_primary',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'event_cta_primary',
+			'type'          => 'text',
+		),
+		array(
+			'key'           => 'field_event_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'event_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_event_cta_secondary',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'event_cta_secondary',
+			'type'          => 'text',
+		),
+		array(
+			'key'           => 'field_event_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+			'name'          => 'event_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'post_type',
+				'operator' => '==',
+				'value'    => 'event',
+			),
+		),
+	),
+	'menu_order' => 10,
 	'position'   => 'normal',
 ) );

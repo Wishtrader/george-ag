@@ -31,6 +31,7 @@ $event_icon_location = get_field('event_icon_location');
 $event_icon_price = get_field('event_icon_price');
 $event_icon_age = get_field('event_icon_age');
 $event_cta_background_image = get_field('event_cta_background_image');
+$event_cta_background_image_mobile = get_field('event_cta_background_image_mobile');
 $event_cta_title = get_field('event_cta_title');
 $event_cta_primary = get_field('event_cta_primary');
 $event_cta_primary_url = get_field('event_cta_primary_url');
@@ -395,7 +396,12 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
     <div class="relative h-full overflow-hidden">
       <!-- Background image -->
       <?php if ( $event_cta_background_image ) : ?>
-      <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('<?php echo esc_url( $event_cta_background_image ); ?>');"></div>
+      <div class="absolute inset-0 bg-cover bg-center hidden lg:block" style="background-image: url('<?php echo esc_url( $event_cta_background_image ); ?>');"></div>
+      <?php endif; ?>
+      <?php if ( $event_cta_background_image_mobile ) : ?>
+      <div class="absolute inset-0 bg-cover bg-center block lg:hidden" style="background-image: url('<?php echo esc_url( $event_cta_background_image_mobile ); ?>');"></div>
+      <?php elseif ( $event_cta_background_image ) : ?>
+      <div class="absolute inset-0 bg-cover bg-center block lg:hidden" style="background-image: url('<?php echo esc_url( $event_cta_background_image ); ?>');"></div>
       <?php endif; ?>
 
       <div class="relative h-full max-w-[1240px] mx-auto px-5 lg:px-10 flex items-center">

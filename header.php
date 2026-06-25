@@ -37,7 +37,7 @@
     :root {
       --brand-orange: #F28A2E;
       --brand-orange-dark: #D1731F;
-      --brand-cream: #FBF4EA;
+      --brand-cream: #FAF6EF;
       --brand-cream-dark: #F5EADB;
       --brand-text: #2D2926;
       --brand-text-light: #6B5A4A;
@@ -62,7 +62,6 @@
     
     h1, h2, h3, h4, h5, h6 {
       font-family: 'Literata', serif;
-      color: var(--brand-text);
       line-height: 1.2;
       font-weight: 400;
     }
@@ -77,7 +76,6 @@
     .btn-primary {
       background-color: var(--brand-orange);
       color: #fff;
-      padding: 12px 28px;
       border-radius: 12px;
       font-weight: 500;
       transition: all .2s;
@@ -85,15 +83,39 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      width: 100%;
+      max-width: 285px;
+      height: 52px;
+      font-size: 16px;
     }
     .btn-primary:hover {
       background-color: var(--brand-orange-dark);
     }
+
+    .btn-secondary {
+      background-color: var(--brand-cream);
+      color: var(--brand-orange);
+      border-radius: 12px;
+      border: 2px solid var(--brand-orange);
+      font-weight: 500;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 285px;
+      height: 52px;
+      font-size: 16px;
+    }
+    .btn-secondary:hover {
+      background-color: var(--brand-cream-dark);
+    }
+
     
     .btn-outline {
       border: 2px solid var(--brand-orange);
       color: var(--brand-orange);
-      padding: 12px 28px;
       border-radius: 12px;
       font-weight: 500;
       transition: all .2s;
@@ -102,12 +124,20 @@
       justify-content: center;
       gap: 8px;
       background: transparent;
+      width: 100%;
+      max-width: 285px;
+      height: 52px;
+      font-size: 16px;
     }
     .btn-outline:hover {
       background-color: var(--brand-orange);
       color: #fff;
     }
-    
+
+    .btn-header {
+      width: clamp(160px, 17vw + 28px, 285px);
+    }
+
     .link-arrow {
       color: var(--brand-orange);
       font-weight: 500;
@@ -199,6 +229,9 @@
     @media (min-width: 769px) {
       .hide-desktop { display: none !important; }
     }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body>
@@ -220,21 +253,21 @@
 	  }
 	?>
     <!-- Desktop Nav -->
-    <nav class="hide-mobile items-center gap-7 hidden lg:flex">
+    <nav class="items-center gap-2 lg:gap-7 hidden lg:flex">
       <?php wp_nav_menu([
 	'menu' => 'main-menu',       
 	'menu_class' => 'flex items-center transition',
 	'container' => false,
-	'link_before' => '<span class="text-[15px] text-[#2D2926] font-medium hover:text-[#E8872C] transition-all mx-[10px]">',
+	'link_before' => '<span class="text-[15px] text-[#2D2926] font-medium hover:text-[#E8872C] transition-all mx-[5px] lg:mx-[10px] whitespace-nowrap">',
 	'link_after' => '</span>',
 	  ]);
       ?>
     </nav>
     
     <!-- Right -->
-    <div class="flex items-center gap-3">
-      <div class="hidden md:flex">
-	<a href="#" class="btn-primary text-base block min-w-[250px] min-h-[52px]">Купить билет</a>
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="hidden md:flex min-w-0">
+	<a href="#" class="btn-primary btn-header text-base block min-h-[52px] whitespace-nowrap">Купить билет</a>
       </div>
       <button class="relative p-2" aria-label="Корзина">
 	<img src="<?php echo esc_url( get_template_directory_uri() . '/img/cart.svg' ); ?>" alt="cart" class="w-[30px]" />
