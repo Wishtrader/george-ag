@@ -25,7 +25,14 @@
   
   <!-- TailwindCSS -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  
+  <style type="text/tailwindcss">
+    @theme {
+      --font-heading: 'Literata', serif;
+      --font-body: 'Golos Text', sans-serif;
+      --max-w-content: 1240px;
+    }
+  </style>
+
   <style>
     :root {
       --brand-orange: #F28A2E;
@@ -56,7 +63,7 @@
     h1, h2, h3, h4, h5, h6 {
       font-family: 'Literata', serif;
       color: var(--brand-text);
-      line-height: 1.15;
+      line-height: 1.2;
       font-weight: 400;
     }
     
@@ -113,7 +120,6 @@
       gap: 10px;
     }
     
-    /* Placeholder images */
     .ph {
       background: linear-gradient(135deg, #E8D5BE 0%, #D4BFA6 100%);
       position: relative;
@@ -150,7 +156,6 @@
     .ph-shop { background: linear-gradient(135deg, #F0E4D0 0%, #D4BFA6 100%); }
     .ph-cta { background: linear-gradient(135deg, #6B4A2A 0%, #3A2E24 100%); }
     
-    /* Decorative SVG icon style */
     .icon-box {
       display: inline-flex;
       align-items: center;
@@ -161,7 +166,6 @@
       background: #F5EADB;
     }
     
-    /* Event card badge */
     .event-badge {
       display: inline-flex;
       align-items: center;
@@ -171,7 +175,6 @@
       font-weight: 500;
     }
     
-    /* Mobile menu */
     .mobile-menu {
       position: fixed;
       inset: 0;
@@ -185,13 +188,11 @@
       transform: translateX(0);
     }
     
-    /* Decorative hill shape behind about illustration */
     .hill-shape {
       background: linear-gradient(135deg, #E5D5C0 0%, #D4BFA6 100%);
       border-radius: 50% 50% 0 0 / 60% 60% 0 0;
     }
     
-    /* Scroll snap-like smooth transitions */
     @media (max-width: 768px) {
       .hide-mobile { display: none !important; }
     }
