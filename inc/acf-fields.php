@@ -1244,3 +1244,623 @@ acf_add_local_field_group( array(
 	'menu_order' => 10,
 	'position'   => 'normal',
 ) );
+
+acf_add_local_field_group( array(
+	'key'      => 'group_about_hero',
+	'title'    => 'О музее: Hero',
+	'fields'   => array(
+			array(
+			'key'           => 'field_about_hero_title',
+			'label'         => 'Заголовок',
+			'name'          => 'about_hero_title',
+			'type'          => 'text',
+			'default_value' => 'О музее Naif Arts',
+		),
+		array(
+			'key'           => 'field_about_hero_description',
+			'label'         => 'Описание',
+			'name'          => 'about_hero_description',
+			'type'          => 'textarea',
+			'rows'          => 4,
+			'default_value' => 'Теплое культурное пространство в Минске, где наивное искусство раскрывается через выставки, мастер-классы, лекции и семейные программы.',
+		),
+		array(
+			'key'           => 'field_about_hero_image',
+			'label'         => 'Изображение',
+			'name'          => 'about_hero_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_about_hero_cta_primary_text',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'about_hero_cta_primary_text',
+			'type'          => 'text',
+			'default_value' => 'Смотреть арт',
+		),
+		array(
+			'key'           => 'field_about_hero_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'about_hero_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_about_hero_cta_secondary_text',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'about_hero_cta_secondary_text',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_about_hero_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+			'name'          => 'about_hero_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'about.php',
+			),
+		),
+	),
+	'menu_order' => 0,
+	'position'   => 'normal',
+) );
+
+acf_add_local_field_group( array(
+	'key'      => 'group_about_mission',
+	'title'    => 'О музее: Миссия и статистика',
+	'fields'   => array(
+		array(
+			'key'           => 'field_about_mission_title',
+			'label'         => 'Заголовок',
+			'name'          => 'about_mission_title',
+			'type'          => 'text',
+			'default_value' => 'Музей, где искусство остаётся искренним',
+		),
+		array(
+			'key'           => 'field_about_mission_description',
+			'label'         => 'Описание',
+			'name'          => 'about_mission_description',
+			'type'          => 'textarea',
+			'rows'          => 6,
+			'default_value' => 'Naif Arts — музей наивного искусства в Минске. Коллекция насчитывает более 1500 работ художников-самоучек из разных стран. Здесь живут картины, выполненные с любовью и фантазией, без академических правил, но с огромной душой. Музей — это место, где можно увидеть работы профессиональных художников, посетить мастер-классы, лекции, встречи и творческие программы для детей и взрослых.',
+		),
+		array(
+			'key'   => 'field_about_stat_1',
+			'label' => 'Статистика 1',
+			'type'  => 'group',
+			'fields' => array(
+				array(
+					'key'           => 'field_about_stat_1_number',
+					'label'         => 'Число',
+					'name'          => 'about_stat_1_number',
+					'type'          => 'text',
+					'default_value' => '1500+',
+				),
+				array(
+					'key'           => 'field_about_stat_1_label',
+					'label'         => 'Подпись',
+					'name'          => 'about_stat_1_label',
+					'type'          => 'text',
+					'default_value' => 'картин художников-самоучек',
+				),
+			),
+		),
+		array(
+			'key'   => 'field_about_stat_2',
+			'label' => 'Статистика 2',
+			'type'  => 'group',
+			'fields' => array(
+				array(
+					'key'           => 'field_about_stat_2_number',
+					'label'         => 'Число',
+					'name'          => 'about_stat_2_number',
+					'type'          => 'text',
+					'default_value' => '9',
+				),
+				array(
+					'key'           => 'field_about_stat_2_label',
+					'label'         => 'Подпись',
+					'name'          => 'about_stat_2_label',
+					'type'          => 'text',
+					'default_value' => 'направлений',
+				),
+			),
+		),
+		array(
+			'key'   => 'field_about_stat_3',
+			'label' => 'Статистика 3',
+			'type'  => 'group',
+			'fields' => array(
+				array(
+					'key'           => 'field_about_stat_3_number',
+					'label'         => 'Число',
+					'name'          => 'about_stat_3_number',
+					'type'          => 'text',
+					'default_value' => 'Первый',
+				),
+				array(
+					'key'           => 'field_about_stat_3_label',
+					'label'         => 'Подпись',
+					'name'          => 'about_stat_3_label',
+					'type'          => 'text',
+					'default_value' => 'в Минске',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'about.php',
+			),
+		),
+	),
+	'menu_order' => 1,
+	'position'   => 'normal',
+) );
+
+acf_add_local_field_group( array(
+	'key'      => 'group_about_what_to_do',
+	'title'    => 'О музее: Что можно сделать',
+	'fields'   => array(
+		array(
+			'key'           => 'field_about_what_to_do_title',
+			'label'         => 'Заголовок',
+			'name'          => 'about_what_to_do_title',
+			'type'          => 'text',
+			'default_value' => 'Что можно сделать в музее',
+		),
+		array(
+			'key'          => 'field_about_what_to_do_items',
+			'label'        => 'Элементы',
+			'name'         => 'about_what_to_do_items',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить элемент',
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_about_what_to_do_icon',
+					'label'         => 'Иконка',
+					'name'          => 'icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
+				),
+				array(
+					'key'     => 'field_about_what_to_do_item_title',
+					'label'   => 'Заголовок',
+					'name'    => 'title',
+					'type'    => 'text',
+				),
+				array(
+					'key'     => 'field_about_what_to_do_item_description',
+					'label'   => 'Описание',
+					'name'    => 'description',
+					'type'    => 'textarea',
+					'rows'    => 3,
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'about.php',
+			),
+		),
+	),
+	'menu_order' => 2,
+	'position'   => 'normal',
+) );
+
+acf_add_local_field_group( array(
+	'key'      => 'group_about_expositions',
+	'title'    => 'О музее: Экспозиции',
+	'fields'   => array(
+		array(
+			'key'           => 'field_about_expositions_title',
+			'label'         => 'Заголовок',
+			'name'          => 'about_expositions_title',
+			'type'          => 'text',
+			'default_value' => 'Экспозиции музея',
+		),
+		array(
+			'key'           => 'field_about_expositions_link_text',
+			'label'         => 'Текст ссылки',
+			'name'          => 'about_expositions_link_text',
+			'type'          => 'text',
+			'default_value' => 'Все экспозиции',
+		),
+		array(
+			'key'          => 'field_about_expositions_list',
+			'label'        => 'Экспозиции',
+			'name'         => 'about_expositions_list',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить экспозицию',
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_about_expo_image',
+					'label'         => 'Изображение',
+					'name'          => 'image',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+				),
+				array(
+					'key'     => 'field_about_expo_title',
+					'label'   => 'Название',
+					'name'    => 'title',
+					'type'    => 'text',
+				),
+				array(
+					'key'     => 'field_about_expo_description',
+					'label'   => 'Описание',
+					'name'    => 'description',
+					'type'    => 'textarea',
+					'rows'    => 3,
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'about.php',
+			),
+		),
+	),
+	'menu_order' => 3,
+	'position'   => 'normal',
+) );
+
+acf_add_local_field_group( array(
+	'key'      => 'group_about_special',
+	'title'    => 'О музее: Спец. экспозиция',
+	'fields'   => array(
+		array(
+			'key'     => 'field_about_special_badge',
+			'label'   => 'Бейдж',
+			'name'    => 'about_special_badge',
+			'type'    => 'text',
+			'default_value' => 'Постоянная экспозиция',
+		),
+		array(
+			'key'           => 'field_about_special_title',
+			'label'         => 'Заголовок',
+			'name'          => 'about_special_title',
+			'type'          => 'text',
+			'default_value' => 'СССР: Сокровища счастливого советского ребенка',
+		),
+		array(
+			'key'           => 'field_about_special_description',
+			'label'         => 'Описание',
+			'name'          => 'about_special_description',
+			'type'          => 'textarea',
+			'rows'          => 4,
+			'default_value' => 'Обычный посетитель музея, посвященный детским игрушкам, книгам и утвари. Погрузитесь в атмосферу детства!',
+		),
+		array(
+			'key'           => 'field_about_special_image',
+			'label'         => 'Изображение',
+			'name'          => 'about_special_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_about_special_button_text',
+			'label'         => 'Текст кнопки',
+			'name'          => 'about_special_button_text',
+			'type'          => 'text',
+			'default_value' => 'Подробнее',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'about.php',
+			),
+		),
+	),
+	'menu_order' => 4,
+	'position'   => 'normal',
+) );
+
+acf_add_local_field_group( array(
+	'key'      => 'group_about_education',
+	'title'    => 'О музее: Образование',
+	'fields'   => array(
+		array(
+			'key'           => 'field_about_education_title',
+			'label'         => 'Заголовок секции',
+			'name'          => 'about_education_title',
+			'type'          => 'text',
+			'default_value' => 'Образовательная и творческая программа',
+		),
+		array(
+			'key'           => 'field_about_education_link_text',
+			'label'         => 'Текст ссылки',
+			'name'          => 'about_education_link_text',
+			'type'          => 'text',
+			'default_value' => 'Все мастер-классы и лекции',
+		),
+		array(
+			'key'           => 'field_about_education_lectures_title',
+			'label'         => 'Лекции: заголовок',
+			'name'          => 'about_education_lectures_title',
+			'type'          => 'text',
+			'default_value' => 'Лекции, экскурсии и встречи',
+		),
+		array(
+			'key'           => 'field_about_education_lectures_image',
+			'label'         => 'Лекции: изображение',
+			'name'          => 'about_education_lectures_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'          => 'field_about_education_lectures_items',
+			'label'        => 'Лекции: список',
+			'name'         => 'about_education_lectures_items',
+			'type'         => 'repeater',
+			'layout'       => 'table',
+			'button_label' => 'Добавить пункт',
+			'sub_fields'   => array(
+				array(
+					'key'   => 'field_about_lectures_item_text',
+					'label' => 'Текст',
+					'name'  => 'text',
+					'type'  => 'text',
+				),
+			),
+		),
+		array(
+			'key'           => 'field_about_education_lectures_button',
+			'label'         => 'Лекции: кнопка',
+			'name'          => 'about_education_lectures_button',
+			'type'          => 'text',
+			'default_value' => 'Подробнее',
+		),
+		array(
+			'key'           => 'field_about_education_masterclass_title',
+			'label'         => 'Мастер-классы: заголовок',
+			'name'          => 'about_education_masterclass_title',
+			'type'          => 'text',
+			'default_value' => 'Мастер-классы и творческие активности',
+		),
+		array(
+			'key'           => 'field_about_education_masterclass_image',
+			'label'         => 'Мастер-классы: изображение',
+			'name'          => 'about_education_masterclass_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'          => 'field_about_education_masterclass_items',
+			'label'        => 'Мастер-классы: список',
+			'name'         => 'about_education_masterclass_items',
+			'type'         => 'repeater',
+			'layout'       => 'table',
+			'button_label' => 'Добавить пункт',
+			'sub_fields'   => array(
+				array(
+					'key'   => 'field_about_masterclass_item_text',
+					'label' => 'Текст',
+					'name'  => 'text',
+					'type'  => 'text',
+				),
+			),
+		),
+		array(
+			'key'           => 'field_about_education_masterclass_button',
+			'label'         => 'Мастер-классы: кнопка',
+			'name'          => 'about_education_masterclass_button',
+			'type'          => 'text',
+			'default_value' => 'Подробнее',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'about.php',
+			),
+		),
+	),
+	'menu_order' => 5,
+	'position'   => 'normal',
+) );
+
+acf_add_local_field_group( array(
+	'key'      => 'group_about_shop',
+	'title'    => 'О музее: Магазин',
+	'fields'   => array(
+		array(
+			'key'           => 'field_about_shop_title',
+			'label'         => 'Заголовок',
+			'name'          => 'about_shop_title',
+			'type'          => 'text',
+			'default_value' => 'Искусство, книги и музейные сувениры',
+		),
+		array(
+			'key'           => 'field_about_shop_link_text',
+			'label'         => 'Текст ссылки',
+			'name'          => 'about_shop_link_text',
+			'type'          => 'text',
+			'default_value' => 'В магазин',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'about.php',
+			),
+		),
+	),
+	'menu_order' => 6,
+	'position'   => 'normal',
+) );
+
+acf_add_local_field_group( array(
+	'key'      => 'group_about_events',
+	'title'    => 'О музее: События',
+	'fields'   => array(
+		array(
+			'key'           => 'field_about_events_title',
+			'label'         => 'Заголовок',
+			'name'          => 'about_events_title',
+			'type'          => 'text',
+			'default_value' => 'События, ради которых хочется возвращаться',
+		),
+		array(
+			'key'           => 'field_about_events_link_text',
+			'label'         => 'Текст ссылки',
+			'name'          => 'about_events_link_text',
+			'type'          => 'text',
+			'default_value' => 'Смотреть все события',
+		),
+		array(
+			'key'          => 'field_about_events_list',
+			'label'        => 'События',
+			'name'         => 'about_events_list',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить событие',
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_about_event_image',
+					'label'         => 'Изображение',
+					'name'          => 'image',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+				),
+				array(
+					'key'     => 'field_about_event_type',
+					'label'   => 'Тип',
+					'name'    => 'type',
+					'type'    => 'select',
+					'choices' => array(
+						'masterclass' => 'Мастер-класс',
+						'lecture'     => 'Лекция',
+						'meeting'     => 'Встреча',
+						'family'      => 'Семейное занятие',
+					),
+				),
+				array(
+					'key'     => 'field_about_event_datetime',
+					'label'   => 'Дата/время',
+					'name'    => 'datetime',
+					'type'    => 'text',
+				),
+				array(
+					'key'     => 'field_about_event_title',
+					'label'   => 'Название',
+					'name'    => 'title',
+					'type'    => 'text',
+				),
+				array(
+					'key'     => 'field_about_event_description',
+					'label'   => 'Описание',
+					'name'    => 'description',
+					'type'    => 'textarea',
+					'rows'    => 3,
+				),
+				array(
+					'key'     => 'field_about_event_button_text',
+					'label'   => 'Текст кнопки',
+					'name'    => 'button_text',
+					'type'    => 'text',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'about.php',
+			),
+		),
+	),
+	'menu_order' => 7,
+	'position'   => 'normal',
+) );
+
+acf_add_local_field_group( array(
+	'key'      => 'group_about_cta',
+	'title'    => 'О музее: CTA-секция',
+	'fields'   => array(
+		array(
+			'key'           => 'field_about_cta_background_image',
+			'label'         => 'Фон изображение (десктоп)',
+			'name'          => 'about_cta_background_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_about_cta_background_image_mobile',
+			'label'         => 'Фон изображение (мобильная)',
+			'name'          => 'about_cta_background_image_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_about_cta_title',
+			'label'         => 'Заголовок',
+			'name'          => 'about_cta_title',
+			'type'          => 'text',
+			'default_value' => 'Познакомьтесь с искусством ближе',
+		),
+		array(
+			'key'           => 'field_about_cta_primary',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'about_cta_primary',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_about_cta_secondary',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'about_cta_secondary',
+			'type'          => 'text',
+			'default_value' => 'Посетите музей',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'about.php',
+			),
+		),
+	),
+	'menu_order' => 8,
+	'position'   => 'normal',
+) );
