@@ -13,7 +13,7 @@ $events = get_field('upcoming_events');
 
 <section class="py-10 lg:py-16">
   <div class="max-w-content mx-auto px-4 lg:px-6">
-    <h1 class="font-heading text-3xl lg:text-[40px] font-bold text-gray-900 mb-8"><?php echo esc_html( $event_title ); ?></h1>
+    <h1 class="text-[34px] lg:text-[50px] text-[#2D2926] font-bold mb-8"><?php echo esc_html( $event_title ); ?></h1>
 
     <?php if ( $events ) : ?>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">

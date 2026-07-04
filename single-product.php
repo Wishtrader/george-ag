@@ -88,7 +88,7 @@ $product_main_image = $product ? wp_get_attachment_url($product->get_image_id())
 
       <!-- Right: Product info -->
       <div class="lg:pt-4">
-        <h1 class="text-[28px] lg:text-[36px] font-['Literata'] leading-[1.15] mb-4">
+        <h1 class="text-[34px] lg:text-[50px] text-[#2D2926] font-['Literata'] leading-[1.15] mb-4">
           <?php echo esc_html($product_name); ?>
         </h1>
         <?php if ($product_price): ?>

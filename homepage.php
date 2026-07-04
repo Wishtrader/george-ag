@@ -96,7 +96,7 @@ function get_event_type_label($type) {
         <?php endif; ?>
         <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
           <?php if ($hero_cta_primary): ?>
-            <a href="/афиша" class="btn-primary w-[285px]">
+            <a href="/poster" class="btn-primary w-[285px]">
               <?php echo esc_html($hero_cta_primary); ?>
             </a>
           <?php endif; ?>
@@ -404,7 +404,7 @@ function get_event_type_label($type) {
 <section id="shop" class="py-16 lg:py-20 bg-[#F5EADB]">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[26px] lg:text-[48px]">
+      <h2 class="text-[32px] lg:text-[44px]">
         <?php echo esc_html($shop_title ?: 'Магазин музея'); ?>
       </h2>
       <a href="<?php echo esc_url(home_url('/shop/')); ?>" class="link-arrow text-sm">

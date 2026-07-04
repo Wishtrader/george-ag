@@ -103,7 +103,7 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
           </nav>
 
           <div class="max-w-lg lg:max-w-[590px]">
-            <h1 class="font-['Literata'] text-2xl sm:text-3xl lg:text-[50px] !font-medium !leading-[1.4] mb-3 lg:mb-4">
+            <h1 class="font-['Literata'] text-[34px] lg:text-[50px] text-[#2D2926] !font-medium !leading-[1.4] mb-3 lg:mb-4">
               <?php the_title(); ?>
             </h1>
             <p class="text-black text-base lg:text-xl leading-[1.2] mb-5 lg:mb-[30px]">

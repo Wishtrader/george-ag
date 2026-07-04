@@ -50,7 +50,7 @@ $products = wc_get_products(array(
       <span class="text-[#2D2926]">Магазин</span>
     </nav>
     <div class="max-w-[600px]">
-      <h1 class="text-[32px] lg:text-[48px] mb-4">
+      <h1 class="text-[34px] lg:text-[50px] text-[#2D2926] mb-4">
         <?php echo esc_html($shop_title ?: 'Магазин музея'); ?>
       </h1>
       <?php if ($shop_description): ?>

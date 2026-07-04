@@ -89,42 +89,42 @@ function get_about_event_type_label($type) {
 
 <!-- ============ HERO ============ -->
 <?php if ($hero_title || $hero_description): ?>
-<section class="py-10 lg:py-16 relative overflow-hidden h-full">
-  <div class="container-main flex flex-col justify-between h-full">
+<section class="mt-[40px] lg:mt-[60px] relative overflow-hidden h-[236px] lg:h-[376px]">
+  <?php if ($hero_image): ?>
+  <div class="absolute inset-0" style="background-image: url('<?php echo esc_url($hero_image); ?>'); background-size: cover; background-position: center;"></div>
+  <?php else: ?>
+  <div class="absolute inset-0 ph ph-museum"></div>
+  <?php endif; ?>
+  <div class="absolute inset-0 bg-black/20"></div>
+
+  <div class="container-main relative h-full flex flex-col justify-center py-10">
+    <nav class="absolute top-6 left-0 text-sm text-white/80">
+      <a href="/" class="hover:text-white transition">Главная</a>
+      <span class="mx-2">→</span>
+      <span class="text-white">О музее</span>
+    </nav>
+
     <div class="">
-      <div class="flex flex-col md:max-w-[57%] h-full items-start">
-        <?php if ($hero_title): ?>
-        <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] leading-[1.05] mb-6 !font-medium">
-          <?php echo esc_html($hero_title); ?>
-        </h1>
+      <?php if ($hero_title): ?>
+      <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] leading-[1.05] mb-4 !font-medium text-[#2D2926]">
+        <?php echo esc_html($hero_title); ?>
+      </h1>
+      <?php endif; ?>
+      <?php if ($hero_description): ?>
+      <p class="text-[16px] md:text-[20px] max-w-[692px] text-[#2D2926] mb-8 leading-[1.2]">
+        <?php echo wp_kses_post($hero_description); ?>
+      </p>
+      <?php endif; ?>
+      <div class="flex flex-col sm:flex-row gap-3 justify-start gap-5 w-full">
+        <?php if ($hero_cta_primary_text): ?>
+          <a href="<?php echo esc_url($hero_cta_primary_url ?: '#'); ?>" class="btn-primary w-[285px]">
+            <?php echo esc_html($hero_cta_primary_text); ?>
+          </a>
         <?php endif; ?>
-        <?php if ($hero_description): ?>
-        <p class="text-[16px] md:text-[20px] text-[#2D2926] mb-8">
-          <?php echo wp_kses_post($hero_description); ?>
-        </p>
-        <?php endif; ?>
-        <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
-          <?php if ($hero_cta_primary_text): ?>
-            <a href="<?php echo esc_url($hero_cta_primary_url ?: '#'); ?>" class="btn-primary w-[285px]">
-              <?php echo esc_html($hero_cta_primary_text); ?>
-            </a>
-          <?php endif; ?>
-          <?php if ($hero_cta_secondary_text): ?>
-            <a href="<?php echo esc_url($hero_cta_secondary_url ?: '#'); ?>" class="btn-outline">
-              <?php echo esc_html($hero_cta_secondary_text); ?>
-            </a>
-          <?php endif; ?>
-        </div>
-      </div>
-      
-      <!-- Hero image -->
-      <div class="absolute right-[-60px] top-[40px] max-w-[42%]">
-        <?php if ($hero_image): ?>
-          <img src="<?php echo esc_url($hero_image); ?>" 
-               alt="<?php echo esc_attr($hero_title); ?>" 
-               class="rounded-2xl aspect-[4/5] lg:aspect-[5/6] w-full lg:w-[120%] lg:-ml-[10%] shadow-lg object-cover">
-        <?php else: ?>
-          <div class="ph ph-museum rounded-2xl aspect-[4/5] lg:aspect-[5/6] w-full lg:w-[120%] lg:-ml-[10%] shadow-lg"></div>
+        <?php if ($hero_cta_secondary_text): ?>
+          <a href="<?php echo esc_url($hero_cta_secondary_url ?: '#'); ?>" class="btn-secondary">
+            <?php echo esc_html($hero_cta_secondary_text); ?>
+          </a>
         <?php endif; ?>
       </div>
     </div>
@@ -136,15 +136,15 @@ function get_about_event_type_label($type) {
 <?php if ($mission_title || $mission_description): ?>
 <section class="py-16 lg:py-20">
   <div class="container-main">
-    <div class="grid lg:grid-cols-2 gap-10 lg:gap-20 items-start">
-      <div>
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+      <div class="max-w-[590px] w-full	">
         <?php if ($mission_title): ?>
-        <h2 class="text-[32px] lg:text-[44px] mb-6">
+        <h2 class="text-[32px] lg:text-[36px] mb-6">
           <?php echo esc_html($mission_title); ?>
         </h2>
         <?php endif; ?>
         <?php if ($mission_description): ?>
-        <p class="text-[16px] md:text-[20px] text-[#6B5A4A] leading-relaxed">
+        <p class="text-[16px] md:text-[20px] text-[#6B5A4A] leading-[1.2]">
           <?php echo wp_kses_post($mission_description); ?>
         </p>
         <?php endif; ?>
@@ -464,7 +464,7 @@ $education_masterclass_items = $education_masterclass_items ?: $education_master
 <section class="py-16 lg:py-20 bg-[#F5EADB]">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[26px] lg:text-[48px]">
+      <h2 class="text-[32px] lg:text-[44px]">
         <?php echo esc_html($shop_title ?: 'Искусство, книги и музейные сувениры'); ?>
       </h2>
       <a href="<?php echo esc_url(home_url('/shop/')); ?>" class="link-arrow text-sm">

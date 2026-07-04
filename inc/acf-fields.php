@@ -141,7 +141,77 @@ acf_add_local_field_group( array(
 			),
 		),
 	),
-	'menu_order' => -9,
+	'menu_order' => 3,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ГЛАВНАЯ ВЫСТАВКА — HERO
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_exhibition_hero',
+	'title'    => 'Выставка: Hero',
+	'fields'   => array(
+		array(
+			'key'           => 'field_exhibition_hero_title',
+			'label'         => 'Заголовок',
+			'name'          => 'exhibition_hero_title',
+			'type'          => 'text',
+			'default_value' => 'СССР: Сокровища счастливого советского ребёнка',
+		),
+		array(
+			'key'           => 'field_exhibition_hero_description',
+			'label'         => 'Описание',
+			'name'          => 'exhibition_hero_description',
+			'type'          => 'textarea',
+			'rows'          => 3,
+			'default_value' => 'Постоянная экспозиция музея, посвящённая памяти детства, советским игрушкам, предметам быта и визуальной культуре прошлого.',
+		),
+		array(
+			'key'           => 'field_exhibition_hero_image',
+			'label'         => 'Фоновое изображение',
+			'name'          => 'exhibition_hero_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_exhibition_hero_cta_primary_text',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'exhibition_hero_cta_primary_text',
+			'type'          => 'text',
+			'default_value' => 'Смотреть афишу',
+		),
+		array(
+			'key'           => 'field_exhibition_hero_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'exhibition_hero_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_exhibition_hero_cta_secondary_text',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'exhibition_hero_cta_secondary_text',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_exhibition_hero_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+			'name'          => 'exhibition_hero_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'exhibition.php',
+			),
+		),
+	),
+	'menu_order' => 0,
 	'position'   => 'normal',
 ) );
 
@@ -1862,5 +1932,1101 @@ acf_add_local_field_group( array(
 		),
 	),
 	'menu_order' => 8,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КАФЕ — HERO
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_cafe_hero',
+	'title'    => 'Кафе: Hero',
+	'fields'   => array(
+		array(
+			'key'           => 'field_cafe_hero_title',
+			'label'         => 'Заголовок',
+			'name'          => 'cafe_hero_title',
+			'type'          => 'text',
+			'default_value' => 'Кафе музея',
+		),
+		array(
+			'key'           => 'field_cafe_hero_description',
+			'label'         => 'Описание',
+			'name'          => 'cafe_hero_description',
+			'type'          => 'textarea',
+			'rows'          => 3,
+			'default_value' => 'Пространство для отдыха, разговоров и вкусной паузы после знакомства с искусством.',
+		),
+		array(
+			'key'           => 'field_cafe_hero_image',
+			'label'         => 'Изображение',
+			'name'          => 'cafe_hero_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_cafe_hero_cta_primary_text',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'cafe_hero_cta_primary_text',
+			'type'          => 'text',
+			'default_value' => 'Смотреть афишу',
+		),
+		array(
+			'key'           => 'field_cafe_hero_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'cafe_hero_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_cafe_hero_cta_secondary_text',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'cafe_hero_cta_secondary_text',
+			'type'          => 'text',
+			'default_value' => 'Связаться с музеем',
+		),
+		array(
+			'key'           => 'field_cafe_hero_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+			'name'          => 'cafe_hero_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'cafe.php',
+			),
+		),
+	),
+	'menu_order' => 0,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КАФЕ — ОПИСАНИЕ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_cafe_about',
+	'title'    => 'Кафе: Описание',
+	'fields'   => array(
+		array(
+			'key'           => 'field_cafe_about_title',
+			'label'         => 'Заголовок',
+			'name'          => 'cafe_about_title',
+			'type'          => 'text',
+			'default_value' => 'Искусство хочется не только смотреть, но и обсуждать',
+		),
+		array(
+			'key'           => 'field_cafe_about_description',
+			'label'         => 'Описание',
+			'name'          => 'cafe_about_description',
+			'type'          => 'textarea',
+			'rows'          => 5,
+			'default_value' => 'Посещение музея — это событие не только эстетическое, но и гастрономическое. Увиденное хочется обсудить, обсудить и прожить чуть дольше — за чашкой чая, кофе или десертом. Поэтому мы создали музейное кафе, где можно комфортно провести время после экспозиции с постоянной экспозицией и новыми выставками.',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'cafe.php',
+			),
+		),
+	),
+	'menu_order' => 1,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КАФЕ — ЧТО ВАС ЖДЕТ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_cafe_features',
+	'title'    => 'Кафе: Что вас ждет',
+	'fields'   => array(
+		array(
+			'key'           => 'field_cafe_features_title',
+			'label'         => 'Заголовок',
+			'name'          => 'cafe_features_title',
+			'type'          => 'text',
+			'default_value' => 'Что вас ждет',
+		),
+		array(
+			'key'          => 'field_cafe_features_items',
+			'label'        => 'Карточки',
+			'name'         => 'cafe_features_items',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить карточку',
+			'max'          => 4,
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_cafe_feature_icon',
+					'label'         => 'Иконка',
+					'name'          => 'icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
+				),
+				array(
+					'key'          => 'field_cafe_feature_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+					'default_value' => 'Кафе и десерты',
+				),
+				array(
+					'key'          => 'field_cafe_feature_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 3,
+					'default_value' => 'Идеальное место для короткой паузы, неспешного разговора и отдыха после прогулки по музею.',
+				),
+				array(
+					'key'           => 'field_cafe_feature_image',
+					'label'         => 'Изображение',
+					'name'          => 'image',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'cafe.php',
+			),
+		),
+	),
+	'menu_order' => 2,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КАФЕ — ТВОРЧЕСКАЯ ПАУЗА
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_cafe_creative',
+	'title'    => 'Кафе: Творческая пауза',
+	'fields'   => array(
+		array(
+			'key'           => 'field_cafe_creative_title',
+			'label'         => 'Заголовок',
+			'name'          => 'cafe_creative_title',
+			'type'          => 'text',
+			'default_value' => 'Творческая пауза внутри музейного маршрута',
+		),
+		array(
+			'key'           => 'field_cafe_creative_description',
+			'label'         => 'Описание',
+			'name'          => 'cafe_creative_description',
+			'type'          => 'textarea',
+			'rows'          => 4,
+			'default_value' => 'Кафе продолжает атмосферу музея: здесь можно сделать паузу, обсудить увиденное, встретиться с друзьями или просто спокойно провести время в красивом пространстве.',
+		),
+		array(
+			'key'           => 'field_cafe_creative_image',
+			'label'         => 'Изображение',
+			'name'          => 'cafe_creative_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'cafe.php',
+			),
+		),
+	),
+	'menu_order' => 3,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КАФЕ — ВАЖНО ЗНАТЬ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_cafe_important',
+	'title'    => 'Кафе: Важно знать',
+	'fields'   => array(
+		array(
+			'key'           => 'field_cafe_important_title',
+			'label'         => 'Заголовок',
+			'name'          => 'cafe_important_title',
+			'type'          => 'text',
+			'default_value' => 'Важно знать перед посещением',
+		),
+		array(
+			'key'          => 'field_cafe_important_items',
+			'label'        => 'Карточки',
+			'name'         => 'cafe_important_items',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить карточку',
+			'max'          => 6,
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_cafe_important_icon',
+					'label'         => 'Иконка',
+					'name'          => 'icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
+				),
+				array(
+					'key'          => 'field_cafe_important_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+					'default_value' => 'Посещение по билету музея',
+				),
+				array(
+					'key'          => 'field_cafe_important_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 3,
+					'default_value' => 'Для посещения кафе и бара необходим действующий билет в музей.',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'cafe.php',
+			),
+		),
+	),
+	'menu_order' => 4,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КАФЕ — ГАЛЕРЕЯ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_cafe_gallery',
+	'title'    => 'Кафе: Галерея',
+	'fields'   => array(
+		array(
+			'key'           => 'field_cafe_gallery_title',
+			'label'         => 'Заголовок',
+			'name'          => 'cafe_gallery_title',
+			'type'          => 'text',
+			'default_value' => 'Пространство для отдыха и разговоров',
+		),
+		array(
+			'key'          => 'field_cafe_gallery_images',
+			'label'        => 'Изображения (4 шт)',
+			'name'         => 'cafe_gallery_images',
+			'type'         => 'gallery',
+			'layout'       => 'grid',
+			'button_label' => 'Добавить изображение',
+			'return_format' => 'array',
+			'library'       => 'all',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'cafe.php',
+			),
+		),
+	),
+	'menu_order' => 5,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КАФЕ — CTA
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_cafe_cta',
+	'title'    => 'Кафе: CTA-секция',
+	'fields'   => array(
+		array(
+			'key'           => 'field_cafe_cta_background_image',
+			'label'         => 'Фон изображение (десктоп)',
+			'name'          => 'cafe_cta_background_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_cafe_cta_background_image_mobile',
+			'label'         => 'Фон изображение (мобильная)',
+			'name'          => 'cafe_cta_background_image_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_cafe_cta_title',
+			'label'         => 'Заголовок',
+			'name'          => 'cafe_cta_title',
+			'type'          => 'text',
+			'default_value' => 'Хотите провести время в музейном кафе?',
+		),
+		array(
+			'key'           => 'field_cafe_cta_primary',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'cafe_cta_primary',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_cafe_cta_secondary',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'cafe_cta_secondary',
+			'type'          => 'text',
+			'default_value' => 'Связаться с музеем',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'cafe.php',
+			),
+		),
+	),
+	'menu_order' => 6,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КОНТАКТЫ — HERO
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_contacts_hero',
+	'title'    => 'Контакты: Hero',
+	'fields'   => array(
+		array(
+			'key'           => 'field_contacts_hero_title',
+			'label'         => 'Заголовок',
+			'name'          => 'contacts_hero_title',
+			'type'          => 'text',
+			'default_value' => 'Контакты музея',
+		),
+		array(
+			'key'           => 'field_contacts_hero_description',
+			'label'         => 'Описание',
+			'name'          => 'contacts_hero_description',
+			'type'          => 'textarea',
+			'rows'          => 3,
+			'default_value' => 'Свяжитесь с нами, запланируйте посещение музея или найдите удобный способ добраться до Naif Arts',
+		),
+		array(
+			'key'           => 'field_contacts_hero_image',
+			'label'         => 'Фоновое изображение',
+			'name'          => 'contacts_hero_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'contacts.php',
+			),
+		),
+	),
+	'menu_order' => 0,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КОНТАКТЫ — КОНТАКТНАЯ ИНФОРМАЦИЯ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_contacts_info',
+	'title'    => 'Контакты: Контактная информация',
+	'fields'   => array(
+		array(
+			'key'           => 'field_contacts_address_title',
+			'label'         => 'Адрес: заголовок',
+			'name'          => 'contacts_address_title',
+			'type'          => 'text',
+			'default_value' => 'Адрес музея',
+		),
+		array(
+			'key'           => 'field_contacts_address_text',
+			'label'         => 'Адрес: текст',
+			'name'          => 'contacts_address_text',
+			'type'          => 'textarea',
+			'rows'          => 2,
+			'default_value' => 'Минск, пр-т Победителей, 84, 2 этаж, ТЦ «Арена Сити»',
+		),
+		array(
+			'key'           => 'field_contacts_address_map_query',
+			'label'         => 'Адрес для карты',
+			'name'          => 'contacts_address_map_query',
+			'type'          => 'text',
+			'instructions'  => 'Точный адрес для Яндекс Карт (будет использован для геокодирования)',
+			'default_value' => 'Минск, пр-т Победителей, 84',
+		),
+		array(
+			'key'           => 'field_contacts_phone_title',
+			'label'         => 'Телефон: заголовок',
+			'name'          => 'contacts_phone_title',
+			'type'          => 'text',
+			'default_value' => 'Телефон',
+		),
+		array(
+			'key'           => 'field_contacts_phone_text',
+			'label'         => 'Телефон: текст',
+			'name'          => 'contacts_phone_text',
+			'type'          => 'text',
+			'default_value' => '+375 44 574-30-82',
+		),
+		array(
+			'key'           => 'field_contacts_phone_link',
+			'label'         => 'Телефон: ссылка',
+			'name'          => 'contacts_phone_link',
+			'type'          => 'text',
+			'default_value' => 'tel:+375445743082',
+		),
+		array(
+			'key'           => 'field_contacts_email_title',
+			'label'         => 'Почта: заголовок',
+			'name'          => 'contacts_email_title',
+			'type'          => 'text',
+			'default_value' => 'E-mail',
+		),
+		array(
+			'key'           => 'field_contacts_email_text',
+			'label'         => 'Почта: текст',
+			'name'          => 'contacts_email_text',
+			'type'          => 'text',
+			'default_value' => 'naifartsmuseum@yandex.by',
+		),
+		array(
+			'key'           => 'field_contacts_email_link',
+			'label'         => 'Почта: ссылка',
+			'name'          => 'contacts_email_link',
+			'type'          => 'text',
+			'default_value' => 'mailto:naifartsmuseum@yandex.by',
+		),
+		array(
+			'key'           => 'field_contacts_socials_title',
+			'label'         => 'Соцсети: заголовок',
+			'name'          => 'contacts_socials_title',
+			'type'          => 'text',
+			'default_value' => 'Мы в социальных сетях',
+		),
+		array(
+			'key'           => 'field_contacts_socials_instagram',
+			'label'         => 'Instagram: ссылка',
+			'name'          => 'contacts_socials_instagram',
+			'type'          => 'url',
+			'default_value' => 'https://www.instagram.com/naifartsmuseum',
+		),
+		array(
+			'key'           => 'field_contacts_socials_tiktok',
+			'label'         => 'TikTok: ссылка',
+			'name'          => 'contacts_socials_tiktok',
+			'type'          => 'url',
+			'default_value' => 'https://www.tiktok.com/@naifartsmuseum',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'contacts.php',
+			),
+		),
+	),
+	'menu_order' => 1,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КОНТАКТЫ — ЧАСЫ РАБОТЫ + КАРТА
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_contacts_hours_map',
+	'title'    => 'Контакты: Часы работы и Карта',
+	'fields'   => array(
+		array(
+			'key'           => 'field_contacts_hours_title',
+			'label'         => 'Часы работы: заголовок',
+			'name'          => 'contacts_hours_title',
+			'type'          => 'text',
+			'default_value' => 'Часы работы',
+		),
+		array(
+			'key'           => 'field_contacts_hours_text',
+			'label'         => 'Часы работы: текст',
+			'name'          => 'contacts_hours_text',
+			'type'          => 'text',
+			'default_value' => 'Музей работает с 10:00 до 22:00',
+		),
+		array(
+			'key'           => 'field_contacts_how_to_get_title',
+			'label'         => 'Карта: заголовок',
+			'name'          => 'contacts_how_to_get_title',
+			'type'          => 'text',
+			'default_value' => 'Как добраться',
+		),
+		array(
+			'key'           => 'field_contacts_map_api_key',
+			'label'         => 'API-ключ Яндекс Карт',
+			'name'          => 'contacts_map_api_key',
+			'type'          => 'text',
+			'instructions'  => 'Получите API-ключ на https://developer.tech.yandex.ru/',
+		),
+		array(
+			'key'           => 'field_contacts_map_center_lat',
+			'label'         => 'Широта центра карты',
+			'name'          => 'contacts_map_center_lat',
+			'type'          => 'text',
+			'default_value' => '53.9386',
+		),
+		array(
+			'key'           => 'field_contacts_map_center_lon',
+			'label'         => 'Долгота центра карты',
+			'name'          => 'contacts_map_center_lon',
+			'type'          => 'text',
+			'default_value' => '27.4855',
+		),
+		array(
+			'key'           => 'field_contacts_map_zoom',
+			'label'         => 'Масштаб',
+			'name'          => 'contacts_map_zoom',
+			'type'          => 'range',
+			'min'           => 1,
+			'max'           => 19,
+			'step'          => 1,
+			'default_value' => 16,
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'contacts.php',
+			),
+		),
+	),
+	'menu_order' => 2,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: КОНТАКТЫ — ФОРМА И РЕКВИЗИТЫ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_contacts_form',
+	'title'    => 'Контакты: Форма и Реквизиты',
+	'fields'   => array(
+		array(
+			'key'           => 'field_contacts_form_bg_image',
+			'label'         => 'Фон секции формы',
+			'name'          => 'contacts_form_bg_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_contacts_form_title',
+			'label'         => 'Форма: заголовок',
+			'name'          => 'contacts_form_title',
+			'type'          => 'text',
+			'default_value' => 'Напишите нам',
+		),
+		array(
+			'key'           => 'field_contacts_form_name_placeholder',
+			'label'         => 'Форма: плейсхолдер имени',
+			'name'          => 'contacts_form_name_placeholder',
+			'type'          => 'text',
+			'default_value' => 'Иван Иванов',
+		),
+		array(
+			'key'           => 'field_contacts_form_phone_placeholder',
+			'label'         => 'Форма: плейсхолдер телефона',
+			'name'          => 'contacts_form_phone_placeholder',
+			'type'          => 'text',
+			'default_value' => '+375 XX XXX-XX-XX',
+		),
+		array(
+			'key'           => 'field_contacts_form_comment_placeholder',
+			'label'         => 'Форма: плейсхолдер комментария',
+			'name'          => 'contacts_form_comment_placeholder',
+			'type'          => 'text',
+			'default_value' => 'Опишите, какая упаковка вам нужна...',
+		),
+		array(
+			'key'           => 'field_contacts_form_checkbox_text',
+			'label'         => 'Форма: текст чекбокса',
+			'name'          => 'contacts_form_checkbox_text',
+			'type'          => 'text',
+			'default_value' => 'Я согласен (на) на обработку персональных данных',
+		),
+		array(
+			'key'           => 'field_contacts_form_button_text',
+			'label'         => 'Форма: текст кнопки',
+			'name'          => 'contacts_form_button_text',
+			'type'          => 'text',
+			'default_value' => 'Отправить заявку',
+		),
+		array(
+			'key'           => 'field_contacts_requisites_title',
+			'label'         => 'Реквизиты: заголовок',
+			'name'          => 'contacts_requisites_title',
+			'type'          => 'text',
+			'default_value' => 'Реквизиты',
+		),
+		array(
+			'key'           => 'field_contacts_requisites_text',
+			'label'         => 'Реквизиты: текст',
+			'name'          => 'contacts_requisites_text',
+			'type'          => 'textarea',
+			'rows'          => 12,
+			'default_value' => 'ООО "Джордж Эйджи"
+УНП: 690663385
+Счет: BY58PJCB30120683671000000933
+ОАО "Приорбанк"
+БИК: PJCVBY2X
+Юридический адрес: 220062 Республика Беларусь, г.Минск, ул Ржавецкая, д.5. пом.158/2
+Директор: Жуковская Полина Константиновна действующая на основании Устава',
+		),
+		array(
+	'key'           => 'field_contacts_requisites_image',
+		'label'         => 'Реквизиты: изображение',
+		'name'          => 'contacts_requisites_image',
+		'type'          => 'image',
+		'return_format' => 'url',
+		'library'       => 'all',
+	),
+),
+'location'   => array(
+	array(
+		array(
+			'param'    => 'page_template',
+			'operator' => '==',
+			'value'    => 'contacts.php',
+		),
+	),
+),
+'menu_order' => 3,
+'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ГЛАВНАЯ ВЫСТАВКА — ОПИСАНИЕ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_exhibition_about',
+	'title'    => 'Выставка: Описание',
+	'fields'   => array(
+		array(
+			'key'           => 'field_exhibition_about_title',
+			'label'         => 'Заголовок',
+			'name'          => 'exhibition_about_title',
+			'type'          => 'text',
+			'default_value' => 'Экспозиция о памяти, детстве и вещах, которые узнаются с первого взгляда',
+		),
+		array(
+			'key'           => 'field_exhibition_about_description',
+			'label'         => 'Описание 1',
+			'name'          => 'exhibition_about_description',
+			'type'          => 'textarea',
+			'rows'          => 4,
+			'default_value' => 'Эта экспозиция — не просто место для осмотра предметов, а пространство личной памяти. Проект «СССР: Сокровища счастливого советского ребёнка» — это возможность не просто увидеть прошлое, но и прожить его через визуальные и эмоциональные детали.',
+		),
+		array(
+			'key'           => 'field_exhibition_about_description_2',
+			'label'         => 'Описание 2',
+			'name'          => 'exhibition_about_description_2',
+			'type'          => 'textarea',
+			'rows'          => 4,
+			'default_value' => 'Здесь собраны игрушки, книги, элементы повседневного быта, визуальные детали и знакомые вещи, которые вызывают воспоминания, тёплую ностальгию и желание рассказать о них снова.',
+		),
+		array(
+			'key'           => 'field_exhibition_about_description_3',
+			'label'         => 'Описание 3',
+			'name'          => 'exhibition_about_description_3',
+			'type'          => 'textarea',
+			'rows'          => 3,
+			'default_value' => 'Пространство экспозиции помогает не только вспомнить прошлое, но и увидеть его как часть культурной памяти.',
+		),
+		array(
+			'key'           => 'field_exhibition_about_image',
+			'label'         => 'Изображение',
+			'name'          => 'exhibition_about_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'exhibition.php',
+			),
+		),
+	),
+	'menu_order' => 1,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ГЛАВНАЯ ВЫСТАВКА — ЧТО МОЖНО УВИДЕТЬ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_exhibition_what_to_see',
+	'title'    => 'Выставка: Что можно увидеть',
+	'fields'   => array(
+		array(
+			'key'           => 'field_exhibition_what_to_see_title',
+			'label'         => 'Заголовок',
+			'name'          => 'exhibition_what_to_see_title',
+			'type'          => 'text',
+			'default_value' => 'Что можно увидеть в экспозиции',
+		),
+		array(
+			'key'          => 'exhibition_what_to_see_items',
+			'label'        => 'Элементы',
+			'name'         => 'exhibition_what_to_see_items',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить элемент',
+			'max'          => 4,
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_exhibition_what_to_see_image',
+					'label'         => 'Изображение',
+					'name'          => 'image',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+				),
+				array(
+					'key'          => 'field_exhibition_what_to_see_item_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+					'default_value' => 'Советские игрушки',
+				),
+				array(
+					'key'          => 'field_exhibition_what_to_see_item_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 3,
+					'default_value' => 'Куклы, машинки, конструкторы и игрушки, которые были частью детства нескольких поколений.',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'exhibition.php',
+			),
+		),
+	),
+	'menu_order' => 2,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ГЛАВНАЯ ВЫСТАВКА — ПОЧЕМУ СЮДА ХОЧЕТСЯ ПРИЙТИ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_exhibition_why',
+	'title'    => 'Выставка: Почему сюда хочется прийти',
+	'fields'   => array(
+		array(
+			'key'           => 'field_exhibition_why_title',
+			'label'         => 'Заголовок',
+			'name'          => 'exhibition_why_title',
+			'type'          => 'text',
+			'default_value' => 'Почему сюда хочется прийти',
+		),
+		array(
+			'key'           => 'field_exhibition_why_description',
+			'label'         => 'Описание',
+			'name'          => 'exhibition_why_description',
+			'type'          => 'textarea',
+			'rows'          => 6,
+			'default_value' => 'Эта экспозиция работает не только как музейный раздел, но и как личный эмоциональный опыт. Для одних посетителей она становится поводом вспомнить своё детство, для других — возможностью увидеть предметный мир прошлого впервые. Именно поэтому пространство экспозиции построено как историко-культурный проект, семейный повод для посещения и целый маршрут по памяти.',
+		),
+		array(
+			'key'           => 'field_exhibition_why_image',
+			'label'         => 'Изображение',
+			'name'          => 'exhibition_why_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'exhibition.php',
+			),
+		),
+	),
+	'menu_order' => 3,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ГЛАВНАЯ ВЫСТАВКА — ПРАКТИЧЕСКАЯ ИНФОРМАЦИЯ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_exhibition_practical',
+	'title'    => 'Выставка: Практическая информация',
+	'fields'   => array(
+		array(
+			'key'           => 'field_exhibition_practical_title',
+			'label'         => 'Заголовок',
+			'name'          => 'exhibition_practical_title',
+			'type'          => 'text',
+			'default_value' => 'Практическая информация',
+		),
+		array(
+			'key'           => 'field_exhibition_practical_format',
+			'label'         => 'Формат',
+			'name'          => 'exhibition_practical_format',
+			'type'          => 'text',
+			'default_value' => 'Постоянная экспозиция',
+		),
+		array(
+			'key'           => 'field_exhibition_practical_access',
+			'label'         => 'Доступ',
+			'name'          => 'exhibition_practical_access',
+			'type'          => 'text',
+			'default_value' => 'по входному билету',
+		),
+		array(
+			'key'           => 'field_exhibition_practical_location',
+			'label'         => 'Место',
+			'name'          => 'exhibition_practical_location',
+			'type'          => 'text',
+			'default_value' => 'музей Naif Arts',
+		),
+		array(
+			'key'           => 'field_exhibition_practical_additional',
+			'label'         => 'Дополнительно',
+			'name'          => 'exhibition_practical_additional',
+			'type'          => 'text',
+			'default_value' => 'можно совмещать с другими выставками и событиями музея',
+		),
+		array(
+			'key'           => 'field_exhibition_practical_audience',
+			'label'         => 'Подходит для',
+			'name'          => 'exhibition_practical_audience',
+			'type'          => 'text',
+			'default_value' => 'индивидуального и семейного посещения',
+		),
+		array(
+			'key'           => 'field_exhibition_practical_price',
+			'label'         => 'Стоимость',
+			'name'          => 'exhibition_practical_price',
+			'type'          => 'text',
+			'default_value' => '00 BYN',
+		),
+		array(
+			'key'           => 'field_exhibition_practical_button_text',
+			'label'         => 'Текст кнопки',
+			'name'          => 'exhibition_practical_button_text',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'exhibition.php',
+			),
+		),
+	),
+	'menu_order' => 4,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ГЛАВНАЯ ВЫСТАВКА — АБОНЕМЕНТЫ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_exhibition_subscriptions',
+	'title'    => 'Выставка: Абонементы',
+	'fields'   => array(
+		array(
+			'key'           => 'field_exhibition_subscriptions_title',
+			'label'         => 'Заголовок',
+			'name'          => 'exhibition_subscriptions_title',
+			'type'          => 'text',
+			'default_value' => 'Абонементы и регулярные форматы',
+		),
+		array(
+			'key'          => 'exhibition_subscriptions_items',
+			'label'        => 'Абонементы',
+			'name'         => 'exhibition_subscriptions_items',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить абонемент',
+			'max'          => 3,
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_exhibition_subscription_image',
+					'label'         => 'Изображение',
+					'name'          => 'image',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+				),
+				array(
+					'key'          => 'field_exhibition_subscription_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+					'default_value' => 'Абонемент в музей',
+				),
+				array(
+					'key'          => 'field_exhibition_subscription_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 3,
+					'default_value' => 'Свободное посещение постоянных выставок и временных экспозиций в течение выбранного периода.',
+				),
+				array(
+					'key'          => 'field_exhibition_subscription_includes_title',
+					'label'        => 'Заголовок "Что входит"',
+					'name'         => 'includes_title',
+					'type'         => 'text',
+					'default_value' => 'Что входит',
+				),
+				array(
+					'key'          => 'field_exhibition_subscription_includes_items',
+					'label'        => 'Что входит (через запятую)',
+					'name'         => 'includes_items',
+					'type'         => 'textarea',
+					'rows'         => 3,
+					'default_value' => "посещение музея\ndоступ к постоянной экспозиции\ndоступ к временным выставкам",
+				),
+				array(
+					'key'          => 'field_exhibition_subscription_price',
+					'label'        => 'Цена',
+					'name'         => 'price',
+					'type'         => 'text',
+					'default_value' => 'от 00 BYN',
+				),
+				array(
+					'key'          => 'field_exhibition_subscription_button_text',
+					'label'        => 'Текст кнопки',
+					'name'         => 'button_text',
+					'type'         => 'text',
+					'default_value' => 'Подробнее',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'exhibition.php',
+			),
+		),
+	),
+	'menu_order' => 5,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ГЛАВНАЯ ВЫСТАВКА — CTA
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_exhibition_cta',
+	'title'    => 'Выставка: CTA-секция',
+	'fields'   => array(
+		array(
+			'key'           => 'field_exhibition_cta_background_image',
+			'label'         => 'Фон изображение (десктоп)',
+			'name'          => 'exhibition_cta_background_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_exhibition_cta_background_image_mobile',
+			'label'         => 'Фон изображение (мобильная)',
+			'name'          => 'exhibition_cta_background_image_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_exhibition_cta_title',
+			'label'         => 'Заголовок',
+			'name'          => 'exhibition_cta_title',
+			'type'          => 'text',
+			'default_value' => 'Приходите увидеть экспозицию, которая возвращает в память детства',
+		),
+		array(
+			'key'           => 'field_exhibition_cta_primary',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'exhibition_cta_primary',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_exhibition_cta_secondary',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'exhibition_cta_secondary',
+			'type'          => 'text',
+			'default_value' => 'Посмотреть афишу',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'exhibition.php',
+			),
+		),
+	),
+	'menu_order' => 6,
 	'position'   => 'normal',
 ) );
