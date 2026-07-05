@@ -276,34 +276,34 @@ function get_event_type_label($type) {
 
 <!-- ============ EXPOSITIONS ============ -->
 <?php if ($expositions_list): ?>
-<section id="expositions" class="py-16 lg:py-20">
+<section id="expositions" class="py-4 lg:pt-18">
   <div class="container-main">
-    <div class="flex items-end justify-between mb-10">
-      <h2>
+    <div class="flex items-center justify-between mb-10">
+      <h2 class="!font-medium">
         <?php echo esc_html($expositions_title ?: 'Экспозиции музея'); ?>
       </h2>
-      <a href="<?php echo esc_url(home_url('/expositions/')); ?>" class="link-arrow text-sm">
+      <a href="<?php echo esc_url(home_url('/expositions/')); ?>" class="link-arrow text-base mr-1">
         <?php echo esc_html($expositions_link_text ?: 'Все экспозиции'); ?>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" alt="arrow" class="w-6 h-6" />
       </a>
     </div>
     
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:mt-16">
       <?php foreach ($expositions_list as $expo): ?>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
+      <div class="bg-white rounded-3xl overflow-hidden shadow-sm">
         <?php if (!empty($expo['image'])): ?>
           <img src="<?php echo esc_url($expo['image']); ?>" 
                alt="<?php echo esc_attr($expo['title']); ?>" 
-               class="aspect-[4/3] object-cover w-full">
+               class="aspect-[4/3] object-cover w-full h-[162px]">
         <?php else: ?>
           <div class="ph ph-art1 aspect-[4/3]"></div>
         <?php endif; ?>
         <div class="p-5">
-          <h3 class="font-['Literata'] text-lg font-semibold mb-2"><?php echo esc_html($expo['title']); ?></h3>
-          <p class="text-sm text-[#6B5A4A] mb-4"><?php echo esc_html($expo['description']); ?></p>
-          <a href="#" class="link-arrow text-sm">
+          <h3 class="!font-['Golos_Text'] text-base lg:text-xl !font-medium mb-2"><?php echo esc_html($expo['title']); ?></h3>
+          <p class="text-sm lg:text-base text-[#2D2926] mb-2 leading-[1.2] pt-1"><?php echo esc_html($expo['description']); ?></p>
+          <a href="vystavki" class="link-arrow text-base">
             <?php echo esc_html($expositions_link_text ?: 'Все экспозиции'); ?>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" alt="arrow" class="w-6 h-6 ml-1" />
           </a>
         </div>
       </div>
@@ -318,19 +318,20 @@ function get_event_type_label($type) {
 
 <!-- ============ MASTER CLASSES AND LECTURES ============ -->
 <?php if ($classes_main || $classes_list): ?>
-<section id="classes" class="py-16 lg:py-20">
-  <div class="container-main">
-    <div class="flex items-end justify-between mb-10">
-      <h2>
+<section id="classes" class="py-16 lg:py-24">
+  <div class="container-main lg:pt-20">
+    <div class="flex items-center justify-between mb-10">
+      <h2 class="!font-medium">
         <?php echo esc_html($classes_title ?: 'Мастер-классы и лекции'); ?>
       </h2>
-      <a href="<?php echo esc_url(home_url('/classes/')); ?>" class="link-arrow text-sm">
+      <a href="<?php echo esc_url(home_url('/classes/')); ?>" class="link-arrow text-base">
         <?php echo esc_html($classes_link_text ?: 'Все мастер-классы и лекции'); ?>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" alt="arrow" class="w-6 h-6 ml-1" />
+
       </a>
     </div>
     
-    <div class="grid lg:grid-cols-2 gap-5">
+    <div class="grid lg:grid-cols-2 gap-5 lg:pt-[26px]">
       <!-- Main class card -->
       <?php if ($classes_main): ?>
       <div class="bg-white rounded-2xl overflow-hidden shadow-sm">

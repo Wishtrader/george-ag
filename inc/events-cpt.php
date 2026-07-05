@@ -46,7 +46,6 @@ function georgeag_register_event_categories() {
 		'masterclass'      => 'Мастер-классы',
 		'lecture'          => 'Лекции',
 		'meeting'          => 'Встречи',
-		'tour'             => 'Экскурсии',
 		'movie'            => 'Кинопоказы',
 		'for_children'     => 'Для детей',
 		'for_adults'       => 'Для взрослых',
@@ -59,6 +58,12 @@ function georgeag_register_event_categories() {
 		if ( ! term_exists( $slug, 'event_category' ) ) {
 			wp_insert_term( $name, 'event_category', array( 'slug' => $slug ) );
 		}
+	}
+
+	// Remove "Экскурсии" (tour) category if it exists
+	$tour_term = term_exists( 'tour', 'event_category' );
+	if ( $tour_term && ! is_wp_error( $tour_term ) ) {
+		wp_delete_term( $tour_term['term_id'], 'event_category' );
 	}
 }
 add_action( 'init', 'georgeag_register_event_categories', 1 );
@@ -132,6 +137,99 @@ function georgeag_save_event_category_metabox( $post_id ) {
 	}
 }
 add_action( 'save_post_event', 'georgeag_save_event_category_metabox' );
+
+/**
+ * Add icon field to event category taxonomy
+ */
+function georgeag_event_category_add_form_fields() {
+	?>
+	<div class="form-field">
+		<label for="event_cat_icon"><?php _e( 'Иконка категории', 'georgeag' ); ?></label>
+		<input type="hidden" name="event_cat_icon" id="event_cat_icon" value="" />
+		<button type="button" class="button event-cat-icon-upload"><?php _e( 'Загрузить иконку', 'georgeag' ); ?></button>
+		<button type="button" class="button event-cat-icon-remove" style="display:none;"><?php _e( 'Удалить', 'georgeag' ); ?></button>
+		<p class="description"><?php _e( 'Иконка для отображения рядом с типом события в карточке', 'georgeag' ); ?></p>
+	</div>
+	<?php
+}
+add_action( 'event_category_add_form_fields', 'georgeag_event_category_add_form_fields' );
+
+function georgeag_event_category_edit_form_fields( $term ) {
+	$icon_url = get_term_meta( $term->term_id, 'event_cat_icon', true );
+	?>
+	<tr class="form-field">
+		<th scope="row"><label for="event_cat_icon"><?php _e( 'Иконка категории', 'georgeag' ); ?></label></th>
+		<td>
+			<input type="hidden" name="event_cat_icon" id="event_cat_icon" value="<?php echo esc_attr( $icon_url ); ?>" />
+			<?php if ( $icon_url ) : ?>
+				<p><img src="<?php echo esc_url( $icon_url ); ?>" style="max-width:40px;max-height:40px;" /></p>
+			<?php endif; ?>
+			<button type="button" class="button event-cat-icon-upload"><?php _e( 'Загрузить иконку', 'georgeag' ); ?></button>
+			<button type="button" class="button event-cat-icon-remove" <?php echo $icon_url ? '' : 'style="display:none;"'; ?>><?php _e( 'Удалить', 'georgeag' ); ?></button>
+		</td>
+	</tr>
+	<?php
+}
+add_action( 'event_category_edit_form_fields', 'georgeag_event_category_edit_form_fields' );
+
+function georgeag_event_category_save_fields( $term_id ) {
+	if ( isset( $_POST['event_cat_icon'] ) ) {
+		update_term_meta( $term_id, 'event_cat_icon', sanitize_text_field( $_POST['event_cat_icon'] ) );
+	}
+}
+add_action( 'created_event_category', 'georgeag_event_category_save_fields' );
+add_action( 'edited_event_category', 'georgeag_event_category_save_fields' );
+
+function georgeag_event_category_admin_enqueue() {
+	if ( ! isset( $_GET['taxonomy'] ) || $_GET['taxonomy'] !== 'event_category' ) {
+		return;
+	}
+	wp_enqueue_media();
+}
+add_action( 'admin_init', 'georgeag_event_category_admin_enqueue' );
+
+function georgeag_event_category_admin_script() {
+	if ( ! isset( $_GET['taxonomy'] ) || $_GET['taxonomy'] !== 'event_category' ) {
+		return;
+	}
+	?>
+	<script>
+	jQuery(function($){
+		$(document).on('click', '.event-cat-icon-upload', function(e){
+			e.preventDefault();
+			var button = $(this);
+			var container = button.closest('td, .form-field');
+			var input = container.find('input[name="event_cat_icon"]');
+			if (typeof wp.media === 'undefined') {
+				alert('Медиабиблиотека не загружена. Обновите страницу.');
+				return;
+			}
+			var frame = wp.media({ title: 'Выберите иконку', button: { text: 'Выбрать' }, multiple: false });
+			frame.on('select', function(){
+				var attachment = frame.state().get('selection').first().toJSON();
+				input.val(attachment.url);
+				container.find('.event-cat-icon-remove').show();
+				var img = container.find('.event-cat-icon-preview');
+				if (!img.length) {
+					button.before('<p class="event-cat-icon-preview"><img src="' + attachment.url + '" style="max-width:40px;max-height:40px;" /></p>');
+				} else {
+					img.html('<img src="' + attachment.url + '" style="max-width:40px;max-height:40px;" />');
+				}
+			});
+			frame.open();
+		});
+		$(document).on('click', '.event-cat-icon-remove', function(e){
+			e.preventDefault();
+			var container = $(this).closest('td, .form-field');
+			container.find('input[name="event_cat_icon"]').val('');
+			container.find('.event-cat-icon-preview').remove();
+			$(this).hide();
+		});
+	});
+	</script>
+	<?php
+}
+add_action( 'admin_footer', 'georgeag_event_category_admin_script' );
 
 /**
  * Register Events Custom Post Type
@@ -521,15 +619,46 @@ function georgeag_register_event_acf_fields() {
 				'rows'          => 4,
 				'default_value' => 'Искусствовед и куратор образовательных программ музея. Исследует наивное искусство, визуальную память и формы художественного высказывания вне академической традиции.',
 			),
-			array(
-				'key'           => 'field_event_hero_image',
-				'label'         => 'Hero изображение',
-				'name'          => 'event_hero_image',
-				'type'          => 'image',
-				'instructions'  => 'Фоновое изображение для hero секции страницы события',
-				'return_format' => 'url',
+		array(
+			'key'           => 'field_event_thumbnail',
+			'label'         => 'Миниатюра',
+			'name'          => 'event_thumbnail',
+			'type'          => 'image',
+			'instructions'  => 'Изображение для карточки события',
+			'return_format' => 'url',
 			'library'       => 'all',
 		),
+		array(
+			'key'           => 'field_event_audience_type',
+			'label'         => 'Аудитория',
+			'name'          => 'event_audience_type',
+			'type'          => 'select',
+			'instructions'  => 'Для кого предназначен формат',
+			'choices'       => array(
+				'for_children' => 'Для детей',
+				'for_adults'   => 'Для взрослых',
+				'family'       => 'Семейный',
+			),
+			'default_value' => 'for_children',
+		),
+		array(
+			'key'           => 'field_event_audience_icon',
+			'label'         => 'Иконка аудитории',
+			'name'          => 'event_audience_icon',
+			'type'          => 'image',
+			'instructions'  => 'Иконка слева от названия аудитории в карточке',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_event_hero_image',
+			'label'         => 'Hero изображение',
+			'name'          => 'event_hero_image',
+			'type'          => 'image',
+			'instructions'  => 'Фоновое изображение для hero секции страницы события',
+			'return_format' => 'url',
+		'library'       => 'all',
+	),
 		array(
 			'key'           => 'field_event_icons_tab',
 			'label'         => 'Иконки секций',
@@ -876,3 +1005,83 @@ function georgeag_register_subscription_acf_fields() {
 	) );
 }
 add_action( 'acf/init', 'georgeag_register_subscription_acf_fields' );
+
+/**
+ * Add "Duplicate" link to Subscription post row actions
+ */
+function georgeag_subscription_row_actions( $actions, $post ) {
+	if ( $post->post_type === 'subscription' ) {
+		$url = wp_nonce_url(
+			add_query_arg( array(
+				'action'  => 'georgeag_duplicate_subscription',
+				'post'    => $post->ID,
+			), admin_url( 'edit.php' ) ),
+			'georgeag_duplicate_subscription_' . $post->ID
+		);
+		$actions['duplicate'] = '<a href="' . esc_url( $url ) . '" title="Дублировать абонемент">Дублировать</a>';
+	}
+	return $actions;
+}
+add_filter( 'post_row_actions', 'georgeag_subscription_row_actions', 10, 2 );
+
+/**
+ * Handle subscription duplication
+ */
+function georgeag_duplicate_subscription() {
+	if ( ! isset( $_GET['action'] ) || $_GET['action'] !== 'georgeag_duplicate_subscription' ) {
+		return;
+	}
+
+	$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
+	if ( ! $post_id ) {
+		wp_die( 'Некорректный ID поста.' );
+	}
+
+	if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'georgeag_duplicate_subscription_' . $post_id ) ) {
+		wp_die( 'Невалидный nonce.' );
+	}
+
+	$original_post = get_post( $post_id );
+	if ( ! $original_post || $original_post->post_type !== 'subscription' ) {
+		wp_die( 'Абонемент не найден.' );
+	}
+
+	$duplicate_data = array(
+		'comment_status' => $original_post->comment_status,
+		'ping_status'    => $original_post->ping_status,
+		'post_author'    => $original_post->post_author,
+		'post_content'   => $original_post->post_content,
+		'post_excerpt'   => $original_post->post_excerpt,
+		'post_name'      => $original_post->post_name,
+		'post_password'  => $original_post->post_password,
+		'post_status'    => 'draft',
+		'post_title'     => $original_post->post_title . ' (копия)',
+		'post_type'      => $original_post->post_type,
+		'to_ping'        => $original_post->to_ping,
+		'menu_order'     => $original_post->menu_order,
+	);
+
+	$new_post_id = wp_insert_post( $duplicate_data );
+
+	if ( is_wp_error( $new_post_id ) ) {
+		wp_die( 'Ошибка при создании дубликата: ' . $new_post_id->get_error_message() );
+	}
+
+	// Copy post meta.
+	$meta = get_post_meta( $post_id );
+	foreach ( $meta as $key => $values ) {
+		foreach ( $values as $value ) {
+			add_post_meta( $new_post_id, $key, $value );
+		}
+	}
+
+	// Copy featured image.
+	$thumbnail_id = get_post_thumbnail_id( $post_id );
+	if ( $thumbnail_id ) {
+		set_post_thumbnail( $new_post_id, $thumbnail_id );
+	}
+
+	wp_redirect( admin_url( 'post.php?post=' . $new_post_id . '&action=edit' ) );
+	exit;
+}
+add_action( 'admin_init', 'georgeag_duplicate_subscription' );

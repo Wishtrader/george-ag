@@ -289,8 +289,7 @@
       justify-content: center;
       padding-top: 20px;
       padding-bottom: 20px;
-      padding-right: 28px;
-      gap: 16px;
+      gap: 12px;
       width: 390px;
       min-width: 390px;
     }
@@ -315,8 +314,8 @@
       margin: 0;
     }
     .featured-card__meta {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      wudth: 100%;
+      display: flex;
       gap: 28px;
       width: 100%;
     }
@@ -334,8 +333,8 @@
       color: #9B8E82;
     }
     .featured-card__meta-icon-img {
-      width: 16px;
-      height: 16px;
+      width: 24px;
+      height: 24px;
       object-fit: contain;
     }
     .featured-card__meta-label {
@@ -398,26 +397,24 @@
       box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
     }
     .subscription-card__image {
-      padding: 20px;
-      padding-bottom: 0;
       flex-shrink: 0;
     }
     .subscription-card__img {
       width: 100%;
-      height: 240px;
+      height: 200px;
       object-fit: cover;
-      border-radius: 20px;
+      display: block;
     }
     .subscription-card__body {
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 20px 24px 24px;
+      padding: 20px;
       overflow: hidden;
     }
     .subscription-card__title {
-      font-family: 'Literata', serif;
-      font-size: 22px;
+      font-family: 'Golos Text', sans-serif;
+      font-size: 28px;
       font-weight: 600;
       color: #2D2926;
       line-height: 1.2;
@@ -425,9 +422,9 @@
     }
     .subscription-card__desc {
       font-family: 'Golos Text', sans-serif;
-      font-size: 15px;
-      color: #6B5A4A;
-      line-height: 1.4;
+      font-size: 20px;
+      color: #2D2926;
+      line-height: 1.2;
       margin: 0 0 20px;
     }
     .subscription-card__includes {
@@ -438,7 +435,7 @@
     }
     .subscription-card__includes-label {
       font-family: 'Golos Text', sans-serif;
-      font-size: 14px;
+      font-size: 18px;
       font-weight: 500;
       color: #E8A62E;
       white-space: nowrap;
@@ -454,12 +451,12 @@
       margin: 0 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 20px;
     }
     .subscription-card__list-item {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
+      gap: 20px;
     }
     .subscription-card__list-icon {
       display: inline-flex;
@@ -469,13 +466,13 @@
       margin-top: 1px;
     }
     .subscription-card__list-icon-img {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       object-fit: contain;
     }
     .subscription-card__list-text {
       font-family: 'Golos Text', sans-serif;
-      font-size: 15px;
+      font-size: 16px;
       color: #2D2926;
       line-height: 1.4;
     }
@@ -488,18 +485,18 @@
     }
     .subscription-card__price {
       font-family: 'Golos Text', sans-serif;
-      font-size: 15px;
+      font-size: 16px;
       color: #2D2926;
     }
     .subscription-card__price strong {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
     }
     .subscription-card__btn {
       flex-shrink: 0;
-      max-width: 160px;
-      height: 44px;
-      font-size: 14px;
+      max-width: 182px;
+      height: 52px;
+      font-size: 16px;
     }
 
     @media (max-width: 1023px) {
@@ -516,9 +513,6 @@
         max-width: none;
         min-height: auto;
         border-radius: 24px;
-      }
-      .subscription-card__img {
-        height: 200px;
       }
     }
 

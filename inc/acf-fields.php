@@ -487,7 +487,33 @@ acf_add_local_field_group( array(
 			),
 		),
 	),
-	'menu_order' => -8,
+	'menu_order' => 2,
+	'position'   => 'normal',
+) );
+
+// Афиша: Абонементы и регулярные форматы
+acf_add_local_field_group( array(
+	'key'      => 'group_afisha_subscriptions',
+	'title'    => 'Афиша: Абонементы',
+	'fields'   => array(
+		array(
+			'key'           => 'field_afisha_subscriptions_title',
+			'label'         => 'Заголовок секции',
+			'name'          => 'afisha_subscriptions_title',
+			'type'          => 'text',
+			'default_value' => 'Абонементы и регулярные форматы',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'afisha.php',
+			),
+		),
+	),
+	'menu_order' => 3,
 	'position'   => 'normal',
 ) );
 

@@ -2,11 +2,8 @@
 /**
  * Template Part: Особая постоянная экспозиция
  * 
- * Читает ACF-поля со страницы, использующей шаблон homepage.php.
- * Используется на разных страницах для отображения одного и того же контента.
  */
 
-// Находим ID страницы с шаблоном homepage.php
 $homepage_page = get_pages(array(
     'meta_key'   => '_wp_page_template',
     'meta_value' => 'homepage.php',
@@ -23,45 +20,38 @@ $button_url = home_url('/special/');
 ?>
 
 <?php if ($title || $description): ?>
-<section class="py-12">
-  <div class="">
-    <div class="relative overflow-hidden bg-[#E8872C]/10">
-      <div class="grid md:grid-cols-2">
-        <div class="p-8 md:p-12 lg:p-14 flex flex-col justify-center">
-          <?php if ($badge): ?>
-          <span class="text-sm font-medium text-[#E8872C] mb-3 uppercase tracking-wide">
-            <?php echo esc_html($badge); ?>
-          </span>
-          <?php endif; ?>
-          <?php if ($title): ?>
-          <h2 class="mb-4">
-            <?php echo esc_html($title); ?>
-          </h2>
-          <?php endif; ?>
-          <?php if ($description): ?>
-          <p class="text-[17px] text-[#6B5A4A] mb-7">
-            <?php echo esc_html($description); ?>
-          </p>
-          <?php endif; ?>
-          <?php if ($button_text): ?>
-            <div>
-              <a href="<?php echo esc_url($button_url); ?>" class="btn-primary">
-                <?php echo esc_html($button_text); ?>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </a>
-            </div>
-          <?php endif; ?>
+<section class="relative py-12 max-h-[412px]">
+  <div class="relative h-[412px] overflow-hidden rounded-2xl">
+    <?php if ($image): ?>
+      <img src="<?php echo esc_url($image); ?>" 
+           alt="<?php echo esc_attr($title); ?>" 
+           class="absolute inset-0 w-full h-full object-cover">
+    <?php else: ?>
+      <div class="absolute inset-0 ph ph-ussr"></div>
+    <?php endif; ?>
+    <div class="relative p-8 md:p-12 lg:p-14 flex flex-col justify-center h-full max-w-[1200px] mx-auto">
+      <?php if ($badge): ?>
+      <span class="text-[13px] font-medium text-[#F1645A] mb-3">
+        <?php echo esc_html($badge); ?>
+      </span>
+      <?php endif; ?>
+      <?php if ($title): ?>
+      <h2 class="mb-4 text-[#2D2926] !max-w-[570px] !font-normal text-[20px]! md:text-[36px]!">
+        <?php echo esc_html($title); ?>
+      </h2>
+      <?php endif; ?>
+      <?php if ($description): ?>
+      <p class="text-[15px] md:text-[18px] text-[#2D2926] mb-7 max-w-[560px]">
+        <?php echo esc_html($description); ?>
+      </p>
+      <?php endif; ?>
+      <?php if ($button_text): ?>
+        <div>
+          <a href="<?php echo esc_url($button_url); ?>" class="btn-primary">
+            <?php echo esc_html($button_text); ?>
+          </a>
         </div>
-        <div class="relative">
-          <?php if ($image): ?>
-            <img src="<?php echo esc_url($image); ?>" 
-                 alt="<?php echo esc_attr($title); ?>" 
-                 class="aspect-[4/3] md:aspect-auto md:h-full object-cover w-full">
-          <?php else: ?>
-            <div class="ph ph-ussr aspect-[4/3] md:aspect-auto md:h-full"></div>
-          <?php endif; ?>
-        </div>
-      </div>
+      <?php endif; ?>
     </div>
   </div>
 </section>

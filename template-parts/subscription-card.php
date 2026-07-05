@@ -30,7 +30,7 @@ $thumbnail_url      = get_the_post_thumbnail_url($subscription_id, 'full');
     <h3 class="subscription-card__title"><?php echo esc_html($subscription_title); ?></h3>
 
     <?php if ($subscription_desc): ?>
-    <p class="subscription-card__desc"><?php echo wp_kses_post($subscription_desc); ?></p>
+    <p class="subscription-card__desc lg:pt-2"><?php echo wp_kses_post($subscription_desc); ?></p>
     <?php endif; ?>
 
     <?php if ($what_includes): ?>
@@ -42,14 +42,8 @@ $thumbnail_url      = get_the_post_thumbnail_url($subscription_id, 'full');
       <?php foreach ($what_includes as $row): ?>
       <li class="subscription-card__list-item">
         <span class="subscription-card__list-icon">
-          <?php if (!empty($row['icon'])): ?>
             <img src="<?php echo esc_url($row['icon']); ?>" alt="" class="subscription-card__list-icon-img">
-          <?php else: ?>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="12" r="10" stroke="#E8A62E" stroke-width="1.5"/>
-              <path d="M8 12l2.5 2.5L16 9" stroke="#E8A62E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          <?php endif; ?>
         </span>
         <span class="subscription-card__list-text"><?php echo esc_html($row['item']); ?></span>
       </li>
@@ -58,7 +52,7 @@ $thumbnail_url      = get_the_post_thumbnail_url($subscription_id, 'full');
     <?php endif; ?>
 
     <div class="subscription-card__footer">
-      <span class="subscription-card__price">от <strong><?php echo esc_html($subscription_price); ?></strong></span>
+      <span class="subscription-card__price">от <strong><?php echo esc_html($subscription_price); ?></strong> BYN</span>
       <a href="<?php echo esc_url($subscription_btn_url); ?>" class="btn-outline subscription-card__btn">
         <?php echo esc_html($subscription_btn_text); ?>
       </a>

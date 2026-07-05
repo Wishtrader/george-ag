@@ -35,6 +35,8 @@ $cta_primary_url = get_field('afisha_cta_primary_url') ?: '#';
 $cta_secondary = get_field('afisha_cta_secondary') ?: 'Посмотреть афишу';
 $cta_secondary_url = get_field('afisha_cta_secondary_url') ?: '#';
 
+$subscriptions_title = get_field('afisha_subscriptions_title') ?: 'Абонементы и регулярные форматы';
+
 $event_categories = get_terms(array(
 	'taxonomy'   => 'event_category',
 	'hide_empty' => false,
@@ -48,34 +50,31 @@ $events_query = new WP_Query(array(
 ));
 
 function get_event_type_label($type) {
-	$labels = array(
-		'masterclass'  => 'Мастер-класс',
-		'lecture'      => 'Лекция',
-		'meeting'      => 'Встреча',
-		'tour'         => 'Экскурсия',
-		'movie'        => 'Кинопоказ',
-		'for_children' => 'Для детей',
-		'for_adults'   => 'Для взрослых',
-		'family'       => 'Семейный',
-		'free'         => 'Бесплатные',
-	);
-	return $labels[$type] ?? 'Событие';
+	$term = get_term_by('slug', $type, 'event_category');
+	return $term ? $term->name : 'Событие';
 }
 
 function get_event_type_color($type) {
+	$term = get_term_by('slug', $type, 'event_category');
+	if ($term && !empty($term->meta['color'])) {
+		return $term->meta['color'];
+	}
 	$colors = array(
-		'masterclass'  => '#E8A62E',
-		'lecture'      => '#28B6DA',
-		'meeting'      => '#C61B8C',
-		'tour'         => '#73B843',
-		'movie'        => '#9B59B6',
-		'for_children' => '#E74C3C',
-		'for_adults'   => '#3498DB',
-		'family'       => '#F39C12',
-		'free'         => '#1ABC9C',
+		'masterclass'        => '#E8A62E',
+		'lecture'            => '#28B6DA',
+		'meeting'            => '#C61B8C',
+		'tour'               => '#73B843',
+		'movie'              => '#9B59B6',
+		'for_children'       => '#E74C3C',
+		'for_adults'         => '#3498DB',
+		'family'             => '#F39C12',
+		'semejnoe-zanyatie'  => '#73B843',
+		'free'               => '#1ABC9C',
 	);
 	return $colors[$type] ?? '#6B5A4A';
 }
+
+
 ?>
 
 <?php get_header(); ?>
@@ -126,9 +125,9 @@ function get_event_type_color($type) {
 
 <!-- ============ FILTER TABS ============ -->
 <?php if ($event_categories && !is_wp_error($event_categories)): ?>
-<section class="py-8 lg:py-10">
+<section class="py-8 lg:py-6">
   <div class="container-main">
-    <div class="flex flex-wrap gap-3 justify-center lg:justify-start" id="event-filters">
+    <div class="flex flex-wrap gap-[19px] justify-center lg:justify-start" id="event-filters">
       <button
         data-filter="all"
         class="filter-btn filter-btn--active"
@@ -166,14 +165,8 @@ function get_event_type_color($type) {
         </div>
 
         <!-- Center content -->
-        <div class="featured-card__content">
-          <?php if ($featured_type): ?>
-          <span class="event-type-badge" style="color: <?php echo esc_attr(get_event_type_color($featured_type)); ?>">
-            <?php echo esc_html(get_event_type_label($featured_type)); ?>
-          </span>
-          <?php endif; ?>
-
-          <h2 class="featured-card__title">
+        <div class="featured-card__content !justify-start">
+          <h2 class="featured-card__title !font-['Golos_Text'] !font-medium">
             <?php echo esc_html($featured_title); ?>
           </h2>
 
@@ -214,9 +207,6 @@ function get_event_type_color($type) {
             <?php endif; ?>
             <?php if ($featured_date || $featured_time): ?>
             <div class="featured-card__meta-item">
-              <span class="featured-card__meta-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              </span>
               <span class="featured-card__meta-value" style="color: <?php echo esc_attr(get_event_type_color($featured_type)); ?>">
                 <?php
                   $parts = array_filter(array($featured_date, $featured_time));
@@ -227,7 +217,7 @@ function get_event_type_color($type) {
             <?php endif; ?>
           </div>
 
-          <div class="featured-card__actions">
+          <div class="featured-card__actions !mt-auto">
             <?php if ($featured_button_detail_text): ?>
             <a href="<?php echo esc_url($featured_button_detail_url); ?>" class="btn-outline featured-card__btn">
               <?php echo esc_html($featured_button_detail_text); ?>
@@ -259,22 +249,42 @@ function get_event_type_color($type) {
 
 <!-- ============ EVENTS GRID ============ -->
 <?php if ($events_query->have_posts()): ?>
-<section id="events" class="py-6 lg:py-10">
+<section id="events" class="py-6">
   <div class="container-main">
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" id="events-grid">
       <?php while ($events_query->have_posts()): $events_query->the_post();
         $event_id = get_the_ID();
         $event_categories_list = wp_get_post_terms($event_id, 'event_category', array('fields' => 'slugs'));
-        $event_date = get_post_meta($event_id, 'event_date', true);
-        $event_time = get_post_meta($event_id, 'event_time', true);
-        $event_location = get_post_meta($event_id, 'event_location', true);
-        $event_price = get_post_meta($event_id, 'event_price', true);
-        $event_brief = get_post_meta($event_id, 'event_brief_description', true);
-        $event_hero_image = get_post_meta($event_id, 'event_hero_image', true);
+        $event_date = get_field('event_date');
+        $event_time = get_field('event_time');
+        $event_location = get_field('event_location');
+        $event_price = get_field('event_price');
+        $event_brief = get_field('event_brief_description');
+        $event_thumbnail = get_field('event_thumbnail');
+        $event_hero_image = get_field('event_hero_image');
+        $event_audience_type = get_field('event_audience_type');
+        $event_audience_icon = get_field('event_audience_icon');
         $primary_cat = !empty($event_categories_list) ? $event_categories_list[0] : '';
+        $cat_icon_url = '';
+        if ($primary_cat) {
+          $cat_term = get_term_by('slug', $primary_cat, 'event_category');
+          if ($cat_term) {
+            $cat_icon_url = get_term_meta($cat_term->term_id, 'event_cat_icon', true);
+          }
+        }
+        $audience_labels = array(
+          'for_children' => 'Для детей',
+          'for_adults'   => 'Для взрослых',
+          'family'       => 'Семейный',
+        );
+        $audience_label = $audience_labels[$event_audience_type] ?? 'Для детей';
       ?>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col event-card" data-categories="<?php echo esc_attr(implode(',', $event_categories_list)); ?>">
-        <?php if ($event_hero_image): ?>
+      <div class="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col event-card" data-categories="<?php echo esc_attr(implode(',', $event_categories_list)); ?>">
+        <?php if ($event_thumbnail): ?>
+          <img src="<?php echo esc_url($event_thumbnail); ?>" 
+               alt="<?php echo esc_attr(get_the_title()); ?>" 
+               class="w-full h-[162px] object-cover">
+        <?php elseif ($event_hero_image): ?>
           <img src="<?php echo esc_url($event_hero_image); ?>" 
                alt="<?php echo esc_attr(get_the_title()); ?>" 
                class="w-full h-[162px] object-cover">
@@ -283,30 +293,31 @@ function get_event_type_color($type) {
         <?php endif; ?>
         <div class="p-5 flex-1 flex flex-col">
           <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-medium leading-[1.2]" style="color: <?php echo esc_attr(get_event_type_color($primary_cat)); ?>">
+            <span class="flex items-center gap-1.5 text-xs font-medium leading-[1.2]" style="color: <?php echo esc_attr(get_event_type_color($primary_cat)); ?>">
+              <?php if ($cat_icon_url): ?>
+                <img src="<?php echo esc_url($cat_icon_url); ?>" alt="" class="w-6 h-6">
+              <?php endif; ?>
               <?php echo esc_html(get_event_type_label($primary_cat)); ?>
             </span>
             <span class="text-xs font-medium whitespace-nowrap leading-[1.2]" style="color: <?php echo esc_attr(get_event_type_color($primary_cat)); ?>">
               <?php echo esc_html($event_date . ($event_time ? ', ' . $event_time : '')); ?>
             </span>
           </div>
-          <h3 class="!font-['Golos_Text'] text-[20px] !font-medium mb-2"><?php echo esc_html(get_the_title()); ?></h3>
+          <h3 class="!font-['Golos_Text'] text-[20px] !font-medium mb-2 lg:mt-2"><?php echo esc_html(get_the_title()); ?></h3>
           <?php if ($event_brief): ?>
           <p class="text-sm text-[#2D2926] mb-2 leading-[1.2] flex-1"><?php echo esc_html($event_brief); ?></p>
           <?php endif; ?>
           <div class="flex items-center gap-2 text-xs text-[#6B5A4A] mb-3">
-            <?php if ($event_location): ?>
-            <span class="flex items-center gap-1">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              <?php echo esc_html($event_location); ?>
-            </span>
+            <?php if ($event_audience_icon): ?>
+              <img src="<?php echo esc_url($event_audience_icon); ?>" alt="" class="w-6 h-6>
             <?php endif; ?>
+            <span class="text-base"><?php echo esc_html($audience_label); ?></span>
           </div>
           <?php if ($event_price): ?>
-          <p class="text-sm font-medium text-[#2D2926] mb-3"><?php echo esc_html($event_price); ?></p>
+          <p class="text-lg font-medium text-[#2D2926] mb-3"><?php echo esc_html($event_price); ?></p>
           <?php endif; ?>
           <a href="<?php echo esc_url(get_permalink()); ?>" class="btn-outline w-full !py-2.5 text-sm mt-auto">
-            Записаться
+            Подробнее
           </a>
         </div>
       </div>
@@ -329,10 +340,10 @@ $subscriptions_query = new WP_Query(array(
 ));
 if ($subscriptions_query->have_posts()):
 ?>
-<section class="py-10 lg:py-16">
-  <div class="container-main">
-    <h2 class="mb-10 lg:mb-14">Абонементы и регулярные форматы</h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+<section class="py-10 lg:py-16 lg:mt-28">
+  <div class="container-main !px-5">
+    <h2 class="mb-10 lg:mb-14 !font-medium"><?php echo esc_html($subscriptions_title); ?></h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:pt-[10px]">
       <?php while ($subscriptions_query->have_posts()): $subscriptions_query->the_post();
         get_template_part('template-parts/subscription-card');
       endwhile; ?>
@@ -343,7 +354,7 @@ if ($subscriptions_query->have_posts()):
 
 <!-- ============ CTA SECTION ============ -->
 <?php if ($cta_title || $cta_primary || $cta_secondary): ?>
-<section class="relative h-[347px] lg:h-[300px]">
+<section class="relative h-[347px] lg:h-[300px] lg:mt-14">
     <?php if ($cta_background_image): ?>
     <div class="absolute inset-0 hidden lg:block" style="background-image: url('<?php echo esc_url($cta_background_image); ?>'); background-size: cover; background-position: center;"></div>
     <?php endif; ?>
@@ -353,23 +364,26 @@ if ($subscriptions_query->have_posts()):
     ?>
     <div class="absolute inset-0 block lg:hidden" style="background-image: url('<?php echo esc_url($cta_bg_mobile); ?>'); background-size: cover; background-position: center;"></div>
     <?php endif; ?>
-  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col items-center justify-center h-full relative text-center">
+  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col md:flex-row items-center justify-start h-full relative text-center">
+    <div class="flex flex-col flex-1"></div>
+    <div class="flex flex-col flex-1 justify-start lg:-ml-40">
     <?php if ($cta_title): ?>
-    <h2 class="text-white mb-6 mx-auto max-w-[260px] md:max-w-full">
+    <h2 class="text-white mb-6 max-w-[260px] md:max-w-[380px] text-start !text-[26px] lg:!text-[36px] !font-medium">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>
-    <div class="flex flex-col sm:flex-row gap-[10px] md:gap-5 justify-center w-full">
+    <div class="flex flex-col sm:flex-row gap-[10px] md:gap-5 justify-start w-full">
       <?php if ($cta_primary): ?>
-        <a href="<?php echo esc_url($cta_primary_url); ?>" class="btn-primary md:max-w-[285px]">
+        <a href="<?php echo esc_url($cta_primary_url); ?>" class="btn-primary lg:!min-w-[336px]">
           <?php echo esc_html($cta_primary); ?>
         </a>
       <?php endif; ?>
       <?php if ($cta_secondary): ?>
-        <a href="<?php echo esc_url($cta_secondary_url); ?>" class="btn-secondary md:max-w-[285px]">
+        <a href="<?php echo esc_url($cta_secondary_url); ?>" class="btn-secondary lg:!min-w-[336px]">
           <?php echo esc_html($cta_secondary); ?>
         </a>
-      <?php endif; ?>
+        <?php endif; ?>
+      </div>
     </div>
   </div>
 </section>
