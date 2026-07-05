@@ -65,10 +65,12 @@ $map_zoom = get_field('contacts_map_zoom') ?: 16;
   <div class="absolute inset-0 bg-black/20"></div>
 
   <div class="container-main relative h-full flex flex-col justify-center py-10">
-    <nav class="absolute top-6 left-0 text-sm text-white/80">
-      <a href="/" class="hover:text-white transition">Главная</a>
-      <span class="mx-2">→</span>
-      <span class="text-white">Контакты</span>
+    <nav class="absolute top-6 left-[20px] lg:left-[20px]">
+      <ul class="breadcrumbs">
+        <li><a href="/">Главная</a></li>
+        <li><img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" alt="" class="breadcrumbs-separator"></li>
+        <li class="breadcrumbs-current">Контакты</li>
+      </ul>
     </nav>
 
     <div class="max-w-[540px]">
@@ -148,7 +150,7 @@ $map_zoom = get_field('contacts_map_zoom') ?: 16;
       </div>
 
       <div>
-        <h2 class="text-[28px] lg:text-[36px] mb-6 !font-medium">
+        <h2 class="mb-6">
           <?php echo esc_html($how_to_get_title); ?>
         </h2>
         <div id="yandex-map" class="w-full h-[400px] lg:h-[480px] rounded-2xl overflow-hidden shadow-sm bg-gray-200"></div>
@@ -210,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="absolute inset-0 bg-[#FAF6EF]/80"></div>
         <?php endif; ?>
         <div class="relative p-6 lg:p-8">
-          <h2 class="text-[28px] lg:text-[36px] mb-6 !font-medium">
+          <h2 class="mb-6">
             <?php echo esc_html($form_title); ?>
           </h2>
           <form class="space-y-5">
@@ -251,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="absolute inset-0 bg-[#FAF6EF]/80"></div>
         <?php endif; ?>
         <div class="relative p-6 lg:p-8">
-          <h2 class="text-[28px] lg:text-[36px] mb-6 !font-medium">
+          <h2 class="mb-6">
             <?php echo esc_html($requisites_title); ?>
           </h2>
           <div class="text-[16px] text-[#6B5A4A] leading-relaxed whitespace-pre-line">

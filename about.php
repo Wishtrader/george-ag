@@ -28,12 +28,6 @@ $expositions_title = get_field('about_expositions_title');
 $expositions_link_text = get_field('about_expositions_link_text');
 $expositions_list = get_field('about_expositions_list');
 
-$special_badge = get_field('about_special_badge');
-$special_title = get_field('about_special_title');
-$special_description = get_field('about_special_description');
-$special_image = get_field('about_special_image');
-$special_button_text = get_field('about_special_button_text');
-
 $education_title = get_field('about_education_title');
 $education_link_text = get_field('about_education_link_text');
 $education_lectures_title = get_field('about_education_lectures_title');
@@ -98,10 +92,12 @@ function get_about_event_type_label($type) {
   <div class="absolute inset-0 bg-black/20"></div>
 
   <div class="container-main relative h-full flex flex-col justify-center py-10">
-    <nav class="absolute top-6 left-0 text-sm text-white/80">
-      <a href="/" class="hover:text-white transition">Главная</a>
-      <span class="mx-2">→</span>
-      <span class="text-white">О музее</span>
+    <nav class="absolute top-6 left-[20px] lg:left-[20px]">
+      <ul class="breadcrumbs">
+        <li><a href="/">Главная</a></li>
+        <li><img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" alt="" class="breadcrumbs-separator"></li>
+        <li class="breadcrumbs-current">О музее</li>
+      </ul>
     </nav>
 
     <div class="">
@@ -139,7 +135,7 @@ function get_about_event_type_label($type) {
     <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
       <div class="max-w-[590px] w-full	">
         <?php if ($mission_title): ?>
-        <h2 class="text-[32px] lg:text-[36px] mb-6">
+        <h2 class="mb-6">
           <?php echo esc_html($mission_title); ?>
         </h2>
         <?php endif; ?>
@@ -225,7 +221,7 @@ $what_to_do_items = $what_to_do_items ?: $what_to_do_items_default;
 <?php if ($what_to_do_items): ?>
 <section class="py-16 lg:py-20 bg-[#FAF6EF]">
   <div class="container-main">
-    <h2 class="text-[32px] lg:text-[44px] mb-10">
+    <h2 class="mb-10">
       <?php echo esc_html($what_to_do_title ?: 'Что можно сделать в музее'); ?>
     </h2>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -279,7 +275,7 @@ $expositions_list = $expositions_list ?: $expositions_list_default;
 <section class="py-16 lg:py-20">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">
+      <h2>
         <?php echo esc_html($expositions_title ?: 'Экспозиции музея'); ?>
       </h2>
       <a href="<?php echo esc_url(home_url('/expositions/')); ?>" class="link-arrow text-sm">
@@ -314,50 +310,7 @@ $expositions_list = $expositions_list ?: $expositions_list_default;
 <?php endif; ?>
 
 <!-- ============ SPECIAL EXPOSITION BANNER ============ -->
-<?php if ($special_title || $special_description): ?>
-<section class="py-12">
-  <div class="">
-    <div class="relative overflow-hidden bg-[#E8872C]/10">
-      <div class="grid md:grid-cols-2">
-        <div class="p-8 md:p-12 lg:p-14 flex flex-col justify-center">
-          <?php if ($special_badge): ?>
-          <span class="text-sm font-medium text-[#E8872C] mb-3 uppercase tracking-wide">
-            <?php echo esc_html($special_badge); ?>
-          </span>
-          <?php endif; ?>
-          <?php if ($special_title): ?>
-          <h2 class="text-[28px] lg:text-[40px] mb-4">
-            <?php echo esc_html($special_title); ?>
-          </h2>
-          <?php endif; ?>
-          <?php if ($special_description): ?>
-          <p class="text-[17px] text-[#6B5A4A] mb-7">
-            <?php echo esc_html($special_description); ?>
-          </p>
-          <?php endif; ?>
-          <?php if ($special_button_text): ?>
-            <div>
-              <a href="<?php echo esc_url(home_url('/special/')); ?>" class="btn-primary">
-                <?php echo esc_html($special_button_text); ?>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </a>
-            </div>
-          <?php endif; ?>
-        </div>
-        <div class="relative">
-          <?php if ($special_image): ?>
-            <img src="<?php echo esc_url($special_image); ?>" 
-                 alt="<?php echo esc_attr($special_title); ?>" 
-                 class="aspect-[4/3] md:aspect-auto md:h-full object-cover w-full">
-          <?php else: ?>
-            <div class="ph ph-ussr aspect-[4/3] md:aspect-auto md:h-full"></div>
-          <?php endif; ?>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<?php endif; ?>
+<?php get_template_part('template-parts/special-exposition'); ?>
 
 <!-- ============ EDUCATION PROGRAM ============ -->
 <?php
@@ -379,7 +332,7 @@ $education_masterclass_items = $education_masterclass_items ?: $education_master
 <section class="py-16 lg:py-20">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">
+      <h2>
         <?php echo esc_html($education_title ?: 'Образовательная и творческая программа'); ?>
       </h2>
       <a href="<?php echo esc_url(home_url('/classes/')); ?>" class="link-arrow text-sm">
@@ -464,7 +417,7 @@ $education_masterclass_items = $education_masterclass_items ?: $education_master
 <section class="py-16 lg:py-20 bg-[#F5EADB]">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">
+      <h2>
         <?php echo esc_html($shop_title ?: 'Искусство, книги и музейные сувениры'); ?>
       </h2>
       <a href="<?php echo esc_url(home_url('/shop/')); ?>" class="link-arrow text-sm">
@@ -562,7 +515,7 @@ $events = $events ?: $events_default;
 <section class="py-16 lg:py-20">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">
+      <h2>
         <?php echo esc_html($events_title ?: 'События, ради которых хочется возвращаться'); ?>
       </h2>
       <a href="<?php echo esc_url(home_url('/events/')); ?>" class="link-arrow text-sm">
@@ -616,7 +569,7 @@ $events = $events ?: $events_default;
     <?php endif; ?>
   <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col items-center justify-center h-full relative text-center">
     <?php if ($cta_title): ?>
-    <h2 class="text-[26px] lg:text-[48px] text-white mb-6 mx-auto !leading-[1.4] max-w-[260px] md:max-w-full">
+    <h2 class="text-white mb-6 mx-auto max-w-[260px] md:max-w-full">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>

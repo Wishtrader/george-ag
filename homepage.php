@@ -15,6 +15,12 @@ $upcoming_title = get_field('upcoming_title');
 $upcoming_link_text = get_field('upcoming_link_text');
 $upcoming_events = get_field('upcoming_events');
 
+usort($upcoming_events, function ($a, $b) {
+	$da = parse_event_datetime($a['datetime'] ?? '');
+	$db = parse_event_datetime($b['datetime'] ?? '');
+	return $da - $db;
+});
+
 $about_title = get_field('about_title');
 $about_description = get_field('about_description');
 $about_image = get_field('about_image');
@@ -53,6 +59,23 @@ $cta_title = get_field('cta_title');
 $cta_primary = get_field('cta_primary');
 $cta_secondary = get_field('cta_secondary');
 
+// Парсинг строки даты события в timestamp для сортировки
+function parse_event_datetime($datetime) {
+	$months = array(
+		'января' => 1, 'февраля' => 2, 'марта' => 3, 'апреля' => 4,
+		'мая' => 5, 'июня' => 6, 'июля' => 7, 'августа' => 8,
+		'сентября' => 9, 'октября' => 10, 'ноября' => 11, 'декабря' => 12,
+	);
+	if (preg_match('/(\d{1,2})\s+([а-яё]+)/u', $datetime, $m)) {
+		$day = (int) $m[1];
+		$month = $months[$m[2]] ?? null;
+		if ($month) {
+			return mktime(0, 0, 0, $month, $day);
+		}
+	}
+	return 0;
+}
+
 // Вспомогательная функция для иконки типа события
 function get_event_type_icon($type) {
     $icons = array(
@@ -83,14 +106,14 @@ function get_event_type_label($type) {
 <section class="py-10 lg:py-16 relative md:min-h-[900px] overflow-hidden h-full">
   <div class="container-main flex flex-col justify-between h-full">
     <div class="">
-      <div class="flex flex-col md:max-w-[57%] h-full items-start">
+      <div class="flex flex-col md:max-w-[58%] h-full items-center lg:pt-11">
         <?php if ($hero_title): ?>
-        <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] leading-[1.05] mb-6 !font-medium">
+        <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] !leading-[1.5] mb-7 !font-medium lg:max-w-[692px]">
           <?php echo esc_html($hero_title); ?>
         </h1>
         <?php endif; ?>
         <?php if ($hero_description): ?>
-        <p class="text-[16px] md:text-[20px] text-[#2D2926] mb-8">
+        <p class="text-[16px] md:text-[20px] text-[#2D2926] mb-7 leading-[1.2]">
           <?php echo esc_html($hero_description); ?>
         </p>
         <?php endif; ?>
@@ -109,11 +132,11 @@ function get_event_type_label($type) {
       </div>
       
       <!-- Hero image -->
-      <div class="absolute right-[-60px] top-[40px] max-w-[42%]">
+      <div class="absolute right-[-60px] top-[40px] max-w-[42.5%] ">
         <?php if ($hero_image): ?>
           <img src="<?php echo esc_url($hero_image); ?>" 
                alt="<?php echo esc_attr($hero_title); ?>" 
-               class="rounded-2xl aspect-[4/5] lg:aspect-[5/6] w-full lg:w-[120%] lg:-ml-[10%] shadow-lg object-cover">
+               class="rounded-[30px] w-full lg:w-[120%] lg:-ml-[10%] shadow-lg object-cover lg:h-[878px] lg:max-w-[798px]">
         <?php else: ?>
           <div class="ph ph-hero rounded-2xl aspect-[4/5] lg:aspect-[5/6] w-full lg:w-[120%] lg:-ml-[10%] shadow-lg"></div>
         <?php endif; ?>
@@ -122,10 +145,10 @@ function get_event_type_label($type) {
     
     <!-- Event preview cards -->
     <?php if ($preview_events): ?>
-    <div class="relative mt-12 h-full grid md:grid-cols-3 gap-5 z-10">
+    <div class="relative mt-12 h-full grid md:grid-cols-3 gap-5 z-10 lg:mt-30">
       <?php foreach ($preview_events as $event): ?>
-      <div class="bg-white rounded-3xl p-5 flex gap-4 items-start shadow-sm">
-        <div class="flex-1">
+      <div class="bg-white rounded-3xl p-5 flex gap-4 items-start shadow-sm min-h-[233px]">
+        <div class="flex-1 flex flex-col lg:min-h-[193px] h-full justify-between">
           <div class="flex items-center justify-between mb-2">
             <span class="event-badge text-[13px] text-[#2D2926] font-medium">
               <?php echo get_event_type_icon($event['type']); ?>
@@ -159,39 +182,55 @@ function get_event_type_label($type) {
 
 <!-- ============ UPCOMING EVENTS ============ -->
 <?php if ($upcoming_events): ?>
-<section id="events" class="py-16 lg:py-20">
+<section id="events" class="py-16 lg:py-16">
   <div class="container-main">
-    <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">
+    <div class="flex items-center justify-between mb-10">
+      <h2>
         <?php echo esc_html($upcoming_title ?: 'Ближайшие события'); ?>
       </h2>
-      <a href="<?php echo esc_url(home_url('/events/')); ?>" class="link-arrow text-sm">
+      <a href="<?php echo esc_url(home_url('/events/')); ?>" class="link-arrow text-base lg:mt-4">
         <?php echo esc_html($upcoming_link_text ?: 'Смотреть все события'); ?>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" class="w-6 h-6" />
       </a>
     </div>
     
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:mt-16">
       <?php foreach ($upcoming_events as $event): ?>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
         <?php if (!empty($event['image'])): ?>
           <img src="<?php echo esc_url($event['image']); ?>" 
                alt="<?php echo esc_attr($event['title']); ?>" 
-               class="aspect-square object-cover w-full">
+               class="w-full h-[162px] object-cover">
         <?php else: ?>
-          <div class="ph ph-art1 aspect-square"></div>
+          <div class="ph ph-art1 w-full h-[162px]"></div>
         <?php endif; ?>
-        <div class="p-5">
+        <div class="p-5 flex-1 flex flex-col">
           <div class="flex items-center justify-between mb-3">
-            <span class="event-badge">
-              <?php echo get_event_type_icon($event['type']); ?>
+            <span class="event-badge leading-[1.2] <?php
+              if ($event['type'] === 'masterclass') echo 'text-[#E8A62E]';
+              elseif ($event['type'] === 'lecture') echo 'text-[#28B6DA]';
+              elseif ($event['type'] === 'meeting') echo 'text-[#C61B8C]';
+              elseif ($event['type'] === 'family') echo 'text-[#73B843]';
+              else echo 'text-[#6B5A4A]';
+            ?>">
+              <?php if (!empty($event['icon'])): ?>
+                <img src="<?php echo esc_url($event['icon']); ?>" alt="">
+              <?php else: ?>
+                <?php echo get_event_type_icon($event['type']); ?>
+              <?php endif; ?>
               <?php echo esc_html(get_event_type_label($event['type'])); ?>
             </span>
-            <span class="text-xs text-[#6B5A4A] font-medium"><?php echo esc_html($event['datetime']); ?></span>
+            <span class="text-xs font-medium whitespace-nowrap leading-[1.2] <?php
+              if ($event['type'] === 'masterclass') echo 'text-[#E8A62E]';
+              elseif ($event['type'] === 'lecture') echo 'text-[#28B6DA]';
+              elseif ($event['type'] === 'meeting') echo 'text-[#C61B8C]';
+              elseif ($event['type'] === 'family') echo 'text-[#73B843]';
+              else echo 'text-[#6B5A4A]';
+            ?>"><?php echo esc_html($event['datetime']); ?></span>
           </div>
-          <h3 class="font-['Literata'] text-lg font-semibold mb-3"><?php echo esc_html($event['title']); ?></h3>
-          <p class="text-sm text-[#6B5A4A] mb-5"><?php echo esc_html($event['description']); ?></p>
-          <a href="#" class="btn-outline w-full !py-2.5 text-sm">
+          <h3 class="!font-['Golos_Text'] text-[20px] !font-medium mb-3"><?php echo esc_html($event['title']); ?></h3>
+          <p class="text-base text-[#2D2926] mb-2 leading-[1.2]"><?php echo esc_html($event['description']); ?></p>
+          <a href="#" class="btn-outline w-full !py-2.5 text-sm mt-auto">
             <?php echo esc_html($event['button_text']); ?>
           </a>
         </div>
@@ -204,10 +243,10 @@ function get_event_type_label($type) {
 
 <!-- ============ ABOUT MUSEUM ============ -->
 <?php if ($about_title || $about_description || $about_image): ?>
-<section id="about" class="py-16 lg:py-20 relative">
-  <img src="<?php echo esc_url($about_image_bg); ?>" class="absolute bottom-20 right-0 w-full max-w-[1050px]" /> 
+<section id="about" class="py-16 lg:py-14 relative overflow-hidden">
+  <img src="<?php echo esc_url($about_image_bg); ?>" class="absolute bottom-15 -right-60 w-full max-w-[1050px]" /> 
   <div class="container-main">
-    <div class="grid lg:grid-cols-2 gap-0 lg:gap-0 items-start">
+    <div class="grid lg:grid-cols-2 gap-5 lg:gap-[30px] items-start">
       <div class="order-2 lg:order-1">
         <?php if ($about_image): ?>
           <img src="<?php echo esc_url($about_image); ?>" 
@@ -219,7 +258,7 @@ function get_event_type_label($type) {
       </div>
       <div class="order-1 lg:order-2 relative lg:-ml-[18%] max-w-[684px]">
         <?php if ($about_title): ?>
-        <h2 class="text-[32px] lg:text-[44px] mb-6">
+        <h2 class="mb-6">
           <?php echo esc_html($about_title); ?>
         </h2>
         <?php endif; ?>
@@ -240,7 +279,7 @@ function get_event_type_label($type) {
 <section id="expositions" class="py-16 lg:py-20">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">
+      <h2>
         <?php echo esc_html($expositions_title ?: 'Экспозиции музея'); ?>
       </h2>
       <a href="<?php echo esc_url(home_url('/expositions/')); ?>" class="link-arrow text-sm">
@@ -275,57 +314,14 @@ function get_event_type_label($type) {
 <?php endif; ?>
 
 <!-- ============ SPECIAL EXPOSITION BANNER ============ -->
-<?php if ($special_title || $special_description): ?>
-<section class="py-12">
-  <div class="">
-    <div class="relative overflow-hidden bg-[#E8872C]/10">
-      <div class="grid md:grid-cols-2">
-        <div class="p-8 md:p-12 lg:p-14 flex flex-col justify-center">
-          <?php if ($special_badge): ?>
-          <span class="text-sm font-medium text-[#E8872C] mb-3 uppercase tracking-wide">
-            <?php echo esc_html($special_badge); ?>
-          </span>
-          <?php endif; ?>
-          <?php if ($special_title): ?>
-          <h2 class="text-[28px] lg:text-[40px] mb-4">
-            <?php echo esc_html($special_title); ?>
-          </h2>
-          <?php endif; ?>
-          <?php if ($special_description): ?>
-          <p class="text-[17px] text-[#6B5A4A] mb-7">
-            <?php echo esc_html($special_description); ?>
-          </p>
-          <?php endif; ?>
-          <?php if ($special_button_text): ?>
-            <div>
-              <a href="<?php echo esc_url(home_url('/special/')); ?>" class="btn-primary">
-                <?php echo esc_html($special_button_text); ?>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </a>
-            </div>
-          <?php endif; ?>
-        </div>
-        <div class="relative">
-          <?php if ($special_image): ?>
-            <img src="<?php echo esc_url($special_image); ?>" 
-                 alt="<?php echo esc_attr($special_title); ?>" 
-                 class="aspect-[4/3] md:aspect-auto md:h-full object-cover w-full">
-          <?php else: ?>
-            <div class="ph ph-ussr aspect-[4/3] md:aspect-auto md:h-full"></div>
-          <?php endif; ?>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<?php endif; ?>
+<?php get_template_part('template-parts/special-exposition'); ?>
 
 <!-- ============ MASTER CLASSES AND LECTURES ============ -->
 <?php if ($classes_main || $classes_list): ?>
 <section id="classes" class="py-16 lg:py-20">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">
+      <h2>
         <?php echo esc_html($classes_title ?: 'Мастер-классы и лекции'); ?>
       </h2>
       <a href="<?php echo esc_url(home_url('/classes/')); ?>" class="link-arrow text-sm">
@@ -404,7 +400,7 @@ function get_event_type_label($type) {
 <section id="shop" class="py-16 lg:py-20 bg-[#F5EADB]">
   <div class="container-main">
     <div class="flex items-end justify-between mb-10">
-      <h2 class="text-[32px] lg:text-[44px]">
+      <h2>
         <?php echo esc_html($shop_title ?: 'Магазин музея'); ?>
       </h2>
       <a href="<?php echo esc_url(home_url('/shop/')); ?>" class="link-arrow text-sm">
@@ -464,7 +460,7 @@ function get_event_type_label($type) {
 <?php if ($why_us_items): ?>
 <section class="py-16 lg:py-20">
   <div class="container-main">
-    <h2 class="text-[26px] lg:text-[48px] mb-12 text-start lg:mb-15 !font-medium text-black">
+    <h2 class="mb-12 text-start lg:mb-15 text-black">
       <?php echo esc_html($why_us_title ?: 'Почему приходят к нам'); ?>
     </h2>
     
@@ -499,7 +495,7 @@ function get_event_type_label($type) {
     <?php endif; ?>
   <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col items-center justify-center h-full relative text-center">
     <?php if ($cta_title): ?>
-    <h2 class="text-[26px] lg:text-[48px] text-white mb-6 mx-auto !leading-[1.4] max-w-[260px] md:max-w-full">
+    <h2 class="text-white mb-6 mx-auto max-w-[260px] md:max-w-full">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>

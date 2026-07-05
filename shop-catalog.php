@@ -125,7 +125,7 @@ $products = wc_get_products(array(
 <?php if ($delivery_items): ?>
 <section class="py-8 lg:py-12">
   <div class="container-main">
-    <h2 class="text-[28px] lg:text-[40px] mb-8">
+    <h2 class="mb-8">
       <?php echo esc_html($delivery_title ?: 'Как получить заказ'); ?>
     </h2>
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
@@ -164,7 +164,7 @@ $products = wc_get_products(array(
   <?php endif; ?>
   <div class="absolute inset-0 bg-[#6B4A2A]/30"></div>
   <div class="relative z-10 max-w-[1200px] w-full mx-auto px-5 flex flex-col items-center justify-center h-full text-center">
-    <h2 class="text-[26px] lg:text-[40px] text-white mb-6 max-w-[700px] leading-tight">
+    <h2 class="text-white mb-6 max-w-[700px]">
       <?php echo esc_html($banner_title ?: 'Выберите вещь, которую захочется забрать с собой'); ?>
     </h2>
     <div class="flex flex-col sm:flex-row gap-3 justify-center">

@@ -28,7 +28,7 @@ $events = get_field('upcoming_events');
             <span class="text-xs text-gray-400">•</span>
             <span class="text-xs text-gray-500"><?php echo esc_html( $event['datetime'] ); ?></span>
           </div>
-          <h2 class="font-heading text-lg lg:text-xl font-bold text-gray-900 mb-3">
+          <h2 class="text-gray-900 mb-3">
             <?php echo esc_html( $event['title'] ); ?>
           </h2>
           <p class="text-sm text-gray-600 mb-4 line-clamp-2">

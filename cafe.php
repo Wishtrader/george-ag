@@ -84,10 +84,12 @@ $cta_secondary = get_field('cafe_cta_secondary') ?: 'Связаться с му�
   
   <div class="container-main relative h-full flex flex-col justify-center py-10">
     <!-- Breadcrumb -->
-    <nav class="absolute top-6 left-0 text-sm text-white/80">
-      <a href="/" class="hover:text-white transition">Главная</a>
-      <span class="mx-2">›</span>
-      <span class="text-white">Кафе</span>
+    <nav class="absolute top-6 left-[20px] lg:left-[20px]">
+      <ul class="breadcrumbs">
+        <li><a href="/">Главная</a></li>
+        <li><img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" alt="" class="breadcrumbs-separator"></li>
+        <li class="breadcrumbs-current">Кафе</li>
+      </ul>
     </nav>
 
     <div class="max-w-[540px]">
@@ -124,7 +126,7 @@ $cta_secondary = get_field('cafe_cta_secondary') ?: 'Связаться с му�
     <div class="grid lg:grid-cols-2 gap-8 lg:gap-20 items-start">
       <div>
         <?php if ($about_title): ?>
-        <h2 class="text-[32px] lg:text-[44px] mb-6">
+        <h2 class="mb-6">
           <?php echo esc_html($about_title); ?>
         </h2>
         <?php endif; ?>
@@ -146,7 +148,7 @@ $cta_secondary = get_field('cafe_cta_secondary') ?: 'Связаться с му�
 <section class="py-16 lg:py-20">
   <div class="container-main">
     <?php if ($features_title): ?>
-    <h2 class="text-[32px] lg:text-[44px] mb-10">
+    <h2 class="mb-10">
       <?php echo esc_html($features_title); ?>
     </h2>
     <?php endif; ?>
@@ -188,7 +190,7 @@ $cta_secondary = get_field('cafe_cta_secondary') ?: 'Связаться с му�
     <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
       <div>
         <?php if ($creative_title): ?>
-        <h2 class="text-[32px] lg:text-[44px] mb-6">
+        <h2 class="mb-6">
           <?php echo esc_html($creative_title); ?>
         </h2>
         <?php endif; ?>
@@ -217,7 +219,7 @@ $cta_secondary = get_field('cafe_cta_secondary') ?: 'Связаться с му�
 <section class="py-16 lg:py-20">
   <div class="container-main">
     <?php if ($important_title): ?>
-    <h2 class="text-[32px] lg:text-[44px] mb-10">
+    <h2 class="mb-10">
       <?php echo esc_html($important_title); ?>
     </h2>
     <?php endif; ?>
@@ -248,7 +250,7 @@ $cta_secondary = get_field('cafe_cta_secondary') ?: 'Связаться с му�
 <section class="py-16 lg:py-20">
   <div class="container-main">
     <?php if ($gallery_title): ?>
-    <h2 class="text-[32px] lg:text-[44px] mb-10">
+    <h2 class="mb-10">
       <?php echo esc_html($gallery_title); ?>
     </h2>
     <?php endif; ?>
@@ -286,7 +288,7 @@ $cta_secondary = get_field('cafe_cta_secondary') ?: 'Связаться с му�
     <?php endif; ?>
   <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col items-center justify-center h-full relative text-center">
     <?php if ($cta_title): ?>
-    <h2 class="text-[26px] lg:text-[48px] text-white mb-6 mx-auto !leading-[1.4] max-w-[260px] md:max-w-full">
+    <h2 class="text-white mb-6 mx-auto max-w-[260px] md:max-w-full">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>

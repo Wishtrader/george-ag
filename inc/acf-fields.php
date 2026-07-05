@@ -10,6 +10,176 @@ if ( ! function_exists( 'acf_add_local_field_group' ) ) {
 	return; // ACF не установлен или не активирован
 }
 
+/**
+ * Register Vystavka (Exhibitions) Custom Post Type
+ */
+function georgeag_register_vystavka_cpt() {
+	$labels = array(
+		'name'                  => _x( 'Выставки', 'Post type general name', 'georgeag' ),
+		'singular_name'         => _x( 'Выставка', 'Post type singular name', 'georgeag' ),
+		'menu_name'             => _x( 'Выставки', 'Admin Menu text', 'georgeag' ),
+		'name_admin_bar'        => _x( 'Выставка', 'Add New on Toolbar', 'georgeag' ),
+		'add_new'               => __( 'Добавить новую', 'georgeag' ),
+		'add_new_item'          => __( 'Добавить новую выставку', 'georgeag' ),
+		'new_item'              => __( 'Новая выставка', 'georgeag' ),
+		'edit_item'             => __( 'Редактировать выставку', 'georgeag' ),
+		'view_item'             => __( 'Просмотр выставки', 'georgeag' ),
+		'all_items'             => __( 'Все выставки', 'georgeag' ),
+		'search_items'          => __( 'Поиск выставок', 'georgeag' ),
+		'not_found'             => __( 'Выставки не найдены.', 'georgeag' ),
+		'not_found_in_trash'    => __( 'Выставки в корзине не найдены.', 'georgeag' ),
+		'featured_image'        => _x( 'Обложка выставки', 'Overrides the "Featured Image" phrase', 'georgeag' ),
+		'set_featured_image'    => _x( 'Установить обложку выставки', 'Overrides the "Set featured image" phrase', 'georgeag' ),
+		'remove_featured_image' => _x( 'Удалить обложку выставки', 'Overrides the "Remove featured image" phrase', 'georgeag' ),
+		'use_featured_image'    => _x( 'Использовать как обложку выставки', 'Overrides the "Use as featured image" phrase', 'georgeag' ),
+		'archives'              => _x( 'Архив выставок', 'The post type archive label', 'georgeag' ),
+		'insert_into_item'      => _x( 'Добавить в выставку', 'Overrides the "Insert into post" phrase', 'georgeag' ),
+		'uploaded_to_this_item' => _x( 'Загружено для этой выставки', 'Overrides the "Uploaded to this post" phrase', 'georgeag' ),
+		'filter_items_list'     => _x( 'Фильтровать список выставок', 'Overrides the "Filter items list" phrase', 'georgeag' ),
+		'items_list_navigation' => _x( 'Навигация по списку выставок', 'Overrides the "Items list navigation" phrase', 'georgeag' ),
+		'items_list'            => _x( 'Список выставок', 'Overrides the "Items list" phrase', 'georgeag' ),
+	);
+
+	$args = array(
+		'labels'                => $labels,
+		'public'                => true,
+		'publicly_queryable'    => true,
+		'show_ui'               => true,
+		'show_in_menu'          => true,
+		'query_var'             => true,
+		'rewrite'               => array( 'slug' => 'vystavka' ),
+		'capability_type'       => 'post',
+		'has_archive'           => true,
+		'hierarchical'          => false,
+		'menu_position'         => 6,
+		'menu_icon'             => 'dashicons-format-gallery',
+		'show_in_admin_bar'     => true,
+		'show_in_rest'          => true,
+		'supports'              => array( 'title', 'editor', 'thumbnail', 'excerpt', 'author' ),
+		'exclude_from_search'   => false,
+	);
+
+	register_post_type( 'vystavka', $args );
+}
+add_action( 'init', 'georgeag_register_vystavka_cpt' );
+
+/**
+ * Flush rewrite rules on theme activation for vystavka CPT
+ */
+function georgeag_vystavka_flush_rewrite_rules() {
+	georgeag_register_vystavka_cpt();
+	flush_rewrite_rules();
+}
+add_action( 'after_switch_theme', 'georgeag_vystavka_flush_rewrite_rules' );
+
+/**
+ * Add "Duplicate" link to vystavka admin table
+ */
+function georgeag_vystavka_duplicate_actions( $actions, $post ) {
+	if ( $post->post_type !== 'vystavka' ) {
+		return $actions;
+	}
+
+	if ( current_user_can( 'edit_posts' ) ) {
+		$duplicate_url = wp_nonce_url(
+			add_query_arg(
+				array(
+					'duplicate' => $post->ID,
+					'type'      => 'vystavka',
+				)
+			),
+			'duplicate_post_' . $post->ID,
+			'duplicate_nonce'
+		);
+
+		$actions['duplicate'] = sprintf(
+			'<a href="%s" title="%s" rel="nofollow">%s</a>',
+			esc_url( $duplicate_url ),
+			esc_attr__( 'Дублировать эту выставку', 'georgeag' ),
+			esc_html__( 'Дублировать', 'georgeag' )
+		);
+	}
+
+	return $actions;
+}
+add_filter( 'post_row_actions', 'georgeag_vystavka_duplicate_actions', 10, 2 );
+add_filter( 'page_row_actions', 'georgeag_vystavka_duplicate_actions', 10, 2 );
+
+/**
+ * Handle duplicate action for vystavka
+ */
+function georgeag_handle_duplicate_vystavka() {
+	if ( ! isset( $_GET['duplicate'] ) || ! isset( $_GET['type'] ) ) {
+		return;
+	}
+
+	if ( $_GET['type'] !== 'vystavka' ) {
+		return;
+	}
+
+	$nonce = isset( $_GET['duplicate_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['duplicate_nonce'] ) ) : '';
+	if ( ! wp_verify_nonce( $nonce, 'duplicate_post_' . absint( $_GET['duplicate'] ) ) ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'edit_posts' ) ) {
+		return;
+	}
+
+	$post_id = absint( $_GET['duplicate'] );
+	$post    = get_post( $post_id );
+
+	if ( ! $post || $post->post_type !== 'vystavka' ) {
+		return;
+	}
+
+	$new_post = array(
+		'post_title'   => $post->post_title . ' (копия)',
+		'post_content' => $post->post_content,
+		'post_excerpt' => $post->post_excerpt,
+		'post_status'  => 'draft',
+		'post_type'    => 'vystavka',
+		'post_author'  => get_current_user_id(),
+	);
+
+	$new_post_id = wp_insert_post( $new_post );
+
+	if ( is_wp_error( $new_post_id ) ) {
+		return;
+	}
+
+	$acf_fields = array(
+		'sv_hero_badge', 'sv_hero_dates', 'sv_hero_description', 'sv_hero_image',
+		'sv_hero_cta_primary_text', 'sv_hero_cta_primary_url',
+		'sv_hero_cta_secondary_text', 'sv_hero_cta_secondary_url',
+		'sv_about_title', 'sv_about_description',
+		'sv_what_to_see_title', 'sv_what_to_see_items',
+		'sv_why_title', 'sv_why_description', 'sv_why_image',
+		'sv_practical_title', 'sv_practical_format', 'sv_practical_dates',
+		'sv_practical_location', 'sv_practical_audience', 'sv_practical_for_whom',
+		'sv_practical_access', 'sv_practical_button_text',
+		'sv_cta_background_image', 'sv_cta_background_image_mobile',
+		'sv_cta_title', 'sv_cta_primary', 'sv_cta_primary_url',
+		'sv_cta_secondary', 'sv_cta_secondary_url',
+	);
+
+	foreach ( $acf_fields as $field ) {
+		$value = get_post_meta( $post_id, $field, true );
+		if ( $value ) {
+			add_post_meta( $new_post_id, $field, $value );
+		}
+	}
+
+	$thumbnail_id = get_post_thumbnail_id( $post_id );
+	if ( $thumbnail_id ) {
+		set_post_thumbnail( $new_post_id, $thumbnail_id );
+	}
+
+	wp_redirect( admin_url( 'post.php?post=' . $new_post_id . '&action=edit' ) );
+	exit;
+}
+add_action( 'admin_init', 'georgeag_handle_duplicate_vystavka' );
+
 // ============================================
 // ГРУППА: HERO SECTION (Герой)
 // ============================================
@@ -258,6 +428,15 @@ acf_add_local_field_group( array(
 						'family'      => 'Семейное занятие',
 					),
 					'default_value' => 'masterclass',
+				),
+				array(
+					'key'           => 'field_upcoming_event_icon',
+					'label'         => 'Иконка',
+					'name'          => 'icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
 				),
 				array(
 					'key'          => 'field_upcoming_event_datetime',
@@ -1595,61 +1774,6 @@ acf_add_local_field_group( array(
 		),
 	),
 	'menu_order' => 3,
-	'position'   => 'normal',
-) );
-
-acf_add_local_field_group( array(
-	'key'      => 'group_about_special',
-	'title'    => 'О музее: Спец. экспозиция',
-	'fields'   => array(
-		array(
-			'key'     => 'field_about_special_badge',
-			'label'   => 'Бейдж',
-			'name'    => 'about_special_badge',
-			'type'    => 'text',
-			'default_value' => 'Постоянная экспозиция',
-		),
-		array(
-			'key'           => 'field_about_special_title',
-			'label'         => 'Заголовок',
-			'name'          => 'about_special_title',
-			'type'          => 'text',
-			'default_value' => 'СССР: Сокровища счастливого советского ребенка',
-		),
-		array(
-			'key'           => 'field_about_special_description',
-			'label'         => 'Описание',
-			'name'          => 'about_special_description',
-			'type'          => 'textarea',
-			'rows'          => 4,
-			'default_value' => 'Обычный посетитель музея, посвященный детским игрушкам, книгам и утвари. Погрузитесь в атмосферу детства!',
-		),
-		array(
-			'key'           => 'field_about_special_image',
-			'label'         => 'Изображение',
-			'name'          => 'about_special_image',
-			'type'          => 'image',
-			'return_format' => 'url',
-			'library'       => 'all',
-		),
-		array(
-			'key'           => 'field_about_special_button_text',
-			'label'         => 'Текст кнопки',
-			'name'          => 'about_special_button_text',
-			'type'          => 'text',
-			'default_value' => 'Подробнее',
-		),
-	),
-	'location'   => array(
-		array(
-			array(
-				'param'    => 'page_template',
-				'operator' => '==',
-				'value'    => 'about.php',
-			),
-		),
-	),
-	'menu_order' => 4,
 	'position'   => 'normal',
 ) );
 
@@ -3028,5 +3152,1039 @@ acf_add_local_field_group( array(
 		),
 	),
 	'menu_order' => 6,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ВЫСТАВКИ — HERO
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_vystavki_hero',
+	'title'    => 'Выставки: Hero',
+	'fields'   => array(
+		array(
+			'key'           => 'field_vystavki_hero_title',
+			'label'         => 'Заголовок',
+			'name'          => 'vystavki_hero_title',
+			'type'          => 'text',
+			'default_value' => 'Выставки музея',
+		),
+		array(
+			'key'           => 'field_vystavki_hero_description',
+			'label'         => 'Описание',
+			'name'          => 'vystavki_hero_description',
+			'type'          => 'textarea',
+			'rows'          => 3,
+			'default_value' => 'Постоянные и временные экспозиции, через которые раскрывается мир наивного искусства, память, дети и живое художественное высказывание.',
+		),
+		array(
+			'key'           => 'field_vystavki_hero_image',
+			'label'         => 'Фоновое изображение',
+			'name'          => 'vystavki_hero_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_vystavki_hero_cta_primary_text',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'vystavki_hero_cta_primary_text',
+			'type'          => 'text',
+			'default_value' => 'Смотреть текущие выставки',
+		),
+		array(
+			'key'           => 'field_vystavki_hero_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'vystavki_hero_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_vystavki_hero_cta_secondary_text',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'vystavki_hero_cta_secondary_text',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_vystavki_hero_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+			'name'          => 'vystavki_hero_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'vystavki.php',
+			),
+		),
+	),
+	'menu_order' => 0,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ВЫСТАВКИ — ФИЛЬТРЫ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_vystavki_filters',
+	'title'    => 'Выставки: Фильтры',
+	'fields'   => array(
+		array(
+			'key'          => 'field_vystavki_filters',
+			'label'        => 'Категории фильтров',
+			'name'         => 'vystavki_filters',
+			'type'         => 'repeater',
+			'layout'       => 'table',
+			'button_label' => 'Добавить фильтр',
+			'sub_fields'   => array(
+				array(
+					'key'          => 'field_vystavki_filter_label',
+					'label'        => 'Название',
+					'name'         => 'label',
+					'type'         => 'text',
+				),
+				array(
+					'key'          => 'field_vystavki_filter_slug',
+					'label'        => 'Slug',
+					'name'         => 'slug',
+					'type'         => 'text',
+					'instructions' => 'Идентификатор для JS-фильтрации (латиницей)',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'vystavki.php',
+			),
+		),
+	),
+	'menu_order' => 1,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ВЫСТАВКИ — СПИСОК ВЫСТАВОК
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_vystavki_list',
+	'title'    => 'Выставки: Список выставок',
+	'fields'   => array(
+		array(
+			'key'          => 'field_vystavki_list',
+			'label'        => 'Выставки',
+			'name'         => 'vystavki_list',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить выставку',
+			'sub_fields'   => array(
+				array(
+					'key'          => 'field_vystavki_item_category',
+					'label'        => 'Категория',
+					'name'         => 'category',
+					'type'         => 'select',
+					'choices'      => array(
+						'permanent'  => 'Постоянная экспозиция',
+						'temporary'  => 'Временные выставки',
+						'accompanying' => 'Сопутствующие',
+					),
+					'default_value' => 'permanent',
+				),
+				array(
+					'key'          => 'field_vystavki_item_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+				),
+				array(
+					'key'          => 'field_vystavki_item_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 3,
+				),
+				array(
+					'key'           => 'field_vystavki_item_image',
+					'label'         => 'Изображение',
+					'name'          => 'image',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+				),
+				array(
+					'key'          => 'field_vystavki_item_button_text',
+					'label'        => 'Текст кнопки',
+					'name'         => 'button_text',
+					'type'         => 'text',
+					'default_value' => 'Подробнее',
+				),
+				array(
+					'key'          => 'field_vystavki_item_button_url',
+					'label'        => 'Ссылка кнопки',
+					'name'         => 'button_url',
+					'type'         => 'url',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'vystavki.php',
+			),
+		),
+	),
+	'menu_order' => 3,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ВЫСТАВКИ — КАК УСТРОЕНЫ ВЫСТАВКИ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_vystavki_how',
+	'title'    => 'Выставки: Как устроены выставки',
+	'fields'   => array(
+		array(
+			'key'           => 'field_vystavki_how_title',
+			'label'         => 'Заголовок',
+			'name'          => 'vystavki_how_title',
+			'type'          => 'text',
+			'default_value' => 'Как устроены выставки музея',
+		),
+		array(
+			'key'           => 'field_vystavki_how_description',
+			'label'         => 'Описание',
+			'name'          => 'vystavki_how_description',
+			'type'          => 'textarea',
+			'rows'          => 6,
+			'default_value' => 'Выставочная программа музея построена так, чтобы посетитель мог увидеть наивное искусство в разных форматах и контекстах. Постоянные экспозиции знакомят с основными темами и авторами, временные выставки помогают по-новому взглянуть на темы и сюжеты, а специальные и кураторские проекты рассказывают музей как живое культурное пространство.',
+		),
+		array(
+			'key'          => 'field_vystavki_how_items',
+			'label'        => 'Карточки',
+			'name'         => 'vystavki_how_items',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить карточку',
+			'max'          => 3,
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_vystavki_how_item_icon',
+					'label'         => 'Иконка',
+					'name'          => 'icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
+				),
+				array(
+					'key'          => 'field_vystavki_how_item_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+				),
+				array(
+					'key'          => 'field_vystavki_how_item_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 4,
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'vystavki.php',
+			),
+		),
+	),
+	'menu_order' => 4,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ВЫСТАВКИ — АБОНЕМЕНТЫ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_vystavki_subscriptions',
+	'title'    => 'Выставки: Абонементы',
+	'fields'   => array(
+		array(
+			'key'           => 'field_vystavki_subscriptions_title',
+			'label'         => 'Заголовок',
+			'name'          => 'vystavki_subscriptions_title',
+			'type'          => 'text',
+			'default_value' => 'Абонементы и регулярные форматы',
+		),
+		array(
+			'key'          => 'field_vystavki_subscriptions_items',
+			'label'        => 'Абонементы',
+			'name'         => 'vystavki_subscriptions_items',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить абонемент',
+			'max'          => 3,
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_vystavki_sub_item_image',
+					'label'         => 'Изображение',
+					'name'          => 'image',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+				),
+				array(
+					'key'          => 'field_vystavki_sub_item_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+				),
+				array(
+					'key'          => 'field_vystavki_sub_item_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 3,
+				),
+				array(
+					'key'          => 'field_vystavki_sub_item_includes_title',
+					'label'        => 'Заголовок "Что входит"',
+					'name'         => 'includes_title',
+					'type'         => 'text',
+					'default_value' => 'Что входит',
+				),
+				array(
+					'key'          => 'field_vystavki_sub_item_includes_items',
+					'label'        => 'Что входит',
+					'name'         => 'includes_items',
+					'type'         => 'textarea',
+					'rows'         => 4,
+				),
+				array(
+					'key'          => 'field_vystavki_sub_item_price',
+					'label'        => 'Цена',
+					'name'         => 'price',
+					'type'         => 'text',
+					'default_value' => 'от 00 BYN',
+				),
+				array(
+					'key'          => 'field_vystavki_sub_item_button_text',
+					'label'        => 'Текст кнопки',
+					'name'         => 'button_text',
+					'type'         => 'text',
+					'default_value' => 'Подробнее',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'vystavki.php',
+			),
+		),
+	),
+	'menu_order' => 5,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ВЫСТАВКИ — CTA
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_vystavki_cta',
+	'title'    => 'Выставки: CTA-секция',
+	'fields'   => array(
+		array(
+			'key'           => 'field_vystavki_cta_background_image',
+			'label'         => 'Фон изображение (десктоп)',
+			'name'          => 'vystavki_cta_background_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_vystavki_cta_background_image_mobile',
+			'label'         => 'Фон изображение (мобильная)',
+			'name'          => 'vystavki_cta_background_image_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_vystavki_cta_title',
+			'label'         => 'Заголовок',
+			'name'          => 'vystavki_cta_title',
+			'type'          => 'text',
+			'default_value' => 'Выберите выставку и приходите в музей',
+		),
+		array(
+			'key'           => 'field_vystavki_cta_primary',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'vystavki_cta_primary',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_vystavki_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'vystavki_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_vystavki_cta_secondary',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'vystavki_cta_secondary',
+			'type'          => 'text',
+			'default_value' => 'Посмотреть афишу',
+		),
+		array(
+			'key'           => 'field_vystavki_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+			'name'          => 'vystavki_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'vystavki.php',
+			),
+		),
+	),
+	'menu_order' => 6,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ТИПОВАЯ ВЫСТАВКА — HERO
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sv_hero',
+	'title'    => 'Типовая выставка: Hero',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sv_hero_badge',
+			'label'         => 'Метка (категория)',
+			'name'          => 'sv_hero_badge',
+			'type'          => 'text',
+			'default_value' => 'Временная выставка',
+		),
+		array(
+			'key'           => 'field_sv_hero_dates',
+			'label'         => 'Даты',
+			'name'          => 'sv_hero_dates',
+			'type'          => 'text',
+			'default_value' => '12 апреля–12 июня',
+		),
+		array(
+			'key'           => 'field_sv_hero_description',
+			'label'         => 'Описание',
+			'name'          => 'sv_hero_description',
+			'type'          => 'textarea',
+			'rows'          => 3,
+			'default_value' => 'Выставочный проект о цвете, личных сюжетах и радости наивного художественного высказывания.',
+		),
+		array(
+			'key'           => 'field_sv_hero_image',
+			'label'         => 'Изображение',
+			'name'          => 'sv_hero_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sv_hero_cta_primary_text',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'sv_hero_cta_primary_text',
+			'type'          => 'text',
+			'default_value' => 'Смотреть афишу',
+		),
+		array(
+			'key'           => 'field_sv_hero_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'sv_hero_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_sv_hero_cta_secondary_text',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'sv_hero_cta_secondary_text',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_sv_hero_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+			'name'          => 'sv_hero_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'post_type',
+				'operator' => '==',
+				'value'    => 'vystavka',
+			),
+		),
+	),
+	'menu_order' => 0,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ТИПОВАЯ ВЫСТАВКА — О ВЫСТАВКЕ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sv_about',
+	'title'    => 'Типовая выставка: О выставке',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sv_about_title',
+			'label'         => 'Заголовок',
+			'name'          => 'sv_about_title',
+			'type'          => 'text',
+			'default_value' => 'О выставке',
+		),
+		array(
+			'key'           => 'field_sv_about_description',
+			'label'         => 'Описание',
+			'name'          => 'sv_about_description',
+			'type'          => 'textarea',
+			'rows'          => 6,
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'post_type',
+				'operator' => '==',
+				'value'    => 'vystavka',
+			),
+		),
+	),
+	'menu_order' => 1,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ТИПОВАЯ ВЫСТАВКА — ЧТО МОЖНО УВИДЕТЬ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sv_what_to_see',
+	'title'    => 'Типовая выставка: Что можно увидеть',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sv_what_to_see_title',
+			'label'         => 'Заголовок',
+			'name'          => 'sv_what_to_see_title',
+			'type'          => 'text',
+			'default_value' => 'Что можно увидеть в экспозиции',
+		),
+		array(
+			'key'          => 'sv_what_to_see_items',
+			'label'        => 'Элементы',
+			'name'         => 'sv_what_to_see_items',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить элемент',
+			'max'          => 4,
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_sv_what_to_see_image',
+					'label'         => 'Изображение',
+					'name'          => 'image',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+				),
+				array(
+					'key'          => 'field_sv_what_to_see_item_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+				),
+				array(
+					'key'          => 'field_sv_what_to_see_item_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 3,
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'post_type',
+				'operator' => '==',
+				'value'    => 'vystavka',
+			),
+		),
+	),
+	'menu_order' => 2,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ТИПОВАЯ ВЫСТАВКА — ПОЧЕМУ ВАЖНА + ПРАКТИКА
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sv_why',
+	'title'    => 'Типовая выставка: Почему важна',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sv_why_title',
+			'label'         => 'Заголовок',
+			'name'          => 'sv_why_title',
+			'type'          => 'text',
+			'default_value' => 'Почему эта выставка важна',
+		),
+		array(
+			'key'           => 'field_sv_why_description',
+			'label'         => 'Описание',
+			'name'          => 'sv_why_description',
+			'type'          => 'textarea',
+			'rows'          => 5,
+		),
+		array(
+			'key'           => 'field_sv_why_image',
+			'label'         => 'Изображение',
+			'name'          => 'sv_why_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sv_practical_title',
+			'label'         => 'Практическая информация: заголовок',
+			'name'          => 'sv_practical_title',
+			'type'          => 'text',
+			'default_value' => 'Практическая информация',
+		),
+		array(
+			'key'           => 'field_sv_practical_format',
+			'label'         => 'Формат',
+			'name'          => 'sv_practical_format',
+			'type'          => 'text',
+			'default_value' => 'времренная выставка',
+		),
+		array(
+			'key'           => 'field_sv_practical_dates',
+			'label'         => 'Даты',
+			'name'          => 'sv_practical_dates',
+			'type'          => 'text',
+			'default_value' => '15 июня — 20 августа',
+		),
+		array(
+			'key'           => 'field_sv_practical_location',
+			'label'         => 'Место',
+			'name'          => 'sv_practical_location',
+			'type'          => 'text',
+			'default_value' => 'Музей Naif Arts',
+		),
+		array(
+			'key'           => 'field_sv_practical_audience',
+			'label'         => 'Подходит для',
+			'name'          => 'sv_practical_audience',
+			'type'          => 'text',
+			'default_value' => 'самостоятельно или с экскурсоводом',
+		),
+		array(
+			'key'           => 'field_sv_practical_for_whom',
+			'label'         => 'Для кого',
+			'name'          => 'sv_practical_for_whom',
+			'type'          => 'text',
+			'default_value' => 'индивидуального и семейного посещения',
+		),
+		array(
+			'key'           => 'field_sv_practical_access',
+			'label'         => 'Доступ',
+			'name'          => 'sv_practical_access',
+			'type'          => 'text',
+			'default_value' => 'по входному билету',
+		),
+		array(
+			'key'           => 'field_sv_practical_button_text',
+			'label'         => 'Текст кнопки',
+			'name'          => 'sv_practical_button_text',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'post_type',
+				'operator' => '==',
+				'value'    => 'vystavka',
+			),
+		),
+	),
+	'menu_order' => 3,
+	'position'   => 'normal',
+) );
+
+
+
+// ============================================
+// ГРУППА: ТИПОВАЯ ВЫСТАВКА — CTA
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_sv_cta',
+	'title'    => 'Типовая выставка: CTA',
+	'fields'   => array(
+		array(
+			'key'           => 'field_sv_cta_background_image',
+			'label'         => 'Фон изображение (десктоп)',
+			'name'          => 'sv_cta_background_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sv_cta_background_image_mobile',
+			'label'         => 'Фон изображение (мобильная)',
+			'name'          => 'sv_cta_background_image_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_sv_cta_title',
+			'label'         => 'Заголовок',
+			'name'          => 'sv_cta_title',
+			'type'          => 'text',
+			'default_value' => 'Выберите выставку и приходите в музей',
+		),
+		array(
+			'key'           => 'field_sv_cta_primary',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'sv_cta_primary',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_sv_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'sv_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_sv_cta_secondary',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'sv_cta_secondary',
+			'type'          => 'text',
+			'default_value' => 'Посмотреть афишу',
+		),
+		array(
+			'key'           => 'field_sv_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+			'name'          => 'sv_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'post_type',
+				'operator' => '==',
+				'value'    => 'vystavka',
+			),
+		),
+	),
+	'menu_order' => 4,
+	'position'   => 'normal',
+) );
+
+
+// ============================================
+// ГРУППА: АФИША — HERO
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_afisha_hero',
+	'title'    => 'Афиша: Hero',
+	'fields'   => array(
+		array(
+			'key'           => 'field_afisha_hero_title',
+			'label'         => 'Заголовок',
+			'name'          => 'afisha_hero_title',
+			'type'          => 'text',
+			'default_value' => 'Афиша музея',
+		),
+		array(
+			'key'           => 'field_afisha_hero_description',
+			'label'         => 'Описание',
+			'name'          => 'afisha_hero_description',
+			'type'          => 'textarea',
+			'rows'          => 3,
+			'default_value' => 'Мастер-классы, лекции, встречи, показы и специальные события, на которые можно записаться уже сейчас.',
+		),
+		array(
+			'key'           => 'field_afisha_hero_image',
+			'label'         => 'Фоновое изображение',
+			'name'          => 'afisha_hero_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_afisha_hero_cta_primary_text',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'afisha_hero_cta_primary_text',
+			'type'          => 'text',
+			'default_value' => 'Ближайшие события',
+		),
+		array(
+			'key'           => 'field_afisha_hero_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'afisha_hero_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_afisha_hero_cta_secondary_text',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'afisha_hero_cta_secondary_text',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_afisha_hero_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+			'name'          => 'afisha_hero_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'afisha.php',
+			),
+		),
+	),
+	'menu_order' => 0,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: АФИША — ГЛАВНОЕ СОБЫТИЕ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_afisha_featured',
+	'title'    => 'Афиша: Главное событие',
+	'fields'   => array(
+		array(
+			'key'           => 'field_afisha_featured_image_left',
+			'label'         => 'Изображение (левое)',
+			'name'          => 'afisha_featured_image_left',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_afisha_featured_image_right',
+			'label'         => 'Изображение (правое)',
+			'name'          => 'afisha_featured_image_right',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_afisha_featured_type',
+			'label'         => 'Тип события',
+			'name'          => 'afisha_featured_type',
+			'type'          => 'select',
+			'choices'       => array(
+				'masterclass' => 'Мастер-класс',
+				'lecture'     => 'Лекция',
+				'meeting'     => 'Встреча',
+				'tour'        => 'Экскурсия',
+				'movie'       => 'Кинопоказ',
+				'for_children'=> 'Для детей',
+				'for_adults'  => 'Для взрослых',
+				'family'      => 'Семейный',
+				'free'        => 'Бесплатные',
+			),
+		),
+		array(
+			'key'           => 'field_afisha_featured_type_icon',
+			'label'         => 'Иконка типа (опционально)',
+			'name'          => 'afisha_featured_type_icon',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+			'instructions'  => 'Заменит стандартную иконку для выбранного типа события',
+		),
+		array(
+			'key'           => 'field_afisha_featured_title',
+			'label'         => 'Заголовок',
+			'name'          => 'afisha_featured_title',
+			'type'          => 'text',
+		),
+		array(
+			'key'           => 'field_afisha_featured_description',
+			'label'         => 'Описание',
+			'name'          => 'afisha_featured_description',
+			'type'          => 'textarea',
+			'rows'          => 3,
+		),
+		array(
+			'key'           => 'field_afisha_featured_location',
+			'label'         => 'Место',
+			'name'          => 'afisha_featured_location',
+			'type'          => 'text',
+			'default_value' => 'Лекторий музея',
+		),
+		array(
+			'key'           => 'field_afisha_featured_location_icon',
+			'label'         => 'Иконка места (опционально)',
+			'name'          => 'afisha_featured_location_icon',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+			'instructions'  => 'Заменит стандартную иконку места проведения',
+		),
+		array(
+			'key'           => 'field_afisha_featured_date',
+			'label'         => 'Дата',
+			'name'          => 'afisha_featured_date',
+			'type'          => 'text',
+			'instructions'  => 'Например: "23 мая, пт"',
+		),
+		array(
+			'key'           => 'field_afisha_featured_time',
+			'label'         => 'Время',
+			'name'          => 'afisha_featured_time',
+			'type'          => 'text',
+			'instructions'  => 'Например: "18:00"',
+		),
+		array(
+			'key'           => 'field_afisha_featured_button_detail_text',
+			'label'         => 'Кнопка "Подробнее" (текст)',
+			'name'          => 'afisha_featured_button_detail_text',
+			'type'          => 'text',
+			'default_value' => 'Подробнее',
+		),
+		array(
+			'key'           => 'field_afisha_featured_button_detail_url',
+			'label'         => 'Кнопка "Подробнее" (ссылка)',
+			'name'          => 'afisha_featured_button_detail_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_afisha_featured_button_buy_text',
+			'label'         => 'Кнопка "Купить билет" (текст)',
+			'name'          => 'afisha_featured_button_buy_text',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_afisha_featured_button_buy_url',
+			'label'         => 'Кнопка "Купить билет" (ссылка)',
+			'name'          => 'afisha_featured_button_buy_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'afisha.php',
+			),
+		),
+	),
+	'menu_order' => 1,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: АФИША — CTA
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_afisha_cta',
+	'title'    => 'Афиша: CTA',
+	'fields'   => array(
+		array(
+			'key'           => 'field_afisha_cta_background_image',
+			'label'         => 'Фон изображение (десктоп)',
+			'name'          => 'afisha_cta_background_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_afisha_cta_background_image_mobile',
+			'label'         => 'Фон изображение (мобильная)',
+			'name'          => 'afisha_cta_background_image_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_afisha_cta_title',
+			'label'         => 'Заголовок',
+			'name'          => 'afisha_cta_title',
+			'type'          => 'text',
+			'default_value' => 'Выберите событие и приходите в музей',
+		),
+		array(
+			'key'           => 'field_afisha_cta_primary',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'afisha_cta_primary',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_afisha_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'afisha_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_afisha_cta_secondary',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'afisha_cta_secondary',
+			'type'          => 'text',
+			'default_value' => 'Посмотреть афишу',
+		),
+		array(
+			'key'           => 'field_afisha_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+			'name'          => 'afisha_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'afisha.php',
+			),
+		),
+	),
+	'menu_order' => 2,
 	'position'   => 'normal',
 ) );

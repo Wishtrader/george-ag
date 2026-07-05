@@ -734,3 +734,145 @@ function georgeag_events_add_custom_columns( $columns ) {
 	return $new_columns;
 }
 add_filter( 'manage_event_posts_columns', 'georgeag_events_add_custom_columns' );
+
+/**
+ * Register Subscriptions Custom Post Type
+ */
+function georgeag_register_subscriptions_cpt() {
+	$labels = array(
+		'name'                  => _x( 'Абонементы', 'Post type general name', 'georgeag' ),
+		'singular_name'         => _x( 'Абонемент', 'Post type singular name', 'georgeag' ),
+		'menu_name'             => _x( 'Абонементы', 'Admin Menu text', 'georgeag' ),
+		'name_admin_bar'        => _x( 'Абонемент', 'Add New on Toolbar', 'georgeag' ),
+		'add_new'               => __( 'Добавить новый', 'georgeag' ),
+		'add_new_item'          => __( 'Добавить новый абонемент', 'georgeag' ),
+		'new_item'              => __( 'Новый абонемент', 'georgeag' ),
+		'edit_item'             => __( 'Редактировать абонемент', 'georgeag' ),
+		'view_item'             => __( 'Просмотр абонемента', 'georgeag' ),
+		'all_items'             => __( 'Все абонементы', 'georgeag' ),
+		'search_items'          => __( 'Поиск абонементов', 'georgeag' ),
+		'not_found'             => __( 'Абонементы не найдены.', 'georgeag' ),
+		'not_found_in_trash'    => __( 'Абонементы в корзине не найдены.', 'georgeag' ),
+		'featured_image'        => _x( 'Обложка абонемента', 'Overrides the "Featured Image" phrase', 'georgeag' ),
+		'set_featured_image'    => _x( 'Установить обложку абонемента', 'Overrides the "Set featured image" phrase', 'georgeag' ),
+		'remove_featured_image' => _x( 'Удалить обложку абонемента', 'Overrides the "Remove featured image" phrase', 'georgeag' ),
+		'use_featured_image'    => _x( 'Использовать как обложку абонемента', 'Overrides the "Use as featured image" phrase', 'georgeag' ),
+	);
+
+	$args = array(
+		'labels'                => $labels,
+		'public'                => true,
+		'publicly_queryable'    => true,
+		'show_ui'               => true,
+		'show_in_menu'          => true,
+		'query_var'             => true,
+		'rewrite'               => array( 'slug' => 'subscriptions' ),
+		'capability_type'       => 'post',
+		'has_archive'           => true,
+		'hierarchical'          => false,
+		'menu_position'         => 6,
+		'menu_icon'             => 'dashicons-tickets',
+		'show_in_admin_bar'     => true,
+		'show_in_rest'          => true,
+		'supports'              => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+		'exclude_from_search'   => false,
+	);
+
+	register_post_type( 'subscription', $args );
+}
+add_action( 'init', 'georgeag_register_subscriptions_cpt' );
+
+/**
+ * Flush rewrite rules on theme activation for subscriptions
+ */
+function georgeag_subscriptions_flush_rewrite_rules() {
+	georgeag_register_subscriptions_cpt();
+	flush_rewrite_rules();
+}
+add_action( 'after_switch_theme', 'georgeag_subscriptions_flush_rewrite_rules' );
+
+/**
+ * Register ACF fields for Subscriptions
+ */
+function georgeag_register_subscription_acf_fields() {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+		return;
+	}
+
+	acf_add_local_field_group( array(
+		'key'      => 'group_subscription_details',
+		'title'    => 'Абонемент: Детали',
+		'fields'   => array(
+			array(
+				'key'           => 'field_subscription_description',
+				'label'         => 'Описание',
+				'name'          => 'subscription_description',
+				'type'          => 'textarea',
+				'instructions'  => 'Краткое описание абонемента',
+				'rows'          => 3,
+			),
+			array(
+				'key'           => 'field_subscription_price',
+				'label'         => 'Стоимость',
+				'name'          => 'subscription_price',
+				'type'          => 'text',
+				'instructions'  => 'Например: "49 BYN"',
+				'default_value' => '00 BYN',
+			),
+			array(
+				'key'           => 'field_subscription_button_text',
+				'label'         => 'Текст кнопки',
+				'name'          => 'subscription_button_text',
+				'type'          => 'text',
+				'default_value' => 'Подробнее',
+			),
+			array(
+				'key'           => 'field_subscription_button_url',
+				'label'         => 'Ссылка кнопки',
+				'name'          => 'subscription_button_url',
+				'type'          => 'url',
+			),
+			array(
+				'key'           => 'field_subscription_what_includes',
+				'label'         => 'Что входит',
+				'name'          => 'subscription_what_includes',
+				'type'          => 'repeater',
+				'instructions'  => 'Список того, что входит в абонемент',
+				'layout'        => 'block',
+				'button_label'  => 'Добавить пункт',
+				'sub_fields'    => array(
+					array(
+						'key'   => 'field_sub_what_item',
+						'label' => 'Пункт',
+						'name'  => 'item',
+						'type'  => 'text',
+					),
+					array(
+						'key'           => 'field_sub_what_icon',
+						'label'         => 'Иконка (опционально)',
+						'name'          => 'icon',
+						'type'          => 'image',
+						'return_format' => 'url',
+						'library'       => 'all',
+						'instructions'  => 'Заменит стандартную иконку галочки',
+					),
+				),
+			),
+		),
+		'location'   => array(
+			array(
+				array(
+					'param'    => 'post_type',
+					'operator' => '==',
+					'value'    => 'subscription',
+				),
+			),
+		),
+		'menu_order' => 0,
+		'position'   => 'normal',
+		'style'      => 'default',
+		'label_placement' => 'top',
+		'instruction_placement' => 'label',
+	) );
+}
+add_action( 'acf/init', 'georgeag_register_subscription_acf_fields' );

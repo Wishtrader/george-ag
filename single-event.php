@@ -185,7 +185,7 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
           <!-- О событии -->
           <?php if ( $event_description ) : ?>
           <div class="mb-10 lg:mb-15">
-            <h2 class="font-heading text-xl lg:text-[36px] font-bold text-black mb-4 lg:mb-5">О событии</h2>
+            <h2 class="text-black mb-4 lg:mb-5">О событии</h2>
             <p class="text-[15px] lg:text-xl text-black leading-[1.2]">
               <?php echo esc_html( $event_description ); ?>
             </p>
@@ -195,7 +195,7 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
           <!-- Что вас ждет -->
           <?php if ( $event_what_to_expect ) : ?>
           <div class="mb-10 lg:mb-12">
-            <h2 class="font-heading text-xl lg:text-[36px] font-bold text-black mb-4 lg:mb-5">Что вас ждёт</h2>
+            <h2 class="text-black mb-4 lg:mb-5">Что вас ждёт</h2>
             <div class="space-y-4">
               <?php foreach ( $event_what_to_expect as $item ) : ?>
               <div class="flex items-start gap-3">
@@ -214,7 +214,7 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
           <!-- Кому подойдет событие -->
           <?php if ( $event_audience ) : ?>
           <div class="mb-10 lg:mb-12">
-            <h2 class="font-heading text-xl lg:text-[36px] font-bold text-black mb-4 lg:mb-5">Кому подойдёт событие</h2>
+            <h2 class="text-black mb-4 lg:mb-5">Кому подойдёт событие</h2>
             <p class="text-[15px] lg:text-xl text-black leading-[1.2]">
               <?php echo esc_html( $event_audience ); ?>
             </p>
@@ -224,7 +224,7 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
           <!-- Спикер -->
           <?php if ( $event_speaker_name || $event_speaker_bio ) : ?>
           <div class="mb-0 lg:mb-0">
-            <h2 class="font-heading text-xl lg:text-[36px] font-bold text-black mb-4 lg:mb-5">Спикер</h2>
+            <h2 class="text-black mb-4 lg:mb-5">Спикер</h2>
             <div class="flex flex-col sm:flex-row gap-4 sm:gap-5">
               <?php if ( $event_speaker_image ) : ?>
               <img src="<?php echo esc_url( $event_speaker_image ); ?>" alt="<?php echo esc_attr( $event_speaker_name ?: 'Спикер' ); ?>" class="w-[100px] h-[100px] lg:w-[183px] lg:h-[188px] rounded-[24px] object-cover flex-shrink-0">
@@ -293,7 +293,7 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
   <!-- ===== SUBSCRIPTIONS / REGULAR FORMATS ===== -->
   <section class="py-10 lg:py-16 bg-cream">
     <div class="max-w-content mx-auto px-4 lg:px-6">
-      <h2 class="font-heading text-[26px] lg:text-[48px] font-bold text-black mb-6 lg:mb-8">Абонементы и регулярные форматы</h2>
+      <h2 class="text-black mb-6 lg:mb-8">Абонементы и регулярные форматы</h2>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-6">
 
@@ -406,7 +406,7 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
 
       <div class="relative h-full max-w-[1240px] mx-auto px-5 lg:px-10 flex items-center">
         <div class="w-full lg:ml-[33%] lg:w-[67%] flex flex-col items-start text-left">
-          <h2 class="font-['Literata'] text-[26px] sm:text-[32px] lg:text-[42px] text-[#2D2926] leading-[1.25] mb-8 lg:mb-10">
+          <h2 class="text-[#2D2926] mb-8 lg:mb-10">
             <?php echo esc_html( $event_cta_title ?: 'Выберите событие и приходите в музей' ); ?>
           </h2>
           <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">

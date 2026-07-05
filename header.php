@@ -42,16 +42,16 @@
       --brand-text: #2D2926;
       --brand-text-light: #6B5A4A;
     }
-    
+
     * {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
-    
+
     html {
       scroll-behavior: smooth;
     }
-    
+
     body {
       font-family: 'Golos Text', sans-serif;
       color: var(--brand-text);
@@ -59,20 +59,32 @@
       font-size: 16px;
       line-height: 1.6;
     }
-    
+
     h1, h2, h3, h4, h5, h6 {
       font-family: 'Literata', serif;
       line-height: 1.2;
       font-weight: 400;
     }
-    
+
+    h2 {
+      font-size: 26px;
+      font-weight: 600;
+      color: #2D2926;
+    }
+
+    @media (min-width: 768px) {
+      h2 {
+        font-size: 48px;
+      }
+    }
+
     .container-main {
       max-width: 1240px;
       margin: 0 auto;
       padding-left: 20px;
       padding-right: 20px;
     }
-    
+
     .btn-primary {
       background-color: var(--brand-orange);
       color: #fff;
@@ -112,7 +124,6 @@
       background-color: var(--brand-cream-dark);
     }
 
-    
     .btn-outline {
       border: 2px solid var(--brand-orange);
       color: var(--brand-orange);
@@ -149,7 +160,7 @@
     .link-arrow:hover {
       gap: 10px;
     }
-    
+
     .ph {
       background: linear-gradient(135deg, #E8D5BE 0%, #D4BFA6 100%);
       position: relative;
@@ -174,7 +185,7 @@
       letter-spacing: 2px;
       z-index: 2;
     }
-    
+
     .ph-art1 { background: linear-gradient(135deg, #F4D4A0 0%, #E8A87C 100%); }
     .ph-art2 { background: linear-gradient(135deg, #C7E9B0 0%, #8BC78B 100%); }
     .ph-art3 { background: linear-gradient(135deg, #F6B6B6 0%, #E89B7C 100%); }
@@ -185,7 +196,7 @@
     .ph-ussr { background: linear-gradient(135deg, #D4A574 0%, #A87040 100%); }
     .ph-shop { background: linear-gradient(135deg, #F0E4D0 0%, #D4BFA6 100%); }
     .ph-cta { background: linear-gradient(135deg, #6B4A2A 0%, #3A2E24 100%); }
-    
+
     .icon-box {
       display: inline-flex;
       align-items: center;
@@ -195,16 +206,15 @@
       border-radius: 8px;
       background: #F5EADB;
     }
-    
+
     .event-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       font-size: 13px;
-      color: var(--brand-text-light);
       font-weight: 500;
     }
-    
+
     .mobile-menu {
       position: fixed;
       inset: 0;
@@ -217,12 +227,12 @@
     .mobile-menu.open {
       transform: translateX(0);
     }
-    
+
     .hill-shape {
       background: linear-gradient(135deg, #E5D5C0 0%, #D4BFA6 100%);
       border-radius: 50% 50% 0 0 / 60% 60% 0 0;
     }
-    
+
     @media (max-width: 768px) {
       .hide-mobile { display: none !important; }
     }
@@ -232,6 +242,313 @@
 
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .filter-btn {
+      width: 184px;
+      height: 57px;
+      border-radius: 24px;
+      border: 1px solid #E8D5BE !important;
+      background: transparent !important;
+      color: #2D2926 !important;
+      font-family: 'Golos Text', sans-serif !important;
+      font-size: 15px !important;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.2s ease, color 0.2s ease;
+      box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+    }
+    .filter-btn:hover {
+      border-color: #F28A2E !important;
+      color: #F28A2E !important;
+    }
+    .filter-btn--active {
+      background: transparent !important;
+      border: 1px solid #F28A2E !important;
+      color: #F28A2E !important;
+    }
+
+    .featured-card {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+    }
+    .featured-card__image {
+      min-height: 280px;
+      overflow: hidden;
+      padding: 20px;
+    }
+    .featured-card__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+    .featured-card__content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      padding-right: 28px;
+      gap: 16px;
+      width: 390px;
+      min-width: 390px;
+    }
+    .event-type-badge {
+      font-family: 'Golos Text', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .featured-card__title {
+      font-family: 'Literata', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: #2D2926;
+      line-height: 1.2;
+      margin: 0;
+    }
+    .featured-card__desc {
+      font-family: 'Golos Text', sans-serif;
+      font-size: 16px;
+      color: #6B5A4A;
+      line-height: 1.4;
+      margin: 0;
+    }
+    .featured-card__meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      width: 100%;
+    }
+    .featured-card__meta-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 6px;
+    }
+    .featured-card__meta-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #9B8E82;
+    }
+    .featured-card__meta-icon-img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+    }
+    .featured-card__meta-label {
+      font-family: 'Golos Text', sans-serif;
+      font-size: 12px;
+      color: #9B8E82;
+      font-weight: 500;
+    }
+    .featured-card__meta-value {
+      font-family: 'Golos Text', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.3;
+      white-space: nowrap;
+    }
+    .featured-card__actions {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .featured-card__btn {
+      flex: 1;
+      max-width: none;
+      height: 48px;
+      font-size: 15px;
+    }
+
+    @media (max-width: 1023px) {
+      .featured-card__image--right {
+        display: none;
+      }
+      .featured-card__content {
+        width: 100%;
+        min-width: 0;
+      }
+      .featured-card__meta {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 639px) {
+      .featured-card__meta {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .featured-card__actions {
+        flex-direction: column;
+      }
+    }
+
+    /* Subscription Cards */
+    .subscription-card {
+      width: 387px;
+      height: 677px;
+      border-radius: 24px;
+      background: #fff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+    }
+    .subscription-card__image {
+      padding: 20px;
+      padding-bottom: 0;
+      flex-shrink: 0;
+    }
+    .subscription-card__img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 20px;
+    }
+    .subscription-card__body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 24px 24px;
+      overflow: hidden;
+    }
+    .subscription-card__title {
+      font-family: 'Literata', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #2D2926;
+      line-height: 1.2;
+      margin: 0 0 12px;
+    }
+    .subscription-card__desc {
+      font-family: 'Golos Text', sans-serif;
+      font-size: 15px;
+      color: #6B5A4A;
+      line-height: 1.4;
+      margin: 0 0 20px;
+    }
+    .subscription-card__includes {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .subscription-card__includes-label {
+      font-family: 'Golos Text', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #E8A62E;
+      white-space: nowrap;
+    }
+    .subscription-card__includes-line {
+      flex: 1;
+      height: 1px;
+      background: #E8D5BE;
+    }
+    .subscription-card__list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .subscription-card__list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .subscription-card__list-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .subscription-card__list-icon-img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+    .subscription-card__list-text {
+      font-family: 'Golos Text', sans-serif;
+      font-size: 15px;
+      color: #2D2926;
+      line-height: 1.4;
+    }
+    .subscription-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .subscription-card__price {
+      font-family: 'Golos Text', sans-serif;
+      font-size: 15px;
+      color: #2D2926;
+    }
+    .subscription-card__price strong {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .subscription-card__btn {
+      flex-shrink: 0;
+      max-width: 160px;
+      height: 44px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 1023px) {
+      .subscription-card {
+        width: 100%;
+        max-width: 387px;
+        height: auto;
+        min-height: 600px;
+        border-radius: 32px;
+      }
+    }
+    @media (max-width: 639px) {
+      .subscription-card {
+        max-width: none;
+        min-height: auto;
+        border-radius: 24px;
+      }
+      .subscription-card__img {
+        height: 200px;
+      }
+    }
+
+    .breadcrumbs {
+      font-family: 'Golos Text', sans-serif !important;
+      font-size: 13px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      list-style: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      color: #2D2926 !important;
+    }
+    .breadcrumbs a {
+      color: #7C6E63 !important;
+      text-decoration: none !important;
+      transition: color 0.2s ease !important;
+    }
+    .breadcrumbs a:hover {
+      color: #F28A2E !important;
+    }
+    .breadcrumbs .breadcrumbs-separator {
+      width: 16px !important;
+      height: 16px !important;
+      flex-shrink: 0 !important;
+    }
+    .breadcrumbs .breadcrumbs-current {
+      color: #2D2926 !important;
+    }
   </style>
 </head>
 <body>

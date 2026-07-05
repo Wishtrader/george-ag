@@ -137,7 +137,7 @@ $product_main_image = $product ? wp_get_attachment_url($product->get_image_id())
         <div class="absolute inset-0 bg-gradient-to-br from-[#E8D5BE]/60 to-[#D4BFA6]/40"></div>
       <?php endif; ?>
       <div class="relative z-10 max-w-[700px]">
-        <h2 class="text-[28px] lg:text-[40px] mb-4">О товаре</h2>
+        <h2 class="mb-4">О товаре</h2>
         <?php if ($product && $product->get_description()): ?>
           <p class="text-[15px] lg:text-[17px] text-[#2D2926] leading-relaxed">
             <?php echo wp_kses_post($product->get_description()); ?>
@@ -176,7 +176,7 @@ $product_main_image = $product ? wp_get_attachment_url($product->get_image_id())
         <div class="absolute inset-0 bg-gradient-to-br from-[#E8D5BE]/60 to-[#D4BFA6]/40"></div>
       <?php endif; ?>
       <div class="relative z-10 max-w-[700px]">
-        <h2 class="text-[28px] lg:text-[40px] mb-6">Характеристики</h2>
+        <h2 class="mb-6">Характеристики</h2>
         <div class="space-y-3">
           <?php if ($product): ?>
             <?php
@@ -222,7 +222,7 @@ $product_main_image = $product ? wp_get_attachment_url($product->get_image_id())
         <div class="absolute inset-0 bg-gradient-to-br from-[#E8D5BE]/60 to-[#D4BFA6]/40"></div>
       <?php endif; ?>
       <div class="relative z-10 max-w-[700px]">
-        <h2 class="text-[28px] lg:text-[40px] mb-6">
+        <h2 class="mb-6">
           <?php echo esc_html($why_title ?: 'Почему этот товар выбирают'); ?>
         </h2>
         <div class="space-y-3">
@@ -247,7 +247,7 @@ $product_main_image = $product ? wp_get_attachment_url($product->get_image_id())
 <?php if ($delivery_items): ?>
 <section class="py-8 lg:py-12">
   <div class="container-main">
-    <h2 class="text-[28px] lg:text-[40px] mb-8">
+    <h2 class="mb-8">
       <?php echo esc_html($delivery_title ?: 'Как получить заказ'); ?>
     </h2>
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
@@ -286,7 +286,7 @@ $product_main_image = $product ? wp_get_attachment_url($product->get_image_id())
   <?php endif; ?>
   <div class="absolute inset-0 bg-[#6B4A2A]/30"></div>
   <div class="relative z-10 max-w-[1200px] w-full mx-auto px-5 flex flex-col items-center justify-center h-full text-center">
-    <h2 class="text-[26px] lg:text-[48px] text-white mb-6 max-w-[600px] leading-tight">
+    <h2 class="text-white mb-6 max-w-[600px]">
       <?php echo esc_html($banner_title ?: 'Продолжите знакомство с музеем'); ?>
     </h2>
     <a href="<?php echo esc_url(home_url('/poster/')); ?>" class="btn-primary">
