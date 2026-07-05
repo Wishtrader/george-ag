@@ -97,6 +97,17 @@ function get_event_type_label($type) {
     );
     return $labels[$type] ?? 'Событие';
 }
+
+// Вспомогательная функция для получения цвета типа события
+function get_event_type_color($type) {
+    $colors = array(
+        'masterclass' => '#E8A62E',
+        'lecture' => '#28B6DA',
+        'meeting' => '#C61B8C',
+        'family' => '#73B843',
+    );
+    return $colors[$type] ?? '#6B5A4A';
+}
 ?>
 
 <?php get_header(); ?>
@@ -332,25 +343,25 @@ function get_event_type_label($type) {
     </div>
     
     <div class="grid lg:grid-cols-2 gap-5 lg:pt-[26px]">
-      <!-- Main class card -->
-      <?php if ($classes_main): ?>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <?php if (!empty($classes_main['image'])): ?>
-          <img src="<?php echo esc_url($classes_main['image']); ?>" 
-               alt="<?php echo esc_attr($classes_main['title']); ?>" 
-               class="aspect-[16/10] object-cover w-full">
-        <?php else: ?>
-          <div class="ph ph-art1 aspect-[16/10]"></div>
-        <?php endif; ?>
+<!-- Main class card -->
+       <?php if ($classes_main): ?>
+<div class="bg-white rounded-3xl overflow-hidden shadow-sm">
+         <?php if (!empty($classes_main['image'])): ?>
+           <img src="<?php echo esc_url($classes_main['image']); ?>" 
+                alt="<?php echo esc_attr($classes_main['title']); ?>" 
+                class="aspect-[16/10] object-cover w-full rounded-t-2xl md:h-[558px]">
+         <?php else: ?>
+           <div class="ph ph-art1 aspect-[16/10] rounded-t-2xl md:h-[558px]"></div>
+         <?php endif; ?>
         <div class="p-6">
-          <div class="flex items-center justify-between mb-3">
-            <span class="event-badge">
-              <?php echo get_event_type_icon($classes_main['type']); ?>
-              <?php echo esc_html(get_event_type_label($classes_main['type'])); ?>
-            </span>
-            <span class="text-xs text-[#6B5A4A] font-medium"><?php echo esc_html($classes_main['datetime']); ?></span>
-          </div>
-          <h3 class="font-['Literata'] text-xl font-semibold mb-3"><?php echo esc_html($classes_main['title']); ?></h3>
+<div class="flex items-center justify-between mb-3">
+              <span class="event-badge" style="color: <?php echo esc_attr(get_event_type_color($classes_main['type'])); ?>">
+                <?php echo get_event_type_icon($classes_main['type']); ?>
+                <?php echo esc_html(get_event_type_label($classes_main['type'])); ?>
+              </span>
+              <span class="text-xs font-medium" style="color: <?php echo esc_attr(get_event_type_color($classes_main['type'])); ?>"><?php echo esc_html($classes_main['datetime']); ?></span>
+            </div>
+          <h3 class="font-['Golos_Text'] text-base font-medium text-[#2D2926] lg:text-xl mb-3 !important"><?php echo esc_html($classes_main['title']); ?></h3>
           <p class="text-sm text-[#6B5A4A] mb-5"><?php echo esc_html($classes_main['description']); ?></p>
           <a href="#" class="btn-outline w-full !py-2.5 text-sm">
             <?php echo esc_html($classes_main['button_text']); ?>
@@ -359,28 +370,28 @@ function get_event_type_label($type) {
       </div>
       <?php endif; ?>
       
-      <!-- Right column - classes list -->
-      <?php if ($classes_list): ?>
-      <div class="flex flex-col gap-5">
-        <?php foreach ($classes_list as $class): ?>
-        <div class="bg-white rounded-2xl overflow-hidden shadow-sm grid grid-cols-[1fr_1fr]">
-          <?php if (!empty($class['image'])): ?>
-            <img src="<?php echo esc_url($class['image']); ?>" 
-                 alt="<?php echo esc_attr($class['title']); ?>" 
-                 class="object-cover w-full h-full">
-          <?php else: ?>
-            <div class="ph ph-art2"></div>
-          <?php endif; ?>
+<!-- Right column - classes list -->
+       <?php if ($classes_list): ?>
+       <div class="flex flex-col gap-5">
+         <?php foreach ($classes_list as $class): ?>
+<div class="bg-white rounded-3xl overflow-hidden shadow-sm grid grid-cols-[1fr_1fr] gap-0 md:grid-cols-[285px_1fr]">
+           <?php if (!empty($class['image'])): ?>
+             <img src="<?php echo esc_url($class['image']); ?>" 
+                  alt="<?php echo esc_attr($class['title']); ?>" 
+                  class="object-cover w-full h-full md:h-[259px] rounded-l-3xl">
+           <?php else: ?>
+             <div class="ph ph-art2 w-full h-full md:h-[259px] rounded-l-3xl"></div>
+           <?php endif; ?>
           <div class="p-5 flex flex-col justify-between">
             <div>
-              <div class="flex items-center justify-between mb-3">
-                <span class="event-badge">
-                  <?php echo get_event_type_icon($class['type']); ?>
-                  <?php echo esc_html(get_event_type_label($class['type'])); ?>
-                </span>
-                <span class="text-xs text-[#6B5A4A] font-medium"><?php echo esc_html($class['datetime']); ?></span>
-              </div>
-              <h3 class="font-['Literata'] text-base font-semibold mb-2"><?php echo esc_html($class['title']); ?></h3>
+<div class="flex items-center justify-between mb-3">
+                 <span class="event-badge" style="color: <?php echo esc_attr(get_event_type_color($class['type'])); ?>">
+                   <?php echo get_event_type_icon($class['type']); ?>
+                   <?php echo esc_html(get_event_type_label($class['type'])); ?>
+                 </span>
+                 <span class="text-xs font-medium" style="color: <?php echo esc_attr(get_event_type_color($class['type'])); ?>"><?php echo esc_html($class['datetime']); ?></span>
+               </div>
+              <h3 class="font-['Golos_Text'] text-base font-medium text-[#2D2926] lg:text-xl mb-2 !important"><?php echo esc_html($class['title']); ?></h3>
               <p class="text-sm text-[#6B5A4A]"><?php echo esc_html($class['description']); ?></p>
             </div>
             <a href="#" class="btn-outline w-full !py-2 text-sm mt-4">
