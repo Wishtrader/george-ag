@@ -470,8 +470,82 @@ function georgeag_get_event_meta_keys() {
 		'event_cta_primary_url',
 		'event_cta_secondary',
 		'event_cta_secondary_url',
+		'event_product_id',
 	);
 }
+
+/**
+ * Auto-create WooCommerce product for event (ticket).
+ * Runs on save_post for 'event' CPT.
+ */
+function georgeag_sync_event_product( $post_id ) {
+	if ( ! class_exists( 'WooCommerce' ) ) {
+		return;
+	}
+
+	// Skip autosaves, revisions, AJAX bulk edits
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+	if ( wp_is_post_revision( $post_id ) ) return;
+	if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) return;
+
+	$product_id = get_post_meta( $post_id, 'event_product_id', true );
+
+	$title     = get_the_title( $post_id );
+	$price     = get_post_meta( $post_id, 'event_price', true );
+	$date      = get_post_meta( $post_id, 'event_date', true );
+	$time      = get_post_meta( $post_id, 'event_time', true );
+	$location  = get_post_meta( $post_id, 'event_location', true );
+	$thumbnail = get_post_thumbnail_id( $post_id );
+
+	// Parse numeric price from text like "15 BYN" or "00 BYN"
+	$numeric_price = 0;
+	if ( $price ) {
+		preg_match( '/[\d]+/', str_replace( ' ', '', $price ), $matches );
+		if ( ! empty( $matches[0] ) ) {
+			$numeric_price = (float) $matches[0];
+		}
+	}
+
+	$event_url = get_permalink( $post_id );
+	$desc_parts = array();
+	if ( $date ) $desc_parts[] = $date;
+	if ( $time ) $desc_parts[] = $time;
+	if ( $location ) $desc_parts[] = $location;
+	$short_desc = implode( ' · ', $desc_parts );
+
+	if ( $product_id && get_post_type( $product_id ) === 'product' ) {
+		// Update existing product
+		$product = wc_get_product( $product_id );
+		if ( $product ) {
+			$product->set_name( $title . ' — Билет' );
+			$product->set_regular_price( $numeric_price );
+			$product->set_short_description( $short_desc );
+			$product->set_description( 'Билет на событие: ' . $title . "\n\n" . wp_strip_all_tags( get_post_meta( $post_id, 'event_description', true ) ) );
+			$product->save();
+		}
+	} else {
+		// Create new simple product (virtual, not in knigi category)
+		$product = new WC_Product_Simple();
+		$product->set_name( $title . ' — Билет' );
+		$product->set_regular_price( $numeric_price );
+		$product->set_status( 'publish' );
+		$product->set_catalog_visibility( 'hidden' );
+		$product->set_virtual( true );
+		$product->set_short_description( $short_desc );
+		$product->set_description( 'Билет на событие: ' . $title . "\n\n" . wp_strip_all_tags( get_post_meta( $post_id, 'event_description', true ) ) );
+
+		if ( $thumbnail ) {
+			$product->set_image_id( $thumbnail );
+		}
+
+		$product_id = $product->save();
+
+		if ( $product_id ) {
+			update_post_meta( $post_id, 'event_product_id', $product_id );
+		}
+	}
+}
+add_action( 'save_post_event', 'georgeag_sync_event_product' );
 
 /**
  * Register ACF fields for Events

@@ -128,10 +128,10 @@
       }
     ?>
       <div class="flex items-center gap-2">
-       <button class="relative p-2" aria-label="Корзина">
+       <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="relative p-2" aria-label="Корзина">
         <img src="<?php echo esc_url( get_template_directory_uri() . '/img/cart.svg' ); ?>" alt="cart" class="w-[30px]" />
-        <span class="absolute -top-0.5 -right-0.5 text-[#E8872C] bg-[#FAF6EF] text-[13px] w-[24px] h-[24px] border border-[1px] border-[#E8872C] rounded-full flex items-center justify-center font-semibold">1</span>
-      </button>
+        <span id="mobile-cart-count" class="absolute -top-0.5 -right-0.5 text-[#E8872C] bg-[#FAF6EF] text-[13px] w-[24px] h-[24px] border border-[1px] border-[#E8872C] rounded-full flex items-center justify-center font-semibold <?php echo WC()->cart->get_cart_contents_count() === 0 ? 'hidden' : ''; ?>"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+      </a>
         <button id="closeMenuBtn" class="p-2" aria-label="Закрыть меню">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3A2E24" stroke-width="2" stroke-linecap="round">
             <line x1="5" y1="5" x2="19" y2="19"/>

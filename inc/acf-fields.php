@@ -5187,3 +5187,47 @@ acf_add_local_field_group( array(
 	'menu_order' => 6,
 	'position'   => 'normal',
 ) );
+
+/**
+ * ACF Field Group: Спасибо за заказ (Thank You page)
+ */
+acf_add_local_field_group( array(
+	'key'      => 'group_thankyou',
+	'title'    => 'Страница «Спасибо за заказ»',
+	'fields'   => array(
+		array(
+			'key'           => 'field_thankyou_bg',
+			'label'         => 'Фоновое изображение',
+			'name'          => 'thankyou_bg',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'preview_size'  => 'medium',
+		),
+		array(
+			'key'          => 'field_thankyou_title',
+			'label'        => 'Заголовок',
+			'name'         => 'thankyou_title',
+			'type'         => 'text',
+			'default_value' => 'Спасибо за заказ',
+		),
+		array(
+			'key'          => 'field_thankyou_text',
+			'label'        => 'Текст',
+			'name'         => 'thankyou_text',
+			'type'         => 'textarea',
+			'rows'         => 4,
+			'default_value' => "Ваш заказ в магазине музея принят. Мы свяжемся с вами после обработки и уточнения деталей получения.\n\nЕсли выбран самовывоз — мы сообщим, когда заказ будет готов.",
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'thankyou.php',
+			),
+		),
+	),
+	'menu_order' => 7,
+	'position'   => 'normal',
+) );

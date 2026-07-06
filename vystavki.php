@@ -21,7 +21,6 @@ $how_description = get_field('vystavki_how_description') ?: 'Выставочн�
 $how_items = get_field('vystavki_how_items');
 
 $subscriptions_title = get_field('vystavki_subscriptions_title') ?: 'Абонементы и регулярные форматы';
-$subscriptions_items = get_field('vystavki_subscriptions_items');
 
 $cta_background_image = get_field('vystavki_cta_background_image');
 $cta_background_image_mobile = get_field('vystavki_cta_background_image_mobile');
@@ -171,57 +170,30 @@ function get_vystavki_category_label($category) {
 <?php endif; ?>
 
 <!-- ============ SUBSCRIPTIONS ============ -->
-<?php if ($subscriptions_items): ?>
+<?php
+$subscriptions_query = new WP_Query(array(
+	'post_type'      => 'subscription',
+	'posts_per_page' => 3,
+	'orderby'        => 'menu_order',
+	'order'          => 'ASC',
+));
+if ($subscriptions_query->have_posts()):
+?>
 <section class="py-16 lg:py-20 bg-[#FAF6EF]">
-  <div class="container-main">
+  <div class="max-w-[1200px] mx-auto">
     <?php if ($subscriptions_title): ?>
     <h2 class="mb-10">
       <?php echo esc_html($subscriptions_title); ?>
     </h2>
     <?php endif; ?>
-    
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      <?php foreach ($subscriptions_items as $sub): ?>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
-        <?php if (!empty($sub['image'])): ?>
-          <img src="<?php echo esc_url($sub['image']); ?>" 
-               alt="<?php echo esc_attr($sub['title']); ?>" 
-               class="aspect-[16/10] object-cover w-full">
-        <?php else: ?>
-          <div class="ph ph-art1 aspect-[16/10]"></div>
-        <?php endif; ?>
-        <div class="p-6 flex-1 flex flex-col">
-          <h3 class="font-['Literata'] text-xl font-semibold mb-3"><?php echo esc_html($sub['title']); ?></h3>
-          <?php if (!empty($sub['description'])): ?>
-          <p class="text-sm text-[#6B5A4A] mb-4"><?php echo esc_html($sub['description']); ?></p>
-          <?php endif; ?>
-          <?php if (!empty($sub['includes_items'])): ?>
-          <div class="mb-5">
-            <?php if (!empty($sub['includes_title'])): ?>
-            <span class="text-xs font-medium text-[#2D2926] uppercase tracking-wide mb-2 block">
-              <?php echo esc_html($sub['includes_title']); ?>
-            </span>
-            <?php endif; ?>
-            <ul class="text-sm text-[#6B5A4A] space-y-1.5">
-              <?php echo nl2br('<li class="flex items-start gap-2"><span class="text-[#F28A2E] mt-0.5">&#8226;</span>' . esc_html($sub['includes_items']) . '</li>'); ?>
-            </ul>
-          </div>
-          <?php endif; ?>
-          <div class="mt-auto flex items-center gap-3 pt-4 border-t border-[#E8D5BE]">
-            <?php if (!empty($sub['price'])): ?>
-            <span class="text-sm text-[#6B5A4A]"><?php echo esc_html($sub['price']); ?></span>
-            <?php endif; ?>
-            <a href="#" class="btn-outline !py-2 text-sm ml-auto">
-              <?php echo esc_html($sub['button_text'] ?: 'Подробнее'); ?>
-            </a>
-          </div>
-        </div>
-      </div>
-      <?php endforeach; ?>
+      <?php while ($subscriptions_query->have_posts()): $subscriptions_query->the_post();
+        get_template_part('template-parts/subscription-card');
+      endwhile; ?>
     </div>
   </div>
 </section>
-<?php endif; ?>
+<?php wp_reset_postdata(); endif; ?>
 
 <!-- ============ CTA SECTION ============ -->
 <?php if ($cta_title || $cta_primary || $cta_secondary): ?>

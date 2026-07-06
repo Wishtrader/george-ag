@@ -109,9 +109,9 @@ $product_main_image = $product ? wp_get_attachment_url($product->get_image_id())
             <input type="number" value="1" min="1" class="w-[60px] h-full text-center text-base font-medium border-x border-[#D9CCBC] bg-transparent outline-none" id="qtyInput">
             <button type="button" class="w-[52px] h-full text-xl text-[#6B5A4A] hover:text-[#E8872C] transition" id="qtyPlus">+</button>
           </div>
-          <a href="#" class="btn-primary flex-1 h-[52px]">
+          <button type="button" class="btn-primary flex-1 h-[52px] add-to-cart-btn-single" data-product-id="<?php echo esc_attr($product_id); ?>">
             В корзину
-          </a>
+          </button>
         </div>
       </div>
     </div>
@@ -333,6 +333,63 @@ document.addEventListener('DOMContentLoaded', function() {
   if (qtyPlus) qtyPlus.addEventListener('click', function() {
     if (qtyInput) qtyInput.value = parseInt(qtyInput.value) + 1;
   });
+
+  // Add to cart AJAX
+  var addToCartBtn = document.querySelector('.add-to-cart-btn-single');
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener('click', function() {
+      var productId = this.dataset.productId;
+      var quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+      var btn = this;
+      var originalText = btn.textContent;
+
+      btn.textContent = 'Добавление...';
+      btn.disabled = true;
+
+      var formData = new FormData();
+      formData.append('action', 'georgeag_add_to_cart');
+      formData.append('product_id', productId);
+      formData.append('quantity', quantity);
+
+      var ajaxUrl = typeof georgeagCart !== 'undefined' ? georgeagCart.ajaxUrl : '<?php echo admin_url("admin-ajax.php"); ?>';
+      fetch(ajaxUrl, {
+        method: 'POST',
+        body: formData
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.success) {
+          btn.textContent = 'В корзине ✓';
+          btn.classList.add('!bg-[#4CAF50]');
+          setTimeout(function() {
+            btn.textContent = originalText;
+            btn.classList.remove('!bg-[#4CAF50]');
+            btn.disabled = false;
+          }, 2000);
+
+          var countEl = document.getElementById('header-cart-count');
+          var mobileCountEl = document.getElementById('mobile-cart-count');
+          if (countEl) {
+            countEl.textContent = res.data.count;
+            countEl.classList.toggle('hidden', res.data.count === 0);
+          }
+          if (mobileCountEl) {
+            mobileCountEl.textContent = res.data.count;
+            mobileCountEl.classList.toggle('hidden', res.data.count === 0);
+          }
+        } else {
+          btn.textContent = 'Ошибка';
+          btn.disabled = false;
+          setTimeout(function() { btn.textContent = originalText; }, 2000);
+        }
+      })
+      .catch(function() {
+        btn.textContent = 'Ошибка';
+        btn.disabled = false;
+        setTimeout(function() { btn.textContent = originalText; }, 2000);
+      });
+    });
+  }
 });
 </script>
 

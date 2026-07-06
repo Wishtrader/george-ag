@@ -316,9 +316,9 @@ $subscriptions_query = new WP_Query(array(
 <!-- ============ SUBSCRIPTIONS ============ -->
 <?php if ($subscriptions_query->have_posts()): ?>
 <section class="py-10 lg:py-16 lg:mt-10">
-  <div class="container-main !px-5">
+  <div class="max-w-[1200px] mx-auto">
     <h2 class="mb-10 lg:mb-14 !font-medium"><?php echo esc_html($subscriptions_title); ?></h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:pt-[10px]">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
       <?php while ($subscriptions_query->have_posts()): $subscriptions_query->the_post();
         get_template_part('template-parts/subscription-card');
       endwhile; ?>

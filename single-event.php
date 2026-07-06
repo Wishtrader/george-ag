@@ -79,6 +79,8 @@ $thumbnail_id = get_post_thumbnail_id();
 $thumbnail_url = $thumbnail_id ? wp_get_attachment_url( $thumbnail_id ) : '';
 $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
 
+// Get linked WooCommerce product ID
+$event_product_id = get_post_meta( get_the_ID(), 'event_product_id', true );
 ?>
 
   <!-- ===== HERO BANNER (full width) ===== -->
@@ -138,9 +140,9 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
             </div>
 
             <!-- Buy ticket button -->
-            <a href="#" class="flex items-center justify-center w-full lg:w-[285px] lg:h-[52px] bg-[#FAF6EF] border border-[#F28A2E] text-[#F28A2E] px-8 py-2.5 rounded-[12px] text-base font-medium hover:bg-[#F28A2E] hover:text-white hover:border-white transition">
+            <button type="button" class="event-buy-btn flex items-center justify-center w-full lg:w-[285px] lg:h-[52px] bg-[#FAF6EF] border border-[#F28A2E] text-[#F28A2E] px-8 py-2.5 rounded-[12px] text-base font-medium hover:bg-[#F28A2E] hover:text-white hover:border-white transition" data-event-id="<?php echo esc_attr( get_the_ID() ); ?>">
               Купить билет
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -169,9 +171,9 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
         <?php endforeach; ?>
       </div>
       <!-- Buy button -->
-      <a href="#" class="block w-full bg-orange-400 text-white text-center py-3 rounded-full font-semibold text-sm mt-5 hover:bg-orange-500 transition">
+      <button type="button" class="event-buy-btn block w-full bg-orange-400 text-white text-center py-3 rounded-full font-semibold text-sm mt-5 hover:bg-orange-500 transition" data-event-id="<?php echo esc_attr( get_the_ID() ); ?>">
         Купить билет
-      </a>
+      </button>
     </div>
   </section>
 
@@ -280,9 +282,9 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
               <?php endforeach; ?>
             </div>
             <!-- Buy ticket button -->
-            <a href="#" class="flex items-center justify-center w-full h-[52px] bg-[#F28A2E] text-white text-center rounded-[12px] font-medium text-base mt-5 hover:bg-[#D1731F] transition">
+            <button type="button" class="event-buy-btn flex items-center justify-center w-full h-[52px] bg-[#F28A2E] text-white text-center rounded-[12px] font-medium text-base mt-5 hover:bg-[#D1731F] transition" data-event-id="<?php echo esc_attr( get_the_ID() ); ?>">
               Купить билет
-            </a>
+            </button>
           </div>
         </div>
 
@@ -291,105 +293,26 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
   </section>
 
   <!-- ===== SUBSCRIPTIONS / REGULAR FORMATS ===== -->
+  <?php
+  $subscriptions_query = new WP_Query(array(
+    'post_type'      => 'subscription',
+    'posts_per_page' => 3,
+    'orderby'        => 'menu_order',
+    'order'          => 'ASC',
+  ));
+  if ($subscriptions_query->have_posts()):
+  ?>
   <section class="py-10 lg:py-16 bg-cream">
-    <div class="max-w-content mx-auto px-4 lg:px-6">
+    <div class="max-w-[1200px] mx-auto">
       <h2 class="text-black mb-6 lg:mb-8">Абонементы и регулярные форматы</h2>
-
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-6">
-
-        <!-- Card 1: Абонемент в музей -->
-        <div class="bg-white/95 rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col">
-          <div class="img-placeholder w-full aspect-[16/9]"><span>Subscription Image 1</span></div>
-          <div class="p-5 lg:p-6 flex flex-col flex-1">
-            <h3 class="font-heading text-lg font-bold text-gray-900 mb-2">Абонемент в музей</h3>
-            <p class="text-sm text-gray-600 leading-relaxed mb-4">
-              Свободное посещение постоянной экспозиции и временных выставок в течении выбранного периода
-            </p>
-            <p class="text-sm text-orange-500 font-semibold mb-3">Что входит</p>
-            <ul class="space-y-1.5 mb-5 flex-1">
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="w-1.5 h-1.5 bg-orange-400 rounded-full mt-1.5 flex-shrink-0"></span>
-                <span>посещение музея</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="w-1.5 h-1.5 bg-orange-400 rounded-full mt-1.5 flex-shrink-0"></span>
-                <span>доступ к постоянной экспозиции</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="w-1.5 h-1.5 bg-orange-400 rounded-full mt-1.5 flex-shrink-0"></span>
-                <span>доступ к временным выставкам</span>
-              </li>
-            </ul>
-            <div class="flex items-center justify-between mt-auto pt-2">
-              <span class="text-base font-bold text-gray-900">от 00 BYN</span>
-              <a href="#" class="border border-orange-400 text-orange-500 text-sm px-5 py-2 rounded-full font-medium hover:bg-orange-50 transition">Подробнее</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 2: Абонемент на мастер-классы -->
-        <div class="bg-white/95 rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col">
-          <div class="img-placeholder w-full aspect-[16/9]"><span>Subscription Image 2</span></div>
-          <div class="p-5 lg:p-6 flex flex-col flex-1">
-            <h3 class="font-heading text-lg font-bold text-gray-900 mb-2">Абонемент на мастер-классы</h3>
-            <p class="text-sm text-gray-600 leading-relaxed mb-4">
-              Участие в серии творческих занятий по наивной живописи, декоративным техникам и практическим форматам.
-            </p>
-            <p class="text-sm text-orange-500 font-semibold mb-3">Что входит</p>
-            <ul class="space-y-1.5 mb-5 flex-1">
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="w-1.5 h-1.5 bg-orange-400 rounded-full mt-1.5 flex-shrink-0"></span>
-                <span>несколько мастер-классов</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="w-1.5 h-1.5 bg-orange-400 rounded-full mt-1.5 flex-shrink-0"></span>
-                <span>приоритетная запись</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="w-1.5 h-1.5 bg-orange-400 rounded-full mt-1.5 flex-shrink-0"></span>
-                <span>специальные форматы для постоянных участников</span>
-              </li>
-            </ul>
-            <div class="flex items-center justify-between mt-auto pt-2">
-              <span class="text-base font-bold text-gray-900">от 00 BYN</span>
-              <a href="#" class="border border-orange-400 text-orange-500 text-sm px-5 py-2 rounded-full font-medium hover:bg-orange-50 transition">Подробнее</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 3: Комбинированный формат -->
-        <div class="bg-white/95 rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col">
-          <div class="img-placeholder w-full aspect-[16/9]"><span>Subscription Image 3</span></div>
-          <div class="p-5 lg:p-6 flex flex-col flex-1">
-            <h3 class="font-heading text-lg font-bold text-gray-900 mb-2">Комбинированный формат</h3>
-            <p class="text-sm text-gray-600 leading-relaxed mb-4">
-              Посещение выставок, лекций и мастер-классов по одному абонементу - для тех, кто хочет познакомится с музеей глубже.
-            </p>
-            <p class="text-sm text-orange-500 font-semibold mb-3">Что входит</p>
-            <ul class="space-y-1.5 mb-5 flex-1">
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="w-1.5 h-1.5 bg-orange-400 rounded-full mt-1.5 flex-shrink-0"></span>
-                <span>посещение экспозиций</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="w-1.5 h-1.5 bg-orange-400 rounded-full mt-1.5 flex-shrink-0"></span>
-                <span>участие в выбранных событиях</span>
-              </li>
-              <li class="flex items-start gap-2 text-sm text-gray-600">
-                <span class="w-1.5 h-1.5 bg-orange-400 rounded-full mt-1.5 flex-shrink-0"></span>
-                <span>доступ к регулярной выставкам</span>
-              </li>
-            </ul>
-            <div class="flex items-center justify-between mt-auto pt-2">
-              <span class="text-base font-bold text-gray-900">от 00 BYN</span>
-              <a href="#" class="border border-orange-400 text-orange-500 text-sm px-5 py-2 rounded-full font-medium hover:bg-orange-50 transition">Подробнее</a>
-            </div>
-          </div>
-        </div>
-
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <?php while ($subscriptions_query->have_posts()): $subscriptions_query->the_post();
+          get_template_part('template-parts/subscription-card');
+        endwhile; ?>
       </div>
     </div>
   </section>
+  <?php wp_reset_postdata(); endif; ?>
 
   <!-- ===== CTA BANNER ===== -->
   <section class="relative bg-[#FAF6EF] h-[300px]">
@@ -425,5 +348,60 @@ $hero_url = $event_hero_image ? $event_hero_image : $thumbnail_url;
       </div>
     </div>
   </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.event-buy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var eventId = this.dataset.eventId;
+      var btn = this;
+      var originalText = btn.textContent;
+
+      btn.textContent = 'Добавление...';
+      btn.disabled = true;
+
+      var ajaxUrl = typeof georgeagCart !== 'undefined' ? georgeagCart.ajaxUrl : '<?php echo admin_url("admin-ajax.php"); ?>';
+      var formData = new FormData();
+      formData.append('action', 'georgeag_buy_event_ticket');
+      formData.append('event_id', eventId);
+      formData.append('quantity', 1);
+
+      fetch(ajaxUrl, { method: 'POST', body: formData })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          if (res.success) {
+            btn.textContent = 'В корзине ✓';
+            btn.classList.add('!bg-[#4CAF50]');
+            setTimeout(function() {
+              btn.textContent = originalText;
+              btn.classList.remove('!bg-[#4CAF50]');
+              btn.disabled = false;
+            }, 2000);
+
+            var countEl = document.getElementById('header-cart-count');
+            var mobileCountEl = document.getElementById('mobile-cart-count');
+            if (countEl) {
+              countEl.textContent = res.data.count;
+              countEl.classList.toggle('hidden', res.data.count === 0);
+            }
+            if (mobileCountEl) {
+              mobileCountEl.textContent = res.data.count;
+              mobileCountEl.classList.toggle('hidden', res.data.count === 0);
+            }
+          } else {
+            btn.textContent = 'Ошибка';
+            btn.disabled = false;
+            setTimeout(function() { btn.textContent = originalText; }, 2000);
+          }
+        })
+        .catch(function() {
+          btn.textContent = 'Ошибка';
+          btn.disabled = false;
+          setTimeout(function() { btn.textContent = originalText; }, 2000);
+        });
+    });
+  });
+});
+</script>
 
 <?php get_footer(); ?>

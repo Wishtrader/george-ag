@@ -56,35 +56,6 @@ $practical_price = get_field('exhibition_practical_price') ?: '00 BYN';
 $practical_button_text = get_field('exhibition_practical_button_text') ?: 'Купить билет';
 
 $subscriptions_title = get_field('exhibition_subscriptions_title') ?: 'Абонементы и регулярные форматы';
-$subscriptions_items = get_field('exhibition_subscriptions_items') ?: array(
-	array(
-		'image'       => '',
-		'title'       => 'Абонемент в музей',
-		'description' => 'Свободное посещение постоянных выставок и временных экспозиций в течение выбранного периода.',
-		'includes_title' => 'Что входит',
-		'includes_items' => 'посещение музея\nдоступ к постоянной экспозиции\nдоступ к временным выставкам',
-		'price'       => 'от 00 BYN',
-		'button_text' => 'Подробнее',
-	),
-	array(
-		'image'       => '',
-		'title'       => 'Абонемент на мастер-классы',
-		'description' => 'Участие в серии творческих занятий по наивной живописи, декоративным техникам и авторским форматам.',
-		'includes_title' => 'Что входит',
-		'includes_items' => 'несколько мастер-классов\nприоритетная запись\nспециальные форматы для постоянных участников',
-		'price'       => 'от 00 BYN',
-		'button_text' => 'Подробнее',
-	),
-	array(
-		'image'       => '',
-		'title'       => 'Комбинированный формат',
-		'description' => 'Посещение выставок, лекций и мастер-классов по одному абонементу — для тех, кто хочет погрузиться с головой.',
-		'includes_title' => 'Что входит',
-		'includes_items' => 'посещение экспозиции\nучастие в выбранных событиях\nдоступ к регулярным выставкам',
-		'price'       => 'от 00 BYN',
-		'button_text' => 'Подробнее',
-	),
-);
 
 $cta_background_image = get_field('exhibition_cta_background_image');
 $cta_background_image_mobile = get_field('exhibition_cta_background_image_mobile');
@@ -96,7 +67,7 @@ $cta_secondary = get_field('exhibition_cta_secondary') ?: 'Посмотреть 
 <?php get_header(); ?>
 
 <!-- ============ HERO ============ -->
-<section class="mt-[40px] lg:mt-[60px] relative overflow-hidden h-[400px] lg:h-[380px]">
+<section class="mt-[40px] lg:mt-[60px] relative overflow-hidden h-[400px] lg:h-[535px]">
   <?php if ($hero_image): ?>
   <div class="absolute inset-0" style="background-image: url('<?php echo esc_url($hero_image); ?>'); background-size: cover; background-position: center;"></div>
   <?php else: ?>
@@ -109,24 +80,24 @@ $cta_secondary = get_field('exhibition_cta_secondary') ?: 'Посмотреть 
       <ul class="breadcrumbs">
         <li><a href="/">Главная</a></li>
         <li><img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" alt="" class="breadcrumbs-separator"></li>
-        <li class="breadcrumbs-current">Выставки</li>
+        <li class="breadcrumbs-current !text-[#FAF6EF]">Выставки</li>
       </ul>
     </nav>
 
     <div class="max-w-[580px]">
-      <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] leading-[1.05] mb-4 !font-medium text-[#2D2926]">
+      <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] leading-[1.05] mb-4 !font-medium !text-[#FAF6EF]">
         <?php echo esc_html($hero_title); ?>
       </h1>
-      <p class="text-[16px] md:text-[20px] text-[#2D2926] mb-8">
+      <p class="text-[16px] md:text-[20px] text-[#FAF6EF] mb-8">
         <?php echo wp_kses_post($hero_description); ?>
       </p>
       <div class="flex flex-col sm:flex-row gap-3 justify-start w-full">
-        <a href="<?php echo esc_url($hero_cta_primary_url); ?>" class="btn-primary w-[285px]">
+        <a href="/poster" class="btn-primary w-[285px]">
           <?php echo esc_html($hero_cta_primary_text); ?>
         </a>
-        <a href="<?php echo esc_url($hero_cta_secondary_url); ?>" class="btn-outline !border-white !text-white hover:!bg-white hover:!text-[#2D2926]">
+        <button type="button" class="exhibition-buy-btn btn-outline !border-white !text-white hover:!bg-white hover:!text-[#2D2926]" data-page-id="<?php echo esc_attr( get_the_ID() ); ?>">
           <?php echo esc_html($hero_cta_secondary_text); ?>
-        </a>
+        </button>
       </div>
     </div>
   </div>
@@ -297,70 +268,39 @@ $cta_secondary = get_field('exhibition_cta_secondary') ?: 'Посмотреть 
           </div>
         </div>
 
-        <a href="<?php echo esc_url($hero_cta_secondary_url); ?>" class="btn-primary w-full mt-8">
+        <button type="button" class="exhibition-buy-btn btn-primary w-full mt-8" data-page-id="<?php echo esc_attr( get_the_ID() ); ?>">
           <?php echo esc_html($practical_button_text); ?>
-        </a>
+        </button>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ============ SUBSCRIPTIONS ============ -->
-<?php if ($subscriptions_items): ?>
+<?php
+$subscriptions_query = new WP_Query(array(
+	'post_type'      => 'subscription',
+	'posts_per_page' => 3,
+	'orderby'        => 'menu_order',
+	'order'          => 'ASC',
+));
+if ($subscriptions_query->have_posts()):
+?>
 <section class="py-16 lg:py-20">
-  <div class="container-main">
+  <div class="max-w-[1200px] mx-auto">
     <?php if ($subscriptions_title): ?>
     <h2 class="mb-10">
       <?php echo esc_html($subscriptions_title); ?>
     </h2>
     <?php endif; ?>
-    
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      <?php foreach ($subscriptions_items as $item): ?>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
-        <?php if (!empty($item['image'])): ?>
-        <img src="<?php echo esc_url($item['image']); ?>" 
-             alt="<?php echo esc_attr($item['title']); ?>" 
-             class="w-full aspect-[16/10] object-cover">
-        <?php else: ?>
-        <div class="ph ph-art2 w-full aspect-[16/10]"></div>
-        <?php endif; ?>
-        <div class="p-6 flex flex-col flex-1">
-          <h3 class="font-['Literata'] text-xl font-semibold mb-3">
-            <?php echo esc_html($item['title']); ?>
-          </h3>
-          <p class="text-sm text-[#6B5A4A] leading-relaxed mb-4">
-            <?php echo esc_html($item['description']); ?>
-          </p>
-          
-          <?php if (!empty($item['includes_title'])): ?>
-          <p class="text-sm font-semibold mb-2"><?php echo esc_html($item['includes_title']); ?></p>
-          <?php endif; ?>
-          
-          <?php if (!empty($item['includes_items'])): ?>
-          <ul class="text-sm text-[#6B5A4A] mb-6 space-y-1.5 flex-1">
-            <?php foreach (explode("\n", $item['includes_items']) as $include_item): ?>
-            <li class="flex items-start gap-2">
-              <span class="text-[#F28A2E] mt-1">•</span>
-              <?php echo esc_html(trim($include_item)); ?>
-            </li>
-            <?php endforeach; ?>
-          </ul>
-          <?php endif; ?>
-          
-          <div class="mt-auto">
-            <p class="text-sm text-[#6B5A4A] mb-4"><?php echo esc_html($item['price']); ?></p>
-            <a href="#" class="btn-outline w-full !py-2.5 text-sm">
-              <?php echo esc_html($item['button_text']); ?>
-            </a>
-          </div>
-        </div>
-      </div>
-      <?php endforeach; ?>
+      <?php while ($subscriptions_query->have_posts()): $subscriptions_query->the_post();
+        get_template_part('template-parts/subscription-card');
+      endwhile; ?>
     </div>
   </div>
 </section>
-<?php endif; ?>
+<?php wp_reset_postdata(); endif; ?>
 
 <!-- ============ CTA SECTION ============ -->
 <?php if ($cta_title || $cta_primary || $cta_secondary): ?>
@@ -376,15 +316,15 @@ $cta_secondary = get_field('exhibition_cta_secondary') ?: 'Посмотреть 
     <?php endif; ?>
   <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col items-center justify-center h-full relative text-center">
     <?php if ($cta_title): ?>
-    <h2 class="text-white mb-6 mx-auto max-w-[260px] md:max-w-full">
+    <h2 class="text-white !font-['Literata'] mb-6 mx-auto max-w-[260px] md:max-w-[700px] !font-normal lg:!text-[36px]">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>
     <div class="flex flex-col sm:flex-row gap-[10px] md:gap-5 justify-center w-full">
       <?php if ($cta_primary): ?>
-        <a href="#" class="btn-primary md:max-w-[285px]">
+        <button type="button" class="exhibition-buy-btn btn-primary md:max-w-[285px]" data-page-id="<?php echo esc_attr( get_the_ID() ); ?>">
           <?php echo esc_html($cta_primary); ?>
-        </a>
+        </button>
       <?php endif; ?>
       <?php if ($cta_secondary): ?>
         <a href="#" class="btn-secondary md:max-w-[285px]">
@@ -395,5 +335,53 @@ $cta_secondary = get_field('exhibition_cta_secondary') ?: 'Посмотреть 
   </div>
 </section>
 <?php endif; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.exhibition-buy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var pageId = this.dataset.pageId;
+      var btn = this;
+      var originalText = btn.textContent;
+
+      btn.textContent = 'Добавление...';
+      btn.disabled = true;
+
+      var ajaxUrl = typeof georgeagCart !== 'undefined' ? georgeagCart.ajaxUrl : '/wp-admin/admin-ajax.php';
+      var formData = new FormData();
+      formData.append('action', 'georgeag_buy_exhibition_ticket');
+      formData.append('page_id', pageId);
+      formData.append('quantity', 1);
+
+      fetch(ajaxUrl, { method: 'POST', body: formData })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          if (res.success) {
+            var countEl = document.getElementById('header-cart-count');
+            var mobileCountEl = document.getElementById('mobile-cart-count');
+            if (countEl) {
+              countEl.textContent = res.data.count;
+              countEl.classList.toggle('hidden', res.data.count === 0);
+            }
+            if (mobileCountEl) {
+              mobileCountEl.textContent = res.data.count;
+              mobileCountEl.classList.toggle('hidden', res.data.count === 0);
+            }
+            window.location.href = res.data.cart_url;
+          } else {
+            btn.textContent = 'Ошибка';
+            btn.disabled = false;
+            setTimeout(function() { btn.textContent = originalText; }, 2000);
+          }
+        })
+        .catch(function() {
+          btn.textContent = 'Ошибка';
+          btn.disabled = false;
+          setTimeout(function() { btn.textContent = originalText; }, 2000);
+        });
+    });
+  });
+});
+</script>
 
 <?php get_footer(); ?>

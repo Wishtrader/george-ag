@@ -135,7 +135,7 @@ function get_event_type_color($type) {
             </a>
           <?php endif; ?>
           <?php if ($hero_cta_secondary): ?>
-            <a href="#classes" class="btn-outline">
+            <a href="master-klassy" class="btn-outline">
               <?php echo esc_html($hero_cta_secondary); ?>
             </a>
           <?php endif; ?>
@@ -170,7 +170,7 @@ function get_event_type_color($type) {
           <div class="flex justify-between">
           <div class="flex flex-1 flex-col justify-between">
             <p class="text-[22px] leading-[1.2] font-medium mb-3"><?php echo esc_html($event['title']); ?></p>
-            <a href="#" class="link-arrow text-base">Записаться
+            <a href="<?php echo esc_url(home_url('/poster/')); ?>" class="link-arrow text-base">Записаться
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
           </div>
@@ -199,7 +199,7 @@ function get_event_type_color($type) {
       <h2>
         <?php echo esc_html($upcoming_title ?: 'Ближайшие события'); ?>
       </h2>
-      <a href="<?php echo esc_url(home_url('/events/')); ?>" class="link-arrow text-base lg:mt-4">
+      <a href="<?php echo esc_url(home_url('/poster/')); ?>" class="link-arrow text-base lg:mt-4">
         <?php echo esc_html($upcoming_link_text ?: 'Смотреть все события'); ?>
         <img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" class="w-6 h-6" />
       </a>

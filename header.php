@@ -578,12 +578,12 @@
     <!-- Right -->
     <div class="flex items-center gap-3 min-w-0">
       <div class="hidden md:flex min-w-0">
-	<a href="#" class="btn-primary btn-header text-base block min-h-[52px] whitespace-nowrap">Купить билет</a>
+	<a href="/poster" class="btn-primary btn-header text-base block min-h-[52px] whitespace-nowrap">Купить билет</a>
       </div>
-      <button class="relative p-2" aria-label="Корзина">
+      <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="relative p-2" aria-label="Корзина">
 	<img src="<?php echo esc_url( get_template_directory_uri() . '/img/cart.svg' ); ?>" alt="cart" class="w-[30px]" />
-        <span class="absolute -top-0.5 -right-0.5 text-[#E8872C] bg-[#FAF6EF] text-[13px] w-[24px] h-[24px] border border-[1px] border-[#E8872C] rounded-full flex items-center justify-center font-semibold">1</span>
-      </button>
+        <span id="header-cart-count" class="absolute -top-0.5 -right-0.5 text-[#E8872C] bg-[#FAF6EF] text-[13px] w-[24px] h-[24px] border border-[1px] border-[#E8872C] rounded-full flex items-center justify-center font-semibold <?php echo WC()->cart->get_cart_contents_count() === 0 ? 'hidden' : ''; ?>"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+      </a>
       <!-- Mobile burger -->
       <button id="menuBtn" class="hide-desktop p-2" aria-label="Меню">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3A2E24" stroke-width="2" stroke-linecap="round">

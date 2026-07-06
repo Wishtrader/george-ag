@@ -107,9 +107,9 @@ $products = wc_get_products(array(
                 <?php if ($p_price): ?>
                   <span class="text-[14px] lg:text-[16px] font-semibold text-[#2D2926]"><?php echo wp_kses_post($p_price); ?></span>
                 <?php endif; ?>
-                <a href="<?php echo esc_url($p_link); ?>" class="btn-primary !py-2 !px-4 text-[13px] lg:text-[14px] ml-auto whitespace-nowrap">
+                <button type="button" class="btn-primary !py-2 !px-4 text-[13px] lg:text-[14px] ml-auto whitespace-nowrap add-to-cart-btn" data-product-id="<?php echo esc_attr($p_id); ?>">
                   В корзину
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -183,3 +183,61 @@ $products = wc_get_products(array(
 </section>
 
 <?php get_footer(); ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.add-to-cart-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var productId = this.dataset.productId;
+      var btn = this;
+      var originalText = btn.textContent;
+
+      btn.textContent = 'Добавление...';
+      btn.disabled = true;
+
+      var formData = new FormData();
+      formData.append('action', 'georgeag_add_to_cart');
+      formData.append('product_id', productId);
+      formData.append('quantity', 1);
+
+      var ajaxUrl = typeof georgeagCart !== 'undefined' ? georgeagCart.ajaxUrl : '<?php echo admin_url("admin-ajax.php"); ?>';
+      fetch(ajaxUrl, {
+        method: 'POST',
+        body: formData
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.success) {
+          btn.textContent = 'В корзине ✓';
+          btn.classList.add('!bg-[#4CAF50]');
+          setTimeout(function() {
+            btn.textContent = originalText;
+            btn.classList.remove('!bg-[#4CAF50]');
+            btn.disabled = false;
+          }, 2000);
+
+          var countEl = document.getElementById('header-cart-count');
+          var mobileCountEl = document.getElementById('mobile-cart-count');
+          if (countEl) {
+            countEl.textContent = res.data.count;
+            countEl.classList.toggle('hidden', res.data.count === 0);
+          }
+          if (mobileCountEl) {
+            mobileCountEl.textContent = res.data.count;
+            mobileCountEl.classList.toggle('hidden', res.data.count === 0);
+          }
+        } else {
+          btn.textContent = 'Ошибка';
+          btn.disabled = false;
+          setTimeout(function() { btn.textContent = originalText; }, 2000);
+        }
+      })
+      .catch(function() {
+        btn.textContent = 'Ошибка';
+        btn.disabled = false;
+        setTimeout(function() { btn.textContent = originalText; }, 2000);
+      });
+    });
+  });
+});
+</script>
