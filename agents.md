@@ -1,164 +1,78 @@
-# GeorgeAG Theme - Agent Architecture & Responsibilities
+# GeorgeAG Theme — Agent Guide
 
-## Overview
+WordPress custom theme for Naif Arts museum (Minsk). Based on Underscores (_s).
 
-This document outlines the agent architecture and responsibilities for developing and maintaining the GeorgeAG WordPress theme for Naif Arts museum (Minsk).
+## Commands
 
-## Project Context
+```bash
+composer install         # PHP deps (PHPCS, parallel-lint)
+npm install              # JS deps (wp-scripts, rtlcss)
 
-- **Theme:** WordPress custom theme based on Underscores (_s)
-- **Purpose:** Museum website for Naif Arts (Minsk)
-- **Tech Stack:**
-  - WordPress (PHP)
-  - TailwindCSS v4 (CDN)
-  - Google Fonts: Literata (headers), Golos Text (body)
-  - Vanilla JavaScript (no frameworks)
-  - ACF (Advanced Custom Fields)
+# Linting
+composer lint:wpcs       # PHP coding standards (WordPress + WPThemeReview)
+composer lint:php        # PHP syntax check (parallel-lint)
+npm run lint:scss        # SCSS lint (but sass/ dir doesn't exist — skip)
+npm run lint:js          # JS lint (WordPress standards)
 
-## Agent Roles & Responsibilities
-
-### 1. Theme Development Agent
-
-**Responsibilities:**
-- Implement WordPress theme templates and template parts
-- Manage PHP functions and WordPress hooks
-- Integrate ACF field groups into templates
-- Ensure WordPress coding standards compliance
-- Handle theme customization and customizer settings
-
-**Key Files:**
-- `functions.php` - Theme setup, enqueuing scripts/styles, theme support
-- `header.php` - Site header with navigation, logo, mobile menu
-- `footer.php` - Site footer
-- Template files: `homepage.php`, `index.php`, `single.php`, `page.php`, `archive.php`, `404.php`
-
-### 2. Styling Agent
-
-**Responsibilities:**
-- Implement TailwindCSS v4 styling via CDN
-- Create custom CSS for theme-specific components
-- Ensure responsive design across breakpoints
-- Manage color palette implementation:
-  - `--brand-orange: #F28A2E`
-  - `--brand-cream: #F4EA`
-  - `--brand-text: #3A2E24`
-- Handle dark mode styling (if required)
-- Create button and link styles
-
-**Key Files:**
-- `style.css` - Main stylesheet (base + custom)
-- Inline Tailwind via CDN
-
-### 3. JavaScript Agent
-
-**Responsibilities:**
-- Implement mobile menu navigation logic
-- Handle customizer preview functionality
-- Ensure vanilla JS best practices
-- Optimize for performance
-
-**Key Files:**
-- `js/navigation.js` - Mobile menu toggle and navigation
-- `js/customizer.js` - Customizer preview enhancements
-
-### 4. ACF Integration Agent
-
-**Responsibilities:**
-- Define and register ACF field groups
-- Map field groups to template data
-- Implement repeater field handling
-- Ensure proper field sanitization and escaping
-
-**Field Groups (defined in `inc/acf-fields.php`):**
-
-1. **Hero Section** - Hero image, title, description, CTAs
-2. **Preview Events** - Event preview cards (max 3)
-3. **Upcoming Events** - Event listings with dates, titles, descriptions
-4. **About Museum** - Museum description and image
-5. **Expositions** - Exhibition listings (max 4)
-6. **Special Exposition** - Featured exhibition banner
-7. **Classes & Lectures** - Masterclasses and lecture listings
-8. **Museum Shop** - Product listings for museum store
-9. **Why Us** - Value proposition cards with icons
-10. **CTA Section** - Call-to-action banner
-
-### 5. Template Architecture Agent
-
-**Responsibilities:**
-- Design and implement template hierarchy
-- Create reusable template parts
-- Ensure proper WordPress template tags usage
-- Handle conditional logic for different content types
-
-**Template Structure:**
-```
-georgeag/
-├── header.php          # Header with navigation
-├── footer.php          # Footer
-├── homepage.php        # Homepage template
-├── index.php           # Blog index
-├── single.php          # Single post
-├── page.php            # Single page
-├── archive.php         # Archive pages
-├── 404.php             # 404 page
-├── functions.php       # Theme functions
-├── style.css           # Main stylesheet
-├── inc/                # Includes directory
-│   ├── custom-header.php
-│   ├── customizer.php
-│   ├── template-tags.php
-│   ├── template-functions.php
-│   ├── jetpack.php
-│   └── acf-fields.php
-├── js/
-│   ├── navigation.js
-│   └── customizer.js
-├── img/                # SVG icons
-└── template-parts/     # Reusable template parts
+# No build step needed for styles
+# TailwindCSS v4 loaded via CDN in header.php
+# All custom CSS is inline in header.php <style> block
 ```
 
-### 6. Performance & Optimization Agent
+## Critical Architecture Facts
 
-**Responsibilities:**
-- Optimize asset loading
-- Implement proper image handling
-- Ensure fast page load times
-- Handle lazy loading for images
-- Optimize CSS delivery via CDN
+- **No SCSS compilation.** `sass/` directory doesn't exist. `npm run watch` and `npm run compile:css` reference it and will fail. All styles live inline in `header.php` (lines 28–546) or as Tailwind utility classes in templates.
+- **TailwindCSS v4 via CDN.** Loaded in `header.php:27`. Custom theme config is in a `<style type="text/tailwindcss">` block. Fonts (`Literata`, `Golos Text`) loaded via Google Fonts.
+- **ACF fields are code-defined**, not JSON. All field groups in `inc/acf-fields.php` using `acf_add_local_field_group()`. Requires ACF plugin active.
+- **Three custom post types** (all in `inc/events-cpt.php`):
+  - `vystavka` — Exhibitions (slug: `vystavka`, rewrite: `/vystavka/`)
+  - `event` — Events (slug: `events`, taxonomy: `event_category`)
+  - `subscription` — Subscriptions (slug: `subscriptions`)
+- **Vystavka has a separate template** (`single-vystavka.php`, `exhibition.php`) with its own ACF field set (prefixed `sv_*`).
+- **Duplicate functionality** built into events, vystavka, and subscriptions CPTs.
 
-### 7. Accessibility Agent
+## File Layout
 
-**Responsibilities:**
-- Ensure WCAG compliance
-- Implement proper semantic HTML
-- Handle keyboard navigation
-- Manage ARIA attributes
-- Ensure color contrast ratios
+```
+functions.php            # Theme setup, enqueues, includes
+header.php               # <head>, Tailwind config, ALL custom CSS (~550 lines inline), nav
+footer.php               # Site footer
+homepage.php             # Homepage template (ACF-driven sections)
+exhibition.php           # Exhibition page template
+afisha.php               # Events/schedule page
+shop-catalog.php         # Shop catalog page
+about.php                # About museum
+cafe.php, contacts.php   # Static pages
+single-event.php         # Single event
+single-vystavka.php      # Single exhibition
+single-product.php       # WooCommerce product (if active)
+inc/
+  acf-fields.php         # ACF field group registrations (~1450 lines)
+  events-cpt.php         # Event, vystavka, subscription CPTs + duplicate logic
+  template-tags.php      # Template helper functions
+  template-functions.php # WordPress hooks
+  customizer.php         # Customizer settings
+  custom-header.php      # Custom header support
+  jetpack.php            # Jetpack compatibility
+img/                     # SVG icons + a few PNGs (no hero/event images yet)
+js/navigation.js         # Desktop nav (from _s, mostly unused — mobile uses inline JS)
+js/customizer.js         # Customizer preview
+template-parts/          # content.php, content-page.php, content-search.php,
+                         # content-none.php, special-exposition.php, subscription-card.php
+```
 
-## Communication Protocols
+## ACF Field Access Pattern
 
-### File Structure Updates
-- All new template files must follow WordPress naming conventions
-- Template parts should be placed in `/template-parts/`
-- Custom functions should be in `/inc/` directory
-
-### Code Standards
-- PHP: Follow WordPress PHP Coding Standards
-- CSS: Follow WordPress CSS Coding Standards
-- JS: Follow WordPress JavaScript Coding Standards
-- Use proper escaping: `esc_html()`, `esc_attr()`, `wp_kses_post()`
-
-### ACF Field Access
 ```php
 // Simple field
 $title = get_field('hero_title');
 
-// Group field
+// Group field (e.g., CTA buttons)
 $cta = get_field('hero_cta_primary');
 echo esc_html($cta['text']);
 echo esc_url($cta['link']);
 
-// Repeater field
+// Repeater
 $events = get_field('upcoming_events');
 if ($events) {
     foreach ($events as $event) {
@@ -167,41 +81,25 @@ if ($events) {
 }
 ```
 
-## Development Workflow
+## Conventions
 
-1. **Feature Branch:** Create feature branches for new functionality
-2. **Code Review:** Submit PRs for review before merging
-3. **Testing:** Test across different devices and browsers
-4. **Documentation:** Update this document for major changes
+- **Text domain:** `georgeag`
+- **Function prefix:** `georgeag_`
+- **Language:** All UI text is Russian
+- **Escaping:** Use `esc_html()`, `esc_attr()`, `esc_url()`, `wp_kses_post()`
+- **Colors (CSS vars in `:root`):**
+  - `--brand-orange: #F28A2E` (primary)
+  - `--brand-cream: #FAF6EF` (background)
+  - `--brand-text: #2D2926` (text)
+- **Button classes:** `.btn-primary` (orange filled), `.btn-secondary` (cream + orange border), `.btn-outline` (transparent + orange border)
+- **Responsive hide:** `.hide-mobile` / `.hide-desktop` (custom, not Tailwind)
+- **Container:** `.container-main` (max-width: 1240px, centered)
+- **Image placeholders:** `.ph-hero`, `.ph-museum`, `.ph-ussr`, `.ph-shop`, `.ph-cta`, `.ph-art1-5` — gradient backgrounds until real images
 
-## Breakpoints
+## Gotchas
 
-Tailwind default breakpoints:
-- `sm`: 640px
-- `md`: 768px (mobile breakpoint)
-- `lg`: 1024px
-- `xl`: 1280px
-
-## Utilities
-
-### Hide Classes
-- `.hide-mobile` - Hide on mobile
-- `.hide-desktop` - Hide on desktop
-
-### Button Classes
-- `.btn-primary` - Orange filled button
-- `.btn-outline` - Transparent button with orange border
-
-### Link Classes
-- `.link-arrow` - Link with animated arrow
-
-### Image Placeholders
-- `.ph-hero`, `.ph-museum`, `.ph-ussr`, `.ph-shop`, `.ph-cta` - Section-specific placeholders
-
-## Notes
-
-- Theme is currently in development
-- Images use placeholder gradients (to be replaced with real assets)
-- Content is static (not from WooCommerce/ACF yet)
-- All text is in Russian
-- Theme optimized for Minsk audience
+- `navigation.js` looks for `#site-navigation` element — mobile menu is actually handled by inline JS in `header.php` (burger button `#menuBtn` toggles `.mobile-menu`).
+- `functions.php` enqueues `georgeag-navigation` script but the actual mobile toggle doesn't depend on it.
+- PHPCS config (`phpcs.xml.dist`) still references `_s` as text domain prefix — will flag false positives on `georgeag` prefixed globals.
+- The `homepage.php` template is assigned to the front page via WordPress page template selector, not `front-page.php`.
+- Exhibition single pages use `single-vystavka.php` (not `single.php`). The vystavka CPT ACF fields use `sv_` prefix for hero, about, what-to-see, practical info, and CTA sections.

@@ -4197,8 +4197,78 @@ acf_add_local_field_group( array(
 		),
 		array(
 			'key'           => 'field_afisha_cta_secondary_url',
+	'label'         => 'Вторичная кнопка (ссылка)',
+		'name'          => 'afisha_cta_secondary_url',
+		'type'          => 'url',
+	),
+	),
+	'location'   => array(
+	array(
+		array(
+			'param'    => 'page_template',
+			'operator' => '==',
+			'value'    => 'afisha.php',
+		),
+	),
+	),
+	'menu_order' => 2,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: МАСТЕР-КЛАССЫ — HERO
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_mk_hero',
+	'title'    => 'Мастер-классы: Hero',
+	'fields'   => array(
+		array(
+			'key'           => 'field_mk_hero_title',
+			'label'         => 'Заголовок',
+			'name'          => 'mk_hero_title',
+			'type'          => 'text',
+			'default_value' => 'Мастер-классы музея',
+		),
+		array(
+			'key'           => 'field_mk_hero_description',
+			'label'         => 'Описание',
+			'name'          => 'mk_hero_description',
+			'type'          => 'textarea',
+			'rows'          => 3,
+			'default_value' => 'Практические занятия по наивной живописи, декоративным техникам и творческим форматам для детей и взрослых.',
+		),
+		array(
+			'key'           => 'field_mk_hero_image',
+			'label'         => 'Фоновое изображение',
+			'name'          => 'mk_hero_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_mk_hero_cta_primary_text',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'mk_hero_cta_primary_text',
+			'type'          => 'text',
+			'default_value' => 'Ближайшие события',
+		),
+		array(
+			'key'           => 'field_mk_hero_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'mk_hero_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_mk_hero_cta_secondary_text',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'mk_hero_cta_secondary_text',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_mk_hero_cta_secondary_url',
 			'label'         => 'Вторичная кнопка (ссылка)',
-			'name'          => 'afisha_cta_secondary_url',
+			'name'          => 'mk_hero_cta_secondary_url',
 			'type'          => 'url',
 		),
 	),
@@ -4207,10 +4277,913 @@ acf_add_local_field_group( array(
 			array(
 				'param'    => 'page_template',
 				'operator' => '==',
-				'value'    => 'afisha.php',
+				'value'    => 'master-klassy.php',
+			),
+		),
+	),
+	'menu_order' => 0,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: МАСТЕР-КЛАССЫ — ФИЛЬТРЫ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_mk_filters',
+	'title'    => 'Мастер-классы: Фильтры',
+	'fields'   => array(
+		array(
+			'key'          => 'field_mk_filters',
+			'label'        => 'Категории фильтров',
+			'name'         => 'mk_filters',
+			'type'         => 'repeater',
+			'layout'       => 'table',
+			'button_label' => 'Добавить фильтр',
+			'sub_fields'   => array(
+				array(
+					'key'          => 'field_mk_filter_label',
+					'label'        => 'Название',
+					'name'         => 'label',
+					'type'         => 'text',
+				),
+				array(
+					'key'          => 'field_mk_filter_slug',
+					'label'        => 'Slug',
+					'name'         => 'slug',
+					'type'         => 'text',
+					'instructions' => 'Идентификатор для JS-фильтрации (латиницей)',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'master-klassy.php',
+			),
+		),
+	),
+	'menu_order' => 1,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: МАСТЕР-КЛАССЫ — ГЛАВНЫЙ МАСТЕР-КЛАСС
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_mk_featured',
+	'title'    => 'Мастер-классы: Главный мастер-класс',
+	'fields'   => array(
+		array(
+			'key'          => 'field_mk_featured_title',
+			'label'        => 'Заголовок',
+			'name'         => 'mk_featured_title',
+			'type'         => 'text',
+			'default_value' => 'Живопись акрилом: весенний пейзаж',
+		),
+		array(
+			'key'          => 'field_mk_featured_description',
+			'label'        => 'Описание',
+			'name'         => 'mk_featured_description',
+			'type'         => 'textarea',
+			'rows'         => 3,
+			'default_value' => 'Пишем яркий пейзаж под руководством преподавателя. Для взрослых и подростков.',
+		),
+		array(
+			'key'           => 'field_mk_featured_image',
+			'label'         => 'Изображение',
+			'name'          => 'mk_featured_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'          => 'field_mk_featured_date',
+			'label'        => 'Дата',
+			'name'         => 'mk_featured_date',
+			'type'         => 'text',
+			'default_value' => '23 мая, пт',
+		),
+		array(
+			'key'          => 'field_mk_featured_time',
+			'label'        => 'Время',
+			'name'         => 'mk_featured_time',
+			'type'         => 'text',
+			'default_value' => '18:30',
+		),
+		array(
+			'key'          => 'field_mk_featured_audience',
+			'label'        => 'Аудитория',
+			'name'         => 'mk_featured_audience',
+			'type'         => 'text',
+			'default_value' => 'Для взрослых',
+		),
+		array(
+			'key'          => 'field_mk_featured_button_detail_text',
+			'label'        => 'Кнопка "Подробнее" (текст)',
+			'name'         => 'mk_featured_button_detail_text',
+			'type'         => 'text',
+			'default_value' => 'Подробнее',
+		),
+		array(
+			'key'          => 'field_mk_featured_button_detail_url',
+			'label'        => 'Кнопка "Подробнее" (ссылка)',
+			'name'         => 'mk_featured_button_detail_url',
+			'type'         => 'url',
+		),
+		array(
+			'key'          => 'field_mk_featured_button_buy_text',
+			'label'        => 'Кнопка "Купить билет" (текст)',
+			'name'         => 'mk_featured_button_buy_text',
+			'type'         => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'          => 'field_mk_featured_button_buy_url',
+			'label'        => 'Кнопка "Купить билет" (ссылка)',
+			'name'         => 'mk_featured_button_buy_url',
+			'type'         => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'master-klassy.php',
 			),
 		),
 	),
 	'menu_order' => 2,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: МАСТЕР-КЛАССЫ — СПИСОК МАСТЕР-КЛАССОВ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_mk_classes',
+	'title'    => 'Мастер-классы: Список',
+	'fields'   => array(
+		array(
+			'key'          => 'field_mk_classes_title',
+			'label'        => 'Заголовок секции',
+			'name'         => 'mk_classes_title',
+			'type'         => 'text',
+			'default_value' => 'Мастер-классы',
+		),
+		array(
+			'key'          => 'field_mk_classes',
+			'label'        => 'Мастер-классы',
+			'name'         => 'mk_classes',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить мастер-класс',
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_mk_class_image',
+					'label'         => 'Изображение',
+					'name'          => 'image',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+				),
+				array(
+					'key'          => 'field_mk_class_category',
+					'label'        => 'Категория',
+					'name'         => 'category',
+					'type'         => 'select',
+					'choices'      => array(
+						'masterclass'  => 'Мастер-класс',
+						'lecture'      => 'Лекция',
+						'meeting'      => 'Встреча',
+						'family'       => 'Семейное',
+						'for_children' => 'Для детей',
+						'for_adults'   => 'Для взрослых',
+					),
+					'default_value' => 'masterclass',
+				),
+				array(
+					'key'          => 'field_mk_class_date',
+					'label'        => 'Дата и время',
+					'name'         => 'date',
+					'type'         => 'text',
+					'default_value' => '19 мая, вс · 12:00',
+				),
+				array(
+					'key'          => 'field_mk_class_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+				),
+				array(
+					'key'          => 'field_mk_class_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 3,
+				),
+				array(
+					'key'          => 'field_mk_class_audience',
+					'label'        => 'Аудитория',
+					'name'         => 'audience',
+					'type'         => 'select',
+					'choices'      => array(
+						'for_children' => 'Для детей',
+						'for_adults'   => 'Для взрослых',
+						'family'       => 'Семейное',
+					),
+					'default_value' => 'for_children',
+				),
+				array(
+					'key'           => 'field_mk_class_audience_icon',
+					'label'         => 'Иконка аудитории',
+					'name'          => 'audience_icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
+				),
+				array(
+					'key'          => 'field_mk_class_price',
+					'label'        => 'Цена',
+					'name'         => 'price',
+					'type'         => 'text',
+					'default_value' => '00 BYN',
+				),
+				array(
+					'key'          => 'field_mk_class_button_text',
+					'label'        => 'Текст кнопки',
+					'name'         => 'button_text',
+					'type'         => 'text',
+					'default_value' => 'Записаться',
+				),
+				array(
+					'key'          => 'field_mk_class_button_url',
+					'label'        => 'Ссылка кнопки',
+					'name'         => 'button_url',
+					'type'         => 'url',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'master-klassy.php',
+			),
+		),
+	),
+	'menu_order' => 3,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: МАСТЕР-КЛАССЫ — ФОРМАТЫ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_mk_formats',
+	'title'    => 'Мастер-классы: Форматы',
+	'fields'   => array(
+		array(
+			'key'          => 'field_mk_formats_title',
+			'label'        => 'Заголовок секции',
+			'name'         => 'mk_formats_title',
+			'type'         => 'text',
+			'default_value' => 'Форматы мастер-классов',
+		),
+		array(
+			'key'          => 'field_mk_formats',
+			'label'        => 'Форматы',
+			'name'         => 'mk_formats',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить формат',
+			'max'          => 6,
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_mk_format_icon',
+					'label'         => 'Иконка',
+					'name'          => 'icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
+				),
+				array(
+					'key'          => 'field_mk_format_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+				),
+				array(
+					'key'          => 'field_mk_format_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 3,
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'master-klassy.php',
+			),
+		),
+	),
+	'menu_order' => 4,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: МАСТЕР-КЛАССЫ — АБОНЕМЕНТЫ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_mk_subscriptions',
+	'title'    => 'Мастер-классы: Абонементы',
+	'fields'   => array(
+		array(
+			'key'          => 'field_mk_subscriptions_title',
+			'label'        => 'Заголовок секции',
+			'name'         => 'mk_subscriptions_title',
+			'type'         => 'text',
+			'default_value' => 'Абонементы и регулярные форматы',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'master-klassy.php',
+			),
+		),
+	),
+	'menu_order' => 5,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: МАСТЕР-КЛАССЫ — CTA
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_mk_cta',
+	'title'    => 'Мастер-классы: CTA',
+	'fields'   => array(
+		array(
+			'key'           => 'field_mk_cta_background_image',
+			'label'         => 'Фон изображение (десктоп)',
+			'name'          => 'mk_cta_background_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_mk_cta_background_image_mobile',
+			'label'         => 'Фон изображение (мобильная)',
+			'name'          => 'mk_cta_background_image_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_mk_cta_title',
+			'label'         => 'Заголовок',
+			'name'          => 'mk_cta_title',
+			'type'          => 'text',
+			'default_value' => 'Выберите мастер-класс и приходите творить',
+		),
+		array(
+			'key'           => 'field_mk_cta_primary',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'mk_cta_primary',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_mk_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'mk_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_mk_cta_secondary',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'mk_cta_secondary',
+			'type'          => 'text',
+			'default_value' => 'Посмотреть афишу',
+		),
+		array(
+			'key'           => 'field_mk_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+		'name'          => 'mk_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+	array(
+		array(
+			'param'    => 'page_template',
+			'operator' => '==',
+			'value'    => 'master-klassy.php',
+		),
+	),
+	),
+	'menu_order' => 6,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ЛЕКЦИИ — HERO
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_lk_hero',
+	'title'    => 'Лекции и встречи: Hero',
+	'fields'   => array(
+		array(
+			'key'           => 'field_lk_hero_title',
+			'label'         => 'Заголовок',
+			'name'          => 'lk_hero_title',
+			'type'          => 'text',
+			'default_value' => 'Лекции и встречи',
+		),
+		array(
+			'key'           => 'field_lk_hero_description',
+			'label'         => 'Описание',
+			'name'          => 'lk_hero_description',
+			'type'          => 'textarea',
+			'rows'          => 3,
+			'default_value' => 'Экскурсии, лекции, встречи и творческие форматы для тех, кто хочет узнать больше об искусстве и музее.',
+		),
+		array(
+			'key'           => 'field_lk_hero_image',
+			'label'         => 'Фоновое изображение',
+			'name'          => 'lk_hero_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_lk_hero_cta_primary_text',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'lk_hero_cta_primary_text',
+			'type'          => 'text',
+			'default_value' => 'Ближайшие события',
+		),
+		array(
+			'key'           => 'field_lk_hero_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'lk_hero_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_lk_hero_cta_secondary_text',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'lk_hero_cta_secondary_text',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_lk_hero_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+			'name'          => 'lk_hero_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'lekcii.php',
+			),
+		),
+	),
+	'menu_order' => 0,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ЛЕКЦИИ — ФИЛЬТРЫ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_lk_filters',
+	'title'    => 'Лекции и встречи: Фильтры',
+	'fields'   => array(
+		array(
+			'key'          => 'field_lk_filters',
+			'label'        => 'Категории фильтров',
+			'name'         => 'lk_filters',
+			'type'         => 'repeater',
+			'layout'       => 'table',
+			'button_label' => 'Добавить фильтр',
+			'sub_fields'   => array(
+				array(
+					'key'          => 'field_lk_filter_label',
+					'label'        => 'Название',
+					'name'         => 'label',
+					'type'         => 'text',
+				),
+				array(
+					'key'          => 'field_lk_filter_slug',
+					'label'        => 'Slug',
+					'name'         => 'slug',
+					'type'         => 'text',
+					'instructions' => 'Идентификатор для JS-фильтрации (латиницей)',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'lekcii.php',
+			),
+		),
+	),
+	'menu_order' => 1,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ЛЕКЦИИ — ГЛАВНОЕ СОБЫТИЕ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_lk_featured',
+	'title'    => 'Лекции и встречи: Главное событие',
+	'fields'   => array(
+		array(
+			'key'          => 'field_lk_featured_title',
+			'label'        => 'Заголовок',
+			'name'         => 'lk_featured_title',
+			'type'         => 'text',
+			'default_value' => 'Лекция: Как понимать наивное искусство',
+		),
+		array(
+			'key'          => 'field_lk_featured_description',
+			'label'        => 'Описание',
+			'name'         => 'lk_featured_description',
+			'type'         => 'textarea',
+			'rows'         => 3,
+			'default_value' => 'Разбираемся в языке, символах и особой искренности наивного искусства.',
+		),
+		array(
+			'key'           => 'field_lk_featured_image',
+			'label'         => 'Изображение',
+			'name'          => 'lk_featured_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'          => 'field_lk_featured_date',
+			'label'        => 'Дата',
+			'name'         => 'lk_featured_date',
+			'type'         => 'text',
+			'default_value' => '25 мая, вт',
+		),
+		array(
+			'key'          => 'field_lk_featured_time',
+			'label'        => 'Время',
+			'name'         => 'lk_featured_time',
+			'type'         => 'text',
+			'default_value' => '18:30',
+		),
+		array(
+			'key'          => 'field_lk_featured_location',
+			'label'        => 'Место',
+			'name'         => 'lk_featured_location',
+			'type'         => 'text',
+			'default_value' => 'Лекторий музея',
+		),
+		array(
+			'key'          => 'field_lk_featured_button_detail_text',
+			'label'        => 'Кнопка "Подробнее" (текст)',
+			'name'         => 'lk_featured_button_detail_text',
+			'type'         => 'text',
+			'default_value' => 'Подробнее',
+		),
+		array(
+			'key'          => 'field_lk_featured_button_detail_url',
+			'label'        => 'Кнопка "Подробнее" (ссылка)',
+			'name'         => 'lk_featured_button_detail_url',
+			'type'         => 'url',
+		),
+		array(
+			'key'          => 'field_lk_featured_button_buy_text',
+			'label'        => 'Кнопка "Купить билет" (текст)',
+			'name'         => 'lk_featured_button_buy_text',
+			'type'         => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'          => 'field_lk_featured_button_buy_url',
+			'label'        => 'Кнопка "Купить билет" (ссылка)',
+			'name'         => 'lk_featured_button_buy_url',
+			'type'         => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'lekcii.php',
+			),
+		),
+	),
+	'menu_order' => 2,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ЛЕКЦИИ — СПИСОК СОБЫТИЙ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_lk_events',
+	'title'    => 'Лекции и встречи: Список',
+	'fields'   => array(
+		array(
+			'key'          => 'field_lk_events_title',
+			'label'        => 'Заголовок секции',
+			'name'         => 'lk_events_title',
+			'type'         => 'text',
+			'default_value' => 'Лекции и встречи',
+		),
+		array(
+			'key'          => 'field_lk_events',
+			'label'        => 'События',
+			'name'         => 'lk_events',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить событие',
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_lk_event_image',
+					'label'         => 'Изображение',
+					'name'          => 'image',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+				),
+				array(
+					'key'          => 'field_lk_event_category',
+					'label'        => 'Категория',
+					'name'         => 'category',
+					'type'         => 'select',
+					'choices'      => array(
+						'lecture'      => 'Лекция',
+						'meeting'      => 'Встреча',
+						'tour'         => 'Экскурсия',
+						'masterclass'  => 'Мастер-класс',
+						'for_children' => 'Для детей',
+						'for_adults'   => 'Для взрослых',
+						'family'       => 'Семейное',
+					),
+					'default_value' => 'lecture',
+				),
+				array(
+					'key'          => 'field_lk_event_date',
+					'label'        => 'Дата и время',
+					'name'         => 'date',
+					'type'         => 'text',
+					'default_value' => '21 мая, вт · 18:30',
+				),
+				array(
+					'key'          => 'field_lk_event_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+				),
+				array(
+					'key'          => 'field_lk_event_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 3,
+				),
+				array(
+					'key'          => 'field_lk_event_audience',
+					'label'        => 'Аудитория',
+					'name'         => 'audience',
+					'type'         => 'select',
+					'choices'      => array(
+						'for_children' => 'Для детей',
+						'for_adults'   => 'Для взрослых',
+						'family'       => 'Семейное',
+					),
+					'default_value' => 'for_adults',
+				),
+				array(
+					'key'           => 'field_lk_event_audience_icon',
+					'label'         => 'Иконка аудитории',
+					'name'          => 'audience_icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
+				),
+				array(
+					'key'          => 'field_lk_event_price',
+					'label'        => 'Цена',
+					'name'         => 'price',
+					'type'         => 'text',
+					'default_value' => '00 BYN',
+				),
+				array(
+					'key'          => 'field_lk_event_button_text',
+					'label'        => 'Текст кнопки',
+					'name'         => 'button_text',
+					'type'         => 'text',
+					'default_value' => 'Подробнее',
+				),
+				array(
+					'key'          => 'field_lk_event_button_url',
+					'label'        => 'Ссылка кнопки',
+					'name'         => 'button_url',
+					'type'         => 'url',
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'lekcii.php',
+			),
+		),
+	),
+	'menu_order' => 3,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ЛЕКЦИИ — ФОРМАТЫ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_lk_formats',
+	'title'    => 'Лекции и встречи: Форматы',
+	'fields'   => array(
+		array(
+			'key'          => 'field_lk_formats_title',
+			'label'        => 'Заголовок секции',
+			'name'         => 'lk_formats_title',
+			'type'         => 'text',
+			'default_value' => 'Форматы лекций',
+		),
+		array(
+			'key'          => 'field_lk_formats',
+			'label'        => 'Форматы',
+			'name'         => 'lk_formats',
+			'type'         => 'repeater',
+			'layout'       => 'block',
+			'button_label' => 'Добавить формат',
+			'max'          => 6,
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_lk_format_icon',
+					'label'         => 'Иконка',
+					'name'          => 'icon',
+					'type'          => 'image',
+					'return_format' => 'url',
+					'library'       => 'all',
+					'preview_size'  => 'thumbnail',
+				),
+				array(
+					'key'          => 'field_lk_format_title',
+					'label'        => 'Заголовок',
+					'name'         => 'title',
+					'type'         => 'text',
+				),
+				array(
+					'key'          => 'field_lk_format_description',
+					'label'        => 'Описание',
+					'name'         => 'description',
+					'type'         => 'textarea',
+					'rows'         => 3,
+				),
+			),
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'lekcii.php',
+			),
+		),
+	),
+	'menu_order' => 4,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ЛЕКЦИИ — АБОНЕМЕНТЫ
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_lk_subscriptions',
+	'title'    => 'Лекции и встречи: Абонементы',
+	'fields'   => array(
+		array(
+			'key'          => 'field_lk_subscriptions_title',
+			'label'        => 'Заголовок секции',
+			'name'         => 'lk_subscriptions_title',
+			'type'         => 'text',
+			'default_value' => 'Абонементы и регулярные форматы',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'lekcii.php',
+			),
+		),
+	),
+	'menu_order' => 5,
+	'position'   => 'normal',
+) );
+
+// ============================================
+// ГРУППА: ЛЕКЦИИ — CTA
+// ============================================
+acf_add_local_field_group( array(
+	'key'      => 'group_lk_cta',
+	'title'    => 'Лекции и встречи: CTA',
+	'fields'   => array(
+		array(
+			'key'           => 'field_lk_cta_background_image',
+			'label'         => 'Фон изображение (десктоп)',
+			'name'          => 'lk_cta_background_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_lk_cta_background_image_mobile',
+			'label'         => 'Фон изображение (мобильная)',
+			'name'          => 'lk_cta_background_image_mobile',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_lk_cta_title',
+			'label'         => 'Заголовок',
+			'name'          => 'lk_cta_title',
+			'type'          => 'text',
+			'default_value' => 'Выберите лекцию и приходите в музей',
+		),
+		array(
+			'key'           => 'field_lk_cta_primary',
+			'label'         => 'Основная кнопка (текст)',
+			'name'          => 'lk_cta_primary',
+			'type'          => 'text',
+			'default_value' => 'Купить билет',
+		),
+		array(
+			'key'           => 'field_lk_cta_primary_url',
+			'label'         => 'Основная кнопка (ссылка)',
+			'name'          => 'lk_cta_primary_url',
+			'type'          => 'url',
+		),
+		array(
+			'key'           => 'field_lk_cta_secondary',
+			'label'         => 'Вторичная кнопка (текст)',
+			'name'          => 'lk_cta_secondary',
+			'type'          => 'text',
+			'default_value' => 'Посмотреть афишу',
+		),
+		array(
+			'key'           => 'field_lk_cta_secondary_url',
+			'label'         => 'Вторичная кнопка (ссылка)',
+			'name'          => 'lk_cta_secondary_url',
+			'type'          => 'url',
+		),
+	),
+	'location'   => array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'lekcii.php',
+			),
+		),
+	),
+	'menu_order' => 6,
 	'position'   => 'normal',
 ) );

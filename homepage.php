@@ -361,9 +361,9 @@ function get_event_type_color($type) {
               </span>
               <span class="text-xs font-medium" style="color: <?php echo esc_attr(get_event_type_color($classes_main['type'])); ?>"><?php echo esc_html($classes_main['datetime']); ?></span>
             </div>
-          <h3 class="font-['Golos_Text'] text-base font-medium text-[#2D2926] lg:text-xl mb-3 !important"><?php echo esc_html($classes_main['title']); ?></h3>
-          <p class="text-sm text-[#6B5A4A] mb-5"><?php echo esc_html($classes_main['description']); ?></p>
-          <a href="#" class="btn-outline w-full !py-2.5 text-sm">
+          <h3 class="!font-['Golos_Text'] text-base !font-medium text-[#2D2926] lg:text-xl mb-3 !important"><?php echo esc_html($classes_main['title']); ?></h3>
+          <p class="text-sm text-[#6B5A4A] mb-5 lg:text-base leading-[1.2]"><?php echo esc_html($classes_main['description']); ?></p>
+          <a href="/classes" class="btn-primary !min-w-full !py-2.5 text-base">
             <?php echo esc_html($classes_main['button_text']); ?>
           </a>
         </div>
@@ -378,7 +378,7 @@ function get_event_type_color($type) {
            <?php if (!empty($class['image'])): ?>
              <img src="<?php echo esc_url($class['image']); ?>" 
                   alt="<?php echo esc_attr($class['title']); ?>" 
-                  class="object-cover w-full h-full md:h-[259px] rounded-l-3xl">
+                  class="object-cover w-full h-full rounded-l-3xl">
            <?php else: ?>
              <div class="ph ph-art2 w-full h-full md:h-[259px] rounded-l-3xl"></div>
            <?php endif; ?>
@@ -391,8 +391,8 @@ function get_event_type_color($type) {
                  </span>
                  <span class="text-xs font-medium" style="color: <?php echo esc_attr(get_event_type_color($class['type'])); ?>"><?php echo esc_html($class['datetime']); ?></span>
                </div>
-              <h3 class="font-['Golos_Text'] text-base font-medium text-[#2D2926] lg:text-xl mb-2 !important"><?php echo esc_html($class['title']); ?></h3>
-              <p class="text-sm text-[#6B5A4A]"><?php echo esc_html($class['description']); ?></p>
+              <h3 class="!font-['Golos_Text'] text-base !font-medium text-[#2D2926] lg:!text-xl mb-2 !important leading-[1.2]"><?php echo esc_html($class['title']); ?></h3>
+              <p class="text-base text-[#6B5A4A] leading-[1.2]"><?php echo esc_html($class['description']); ?></p>
             </div>
             <a href="#" class="btn-outline w-full !py-2 text-sm mt-4">
               <?php echo esc_html($class['button_text']); ?>
@@ -409,19 +409,19 @@ function get_event_type_color($type) {
 
 <!-- ============ MUSEUM SHOP ============ -->
 <?php if ($shop_products): ?>
-<section id="shop" class="py-16 lg:py-20 bg-[#F5EADB]">
+<section id="shop" class="py-16 lg:py-7 bg-[#F5EADB]">
   <div class="container-main">
-    <div class="flex items-end justify-between mb-10">
-      <h2>
+    <div class="flex items-center justify-between mb-10">
+      <h2 class="!font-medium">
         <?php echo esc_html($shop_title ?: 'Магазин музея'); ?>
       </h2>
-      <a href="<?php echo esc_url(home_url('/shop/')); ?>" class="link-arrow text-sm">
+      <a href="<?php echo esc_url(home_url('/shop/')); ?>" class="link-arrow text-base lg:mt-4">
         <?php echo esc_html($shop_link_text ?: 'В магазин'); ?>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" alt="arrow" class="w-6 h-6 ml-1" />
       </a>
     </div>
     
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:pt-6">
       <?php foreach ($shop_products as $product): ?>
         <?php
         $p_id = $product->get_id();
@@ -431,30 +431,35 @@ function get_event_type_color($type) {
         $p_image = wp_get_attachment_url($product->get_image_id());
         $p_link = get_permalink($p_id);
         ?>
-        <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
+        <div class="bg-[#FFFDF8] rounded-3xl overflow-hidden shadow-sm flex flex-col">
           <a href="<?php echo esc_url($p_link); ?>" class="block">
             <?php if ($p_image): ?>
               <img src="<?php echo esc_url($p_image); ?>"
                    alt="<?php echo esc_attr($p_name); ?>"
-                   class="aspect-square object-cover w-full">
+                   class="object-cover w-full min-h-[343px]">
             <?php else: ?>
               <div class="ph ph-shop aspect-square"></div>
             <?php endif; ?>
           </a>
           <div class="p-5 flex flex-col flex-1">
-            <h3 class="font-['Literata'] text-base mb-2 leading-snug">
+            <h3 class="!font-['Golos_Text'] text-xl mb-2 leading-snug text-medium">
               <a href="<?php echo esc_url($p_link); ?>" class="hover:text-[#E8872C] transition">
                 <?php echo esc_html($p_name); ?>
               </a>
             </h3>
             <?php if ($p_desc): ?>
-              <p class="text-sm text-[#6B5A4A] mb-4 leading-snug line-clamp-3">
+              <p class="text-sm text-[#2D2926] mb-4 leading-snug line-clamp-3 lg:text-base leading-[1.2]">
                 <?php echo wp_kses_post($p_desc); ?>
               </p>
+          <div class="border-b-[1px] border-[#D9CCBC] mb-5"></div>
             <?php endif; ?>
-            <div class="mt-auto flex items-center gap-3">
+            <div class="mt-auto flex items-center gap-3 text-xl text-[#E8872C] font-medium">
               <?php if ($p_price): ?>
-                <span class="font-semibold text-lg"><?php echo wp_kses_post($p_price); ?></span>
+                <?php
+                 $price_html = wp_kses_post($p_price);
+                 $price_html = str_replace('Br', '<span class="font-medium">BYN</span>', $price_html);
+                 echo $price_html;
+                 ?>
               <?php endif; ?>
               <a href="<?php echo esc_url($p_link); ?>" class="btn-primary !py-2 !px-4 text-sm ml-auto whitespace-nowrap">
                 В корзину
@@ -470,9 +475,9 @@ function get_event_type_color($type) {
 
 <!-- ============ WHY US ============ -->
 <?php if ($why_us_items): ?>
-<section class="py-16 lg:py-20">
+<section class="py-16 lg:py-29">
   <div class="container-main">
-    <h2 class="mb-12 text-start lg:mb-15 text-black">
+    <h2 class="mb-12 text-start lg:mb-16 text-black !font-medium">
       <?php echo esc_html($why_us_title ?: 'Почему приходят к нам'); ?>
     </h2>
     
@@ -507,7 +512,7 @@ function get_event_type_color($type) {
     <?php endif; ?>
   <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col items-center justify-center h-full relative text-center">
     <?php if ($cta_title): ?>
-    <h2 class="text-white mb-6 mx-auto max-w-[260px] md:max-w-full">
+    <h2 class="!text-[#FFFDF8] mb-6 mx-auto max-w-[260px] md:max-w-full">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>
