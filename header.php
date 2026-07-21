@@ -215,6 +215,13 @@
       font-weight: 500;
     }
 
+    .current-menu-item a,
+    .current-menu-item span {
+      color: var(--brand-orange) !important;
+      text-decoration: underline !important;
+      text-underline-offset: 4px;
+    }
+
     .mobile-menu {
       position: fixed;
       inset: 0;
