@@ -607,7 +607,7 @@
     <!-- Right -->
     <div class="flex items-center gap-3 min-w-0">
       <div class="hidden md:flex min-w-0">
-	<a href="/poster" class="btn-primary btn-header text-base block min-h-[52px] whitespace-nowrap">Купить билет</a>
+	<a href="/poster" class="btn-primary btn-header text-base block min-h-[52px] whitespace-nowrap md:max-w-[250px]">Купить билет</a>
       </div>
       <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="relative p-2" aria-label="Корзина">
 	<img src="<?php echo esc_url( get_template_directory_uri() . '/img/cart.svg' ); ?>" alt="cart" class="w-[30px]" />
