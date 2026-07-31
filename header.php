@@ -23,6 +23,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;0,7..72,700;0,7..72,800;1,7..72,400;1,7..72,500&display=swap" rel="stylesheet" />
   
+  <!-- Swiper -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
   <!-- TailwindCSS -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <style type="text/tailwindcss">
@@ -81,8 +84,8 @@
     .container-main {
       max-width: 1240px;
       margin: 0 auto;
-      padding-left: 20px;
-      padding-right: 20px;
+      padding-left: 10px;
+      padding-right: 10px;
     }
 
     .btn-primary {
@@ -96,7 +99,6 @@
       justify-content: center;
       gap: 8px;
       width: 100%;
-      max-width: 285px;
       height: 52px;
       font-size: 16px;
     }
@@ -116,7 +118,6 @@
       justify-content: center;
       gap: 8px;
       width: 100%;
-      max-width: 285px;
       height: 52px;
       font-size: 16px;
     }
@@ -136,7 +137,6 @@
       gap: 8px;
       background: transparent;
       width: 100%;
-      max-width: 285px;
       height: 52px;
       font-size: 16px;
     }
@@ -249,6 +249,28 @@
 
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Event preview cards Swiper */
+    .preview-swiper .swiper-pagination {
+      position: relative;
+      margin-top: 20px;
+    }
+    .preview-swiper .swiper-pagination-bullet {
+      width: 12px;
+      height: 12px;
+      opacity: 1;
+      transition: background 0.3s;
+    }
+    .preview-swiper .swiper-pagination-bullet-active {
+      background: var(--brand-orange);
+    }
+
+    /* Upcoming events Swiper */
+    .upcoming-nav-prev,
+    .upcoming-nav-next {
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
 
     .filter-btn {
       width: 184px;

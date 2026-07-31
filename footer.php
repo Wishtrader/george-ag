@@ -220,6 +220,33 @@
     });
   });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  if (window.innerWidth < 768) {
+    new Swiper('.preview-swiper', {
+      slidesPerView: 1,
+      spaceBetween: 12,
+      pagination: {
+        el: '.preview-swiper .swiper-pagination',
+        clickable: true,
+      },
+    });
+
+    new Swiper('.upcoming-swiper', {
+      slidesPerView: 1,
+      spaceBetween: 0,
+      navigation: {
+        prevEl: '.upcoming-nav-prev',
+        nextEl: '.upcoming-nav-next',
+      },
+    });
+
+    new Swiper('.expositions-swiper', {
+      slidesPerView: 1.15,
+      spaceBetween: 8,
+    });
+  }
+</script>
 <?php wp_footer(); ?>
 
 </body>

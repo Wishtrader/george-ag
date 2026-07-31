@@ -115,27 +115,27 @@ function get_event_type_color($type) {
 <!-- ============ HERO ============ -->
 <?php if ($hero_title || $hero_description || $hero_cta_primary || $hero_cta_secondary): ?>
 <section class="py-10 lg:py-16 relative md:min-h-[900px] overflow-hidden h-full">
-  <div class="container-main flex flex-col justify-between h-full">
+  <div class="container-main !px-2.5 lg:px-5 flex flex-col justify-between h-full">
     <div class="">
       <div class="flex flex-col md:max-w-[58%] h-full items-center lg:pt-11">
         <?php if ($hero_title): ?>
-        <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] !leading-[1.5] mb-7 !font-medium lg:max-w-[692px]">
+        <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] !leading-[1.5] mb-5 lg:mb-7 !font-medium lg:max-w-[692px]">
           <?php echo esc_html($hero_title); ?>
         </h1>
         <?php endif; ?>
         <?php if ($hero_description): ?>
-        <p class="text-[16px] md:text-[20px] text-[#2D2926] mb-7 leading-[1.2]">
+        <p class="text-[15px] md:text-[20px] text-[#2D2926] mb-7 leading-[1.2]">
           <?php echo esc_html($hero_description); ?>
         </p>
         <?php endif; ?>
-        <div class="flex flex-col sm:flex-row gap-3 justify-between w-full">
+        <div class="flex flex-col sm:flex-row gap-3 justify-between w-full mb-10 md:mb-0">
           <?php if ($hero_cta_primary): ?>
-            <a href="/poster" class="btn-primary w-[285px]">
+            <a href="/poster" class="btn-primary w-full md:max-w-[285px]">
               <?php echo esc_html($hero_cta_primary); ?>
             </a>
           <?php endif; ?>
           <?php if ($hero_cta_secondary): ?>
-            <a href="master-klassy" class="btn-outline">
+            <a href="master-klassy" class="btn-outline w-full md:max-w-[285px]">
               <?php echo esc_html($hero_cta_secondary); ?>
             </a>
           <?php endif; ?>
@@ -143,7 +143,7 @@ function get_event_type_color($type) {
       </div>
       
       <!-- Hero image -->
-      <div class="absolute right-[-60px] top-[40px] max-w-[42.5%] ">
+      <div class="lg:absolute lg:right-[-60px] lg:top-[40px] lg:max-w-[42.5%] ">
         <?php if ($hero_image): ?>
           <img src="<?php echo esc_url($hero_image); ?>" 
                alt="<?php echo esc_attr($hero_title); ?>" 
@@ -156,10 +156,11 @@ function get_event_type_color($type) {
     
     <!-- Event preview cards -->
     <?php if ($preview_events): ?>
-    <div class="relative mt-12 h-full grid md:grid-cols-3 gap-5 z-10 lg:mt-30">
+    <!-- Desktop: grid -->
+    <div class="relative mt-12 h-full grid md:grid-cols-3 gap-5 z-10 lg:mt-30 hide-mobile">
       <?php foreach ($preview_events as $event): ?>
-      <div class="bg-white rounded-3xl p-5 flex gap-4 items-start shadow-sm min-h-[233px]">
-        <div class="flex-1 flex flex-col lg:min-h-[193px] h-full justify-between">
+      <div class="bg-white rounded-3xl p-2.5 md:p-5 flex gap-4 items-start shadow-lg min-h-[233px]">
+        <div class="flex-1 flex flex-col lg:min-h-[193px] h-full gap-5 ">
           <div class="flex items-center justify-between mb-2">
             <span class="event-badge text-[13px] text-[#2D2926] font-medium">
               <?php echo get_event_type_icon($event['type']); ?>
@@ -167,7 +168,7 @@ function get_event_type_color($type) {
             </span>
             <span class="text-[13px] text-[#2D2926] font-medium"><?php echo esc_html($event['date']); ?></span>
           </div>
-          <div class="flex justify-between">
+          <div class="flex justify-between h-full">
           <div class="flex flex-1 flex-col justify-between">
             <p class="text-[22px] leading-[1.2] font-medium mb-3"><?php echo esc_html($event['title']); ?></p>
             <a href="<?php echo esc_url(home_url('/poster/')); ?>" class="link-arrow text-base">Записаться
@@ -186,6 +187,45 @@ function get_event_type_color($type) {
       </div>
       <?php endforeach; ?>
     </div>
+
+    <!-- Mobile: Swiper -->
+    <div class="relative mt-12 z-10 hide-desktop">
+      <div class="swiper preview-swiper">
+        <div class="swiper-wrapper">
+          <?php foreach ($preview_events as $event): ?>
+          <div class="swiper-slide">
+            <div class="bg-white rounded-3xl p-5 flex gap-4 items-start shadow-sm lg:min-h-[233px]">
+              <div class="flex-1 flex flex-col h-full justify-between">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="event-badge text-[13px] text-[#2D2926] font-medium mb-5">
+                    <?php echo get_event_type_icon($event['type']); ?>
+                    <?php echo esc_html(get_event_type_label($event['type'])); ?>
+                  </span>
+                  <span class="text-[13px] text-[#2D2926] font-medium"><?php echo esc_html($event['date']); ?></span>
+                </div>
+                <div class="flex justify-between">
+                  <div class="flex flex-1 flex-col justify-between">
+                    <p class="text-base lg:text-[22px] leading-[1.2] font-semibold lg:font-medium mb-3"><?php echo esc_html($event['title']); ?></p>
+                    <a href="<?php echo esc_url(home_url('/poster/')); ?>" class="link-arrow text-base">Записаться
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                  </div>
+                  <?php if (!empty($event['image'])): ?>
+                  <img src="<?php echo esc_url($event['image']); ?>" 
+                       alt="<?php echo esc_attr($event['title']); ?>" 
+                       class="flex-1 w-[164px] h-[117px] rounded-xl flex-shrink-0 object-cover">
+                  <?php else: ?>
+                  <div class="ph ph-art1 w-20 h-20 rounded-xl flex-shrink-0"></div>
+                  <?php endif; ?>
+                </div>
+              </div>
+            </div>
+          </div>
+          <?php endforeach; ?>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
     <?php endif; ?>
   </div>
 </section>
@@ -193,9 +233,9 @@ function get_event_type_color($type) {
 
 <!-- ============ UPCOMING EVENTS ============ -->
 <?php if ($upcoming_events): ?>
-<section id="events" class="py-16 lg:py-16">
-  <div class="container-main">
-    <div class="flex items-center justify-between mb-10">
+<section id="events" class="py-0 lg:py-16 overflow-x-hidden">
+  <div class="container-main !p-2.5 md:p-5">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 gap-5">
       <h2>
         <?php echo esc_html($upcoming_title ?: 'Ближайшие события'); ?>
       </h2>
@@ -205,7 +245,8 @@ function get_event_type_color($type) {
       </a>
     </div>
     
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:mt-16">
+    <!-- Desktop grid -->
+    <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:mt-16">
       <?php foreach ($upcoming_events as $event): ?>
       <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
         <?php if (!empty($event['image'])): ?>
@@ -248,6 +289,66 @@ function get_event_type_color($type) {
       </div>
       <?php endforeach; ?>
     </div>
+
+  </div>
+
+  <!-- Mobile: Swiper -->
+  <div class="sm:hidden mt-0 px-2.5">
+    <div class="swiper upcoming-swiper">
+      <div class="swiper-wrapper">
+        <?php foreach ($upcoming_events as $event): ?>
+        <div class="swiper-slide">
+          <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
+            <?php if (!empty($event['image'])): ?>
+              <img src="<?php echo esc_url($event['image']); ?>" 
+                   alt="<?php echo esc_attr($event['title']); ?>" 
+                   class="w-full h-[162px] object-cover">
+            <?php else: ?>
+              <div class="ph ph-art1 w-full h-[162px]"></div>
+            <?php endif; ?>
+            <div class="p-2.5 md:p-5 flex-1 flex flex-col">
+              <div class="flex items-center justify-between mb-3">
+                <span class="event-badge leading-[1.2] <?php
+                  if ($event['type'] === 'masterclass') echo 'text-[#E8A62E]';
+                  elseif ($event['type'] === 'lecture') echo 'text-[#28B6DA]';
+                  elseif ($event['type'] === 'meeting') echo 'text-[#C61B8C]';
+                  elseif ($event['type'] === 'family') echo 'text-[#73B843]';
+                  else echo 'text-[#6B5A4A]';
+                ?>">
+                  <?php if (!empty($event['icon'])): ?>
+                    <img src="<?php echo esc_url($event['icon']); ?>" alt="">
+                  <?php else: ?>
+                    <?php echo get_event_type_icon($event['type']); ?>
+                  <?php endif; ?>
+                  <?php echo esc_html(get_event_type_label($event['type'])); ?>
+                </span>
+                <span class="text-xs font-medium whitespace-nowrap leading-[1.2] <?php
+                  if ($event['type'] === 'masterclass') echo 'text-[#E8A62E]';
+                  elseif ($event['type'] === 'lecture') echo 'text-[#28B6DA]';
+                  elseif ($event['type'] === 'meeting') echo 'text-[#C61B8C]';
+                  elseif ($event['type'] === 'family') echo 'text-[#73B843]';
+                  else echo 'text-[#6B5A4A]';
+                ?>"><?php echo esc_html($event['datetime']); ?></span>
+              </div>
+              <h3 class="!font-['Golos_Text'] text-base md:text-[20px] !font-semibold md:!font-medium mb-3"><?php echo esc_html($event['title']); ?></h3>
+              <p class="text-[13px] md:text-base text-[#2D2926] mb-2 leading-[1.2]"><?php echo esc_html($event['description']); ?></p>
+              <a href="#" class="btn-outline w-full !py-2.5 text-sm mt-auto">
+                <?php echo esc_html($event['button_text']); ?>
+              </a>
+            </div>
+          </div>
+        </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+    <div class="flex items-center justify-between  mt-2">
+      <div class="upcoming-nav-prev cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+        <img src="<?php echo get_template_directory_uri(); ?>/img/alm.svg" alt="Назад" class="w-6 h-6">
+      </div>
+      <div class="upcoming-nav-next cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+        <img src="<?php echo get_template_directory_uri(); ?>/img/arm.svg" alt="Вперёд" class="w-6 h-6">
+      </div>
+    </div>
   </div>
 </section>
 <?php endif; ?>
@@ -274,7 +375,7 @@ function get_event_type_color($type) {
         </h2>
         <?php endif; ?>
         <?php if ($about_description): ?>
-        <p class="text-[16px] md:text-[20px] text-[#6B5A4A] mb-6">
+        <p class="text-[15px] md:text-[20px] text-[#6B5A4A] mb-6 leading-[1.2]">
           <?php echo esc_html($about_description); ?>
         </p>
         <?php endif; ?>
@@ -289,7 +390,7 @@ function get_event_type_color($type) {
 <?php if ($expositions_list): ?>
 <section id="expositions" class="py-4 lg:pt-18">
   <div class="container-main">
-    <div class="flex items-center justify-between mb-10">
+    <div class="flex flex-col md:flex-row gap-5 items-start lg:items-center justify-between mb-10">
       <h2 class="!font-medium">
         <?php echo esc_html($expositions_title ?: 'Экспозиции музея'); ?>
       </h2>
@@ -299,7 +400,8 @@ function get_event_type_color($type) {
       </a>
     </div>
     
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:mt-16">
+    <!-- Desktop grid -->
+    <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:mt-16">
       <?php foreach ($expositions_list as $expo): ?>
       <div class="bg-white rounded-3xl overflow-hidden shadow-sm">
         <?php if (!empty($expo['image'])): ?>
@@ -319,6 +421,35 @@ function get_event_type_color($type) {
         </div>
       </div>
       <?php endforeach; ?>
+    </div>
+
+    <!-- Mobile: Swiper -->
+    <div class="sm:hidden mt-2">
+      <div class="swiper expositions-swiper">
+        <div class="swiper-wrapper">
+          <?php foreach ($expositions_list as $expo): ?>
+          <div class="swiper-slide">
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm">
+              <?php if (!empty($expo['image'])): ?>
+                <img src="<?php echo esc_url($expo['image']); ?>" 
+                     alt="<?php echo esc_attr($expo['title']); ?>" 
+                     class="aspect-[4/4] object-cover w-full h-[162px]">
+              <?php else: ?>
+                <div class="ph ph-art1 aspect-[4/4]"></div>
+              <?php endif; ?>
+              <div class="p-5">
+                <h3 class="!font-['Golos_Text'] text-base lg:text-xl !font-medium mb-2"><?php echo esc_html($expo['title']); ?></h3>
+                <p class="text-sm lg:text-base text-[#2D2926] mb-2 leading-[1.2] pt-1"><?php echo esc_html($expo['description']); ?></p>
+                <a href="vystavki" class="link-arrow text-base">
+                  <?php echo esc_html($expositions_link_text ?: 'Все экспозиции'); ?>
+                  <img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" alt="arrow" class="w-6 h-6 ml-1" />
+                </a>
+              </div>
+            </div>
+          </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
     </div>
   </div>
 </section>
