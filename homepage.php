@@ -462,7 +462,7 @@ function get_event_type_color($type) {
 <?php if ($classes_main || $classes_list): ?>
 <section id="classes" class="py-16 lg:py-24">
   <div class="container-main lg:pt-20">
-    <div class="flex items-center justify-between mb-10">
+    <div class="flex flex-col md:flex-row items-start gap-5 md:items-center justify-between mb-10">
       <h2 class="!font-medium">
         <?php echo esc_html($classes_title ?: 'Мастер-классы и лекции'); ?>
       </h2>
@@ -473,7 +473,7 @@ function get_event_type_color($type) {
       </a>
     </div>
     
-    <div class="grid lg:grid-cols-2 gap-5 lg:pt-[26px]">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:pt-[26px]">
 <!-- Main class card -->
        <?php if ($classes_main): ?>
 <div class="bg-white rounded-3xl overflow-hidden shadow-sm">
@@ -505,13 +505,13 @@ function get_event_type_color($type) {
        <?php if ($classes_list): ?>
        <div class="flex flex-col gap-5">
          <?php foreach ($classes_list as $class): ?>
-<div class="bg-white rounded-3xl overflow-hidden shadow-sm grid grid-cols-[1fr_1fr] gap-0 md:grid-cols-[285px_1fr]">
+<div class="bg-white rounded-3xl overflow-hidden shadow-sm grid md:grid-cols-[1fr_1fr] gap-0 md:grid-cols-[285px_1fr]">
            <?php if (!empty($class['image'])): ?>
              <img src="<?php echo esc_url($class['image']); ?>" 
                   alt="<?php echo esc_attr($class['title']); ?>" 
-                  class="object-cover w-full h-full rounded-l-3xl">
+                  class="object-cover w-full h-full md:rounded-l-3xl">
            <?php else: ?>
-             <div class="ph ph-art2 w-full h-full md:h-[259px] rounded-l-3xl"></div>
+             <div class="ph ph-art2 w-full h-full md:h-[259px] md:rounded-l-3xl"></div>
            <?php endif; ?>
           <div class="p-5 flex flex-col justify-between">
             <div>
