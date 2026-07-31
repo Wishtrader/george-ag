@@ -433,9 +433,9 @@ function get_event_type_color($type) {
               <?php if (!empty($expo['image'])): ?>
                 <img src="<?php echo esc_url($expo['image']); ?>" 
                      alt="<?php echo esc_attr($expo['title']); ?>" 
-                     class="aspect-[4/4] object-cover w-full h-[162px]">
+                     class="aspect-[4/3] object-cover w-full h-[162px]">
               <?php else: ?>
-                <div class="ph ph-art1 aspect-[4/4]"></div>
+                <div class="ph ph-art1 aspect-[4/3]"></div>
               <?php endif; ?>
               <div class="p-5">
                 <h3 class="!font-['Golos_Text'] text-base lg:text-xl !font-medium mb-2"><?php echo esc_html($expo['title']); ?></h3>
