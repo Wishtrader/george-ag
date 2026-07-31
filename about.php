@@ -14,10 +14,13 @@ $hero_cta_secondary_url = get_field('about_hero_cta_secondary_url');
 
 $mission_title = get_field('about_mission_title');
 $mission_description = get_field('about_mission_description');
+$stat_1_icon = get_field('about_stat_1_icon');
 $stat_1_number = get_field('about_stat_1_number');
 $stat_1_label = get_field('about_stat_1_label');
+$stat_2_icon = get_field('about_stat_2_icon');
 $stat_2_number = get_field('about_stat_2_number');
 $stat_2_label = get_field('about_stat_2_label');
+$stat_3_icon = get_field('about_stat_3_icon');
 $stat_3_number = get_field('about_stat_3_number');
 $stat_3_label = get_field('about_stat_3_label');
 
@@ -85,12 +88,7 @@ function get_about_event_type_label($type) {
 <!-- ============ HERO ============ -->
 <?php if ($hero_title || $hero_description): ?>
 <section class="mt-[40px] lg:mt-[60px] relative overflow-hidden h-[236px] lg:h-[376px]">
-  <?php if ($hero_image): ?>
   <div class="absolute inset-0" style="background-image: url('<?php echo esc_url($hero_image); ?>'); background-size: cover; background-position: center;"></div>
-  <?php else: ?>
-  <div class="absolute inset-0 ph ph-museum"></div>
-  <?php endif; ?>
-  <div class="absolute inset-0 bg-black/20"></div>
 
   <div class="container-main relative h-full flex flex-col justify-center py-10">
     <nav class="absolute top-6 left-[20px] lg:left-[20px]">
@@ -114,7 +112,7 @@ function get_about_event_type_label($type) {
       <?php endif; ?>
       <div class="flex flex-col sm:flex-row gap-3 justify-start gap-5 w-full">
         <?php if ($hero_cta_primary_text): ?>
-          <a href="<?php echo esc_url($hero_cta_primary_url ?: '#'); ?>" class="btn-primary md:max-w-[285px]">
+          <a href="/poster" class="btn-primary md:max-w-[285px]">
             <?php echo esc_html($hero_cta_primary_text); ?>
           </a>
         <?php endif; ?>
@@ -136,43 +134,52 @@ function get_about_event_type_label($type) {
     <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
       <div class="max-w-[590px] w-full	">
         <?php if ($mission_title): ?>
-        <h2 class="mb-6">
+        <h2 class="mb-5 !text-xl lg:!text-4xl text-[#2D2926] !font-medium leading-[1.2]">
           <?php echo esc_html($mission_title); ?>
         </h2>
         <?php endif; ?>
         <?php if ($mission_description): ?>
-        <p class="text-[16px] md:text-[20px] text-[#6B5A4A] leading-[1.2]">
+        <p class="text-[16px] md:text-[20px] text-[#2D2926] leading-[1.2] !leading-[1.2]">
           <?php echo wp_kses_post($mission_description); ?>
         </p>
         <?php endif; ?>
       </div>
       <div class="grid grid-cols-3 gap-4">
         <?php if ($stat_1_number): ?>
-        <div class="text-center p-4">
-          <div class="font-['Literata'] text-[28px] lg:text-[40px] font-semibold text-[#F28A2E] mb-2">
+        <div class="text-center bg-[#F2E8DA] rounded-[24px] border border-px border-[#D9CCBC] shadow-lg lg:px-[20px] lg:py-[50px]">
+          <?php if ($stat_1_icon): ?>
+            <img src="<?php echo esc_url($stat_1_icon); ?>" alt="icon" class="w-auto h-[53px] object-contain mx-auto mb-5">
+          <?php endif; ?>
+          <div class="font-['Literata'] text-[20px] lg:text-[36px] font-light text-black mb-5">
             <?php echo esc_html($stat_1_number); ?>
           </div>
-          <div class="text-sm lg:text-base text-[#6B5A4A]">
+          <div class="text-[13px] lg:text-lg text-black leading-[1.2] font-light">
             <?php echo esc_html($stat_1_label); ?>
           </div>
         </div>
         <?php endif; ?>
         <?php if ($stat_2_number): ?>
-        <div class="text-center p-4">
-          <div class="font-['Literata'] text-[28px] lg:text-[40px] font-semibold text-[#F28A2E] mb-2">
+        <div class="text-center bg-[#F2E8DA] rounded-[24px] border border-px border-[#D9CCBC] shadow-lg lg:px-[20px] lg:py-[50px]">
+          <?php if ($stat_2_icon): ?>
+            <img src="<?php echo esc_url($stat_2_icon); ?>" alt="" class="w-auto h-[53px] object-contain mx-auto mb-5">
+          <?php endif; ?>
+          <div class="font-['Literata'] text-[20px] lg:text-[36px] font-light text-black mb-5">
             <?php echo esc_html($stat_2_number); ?>
           </div>
-          <div class="text-sm lg:text-base text-[#6B5A4A]">
+          <div class="text-[13px] lg:text-lg text-black leading-[1.2] font-light">
             <?php echo esc_html($stat_2_label); ?>
           </div>
         </div>
         <?php endif; ?>
         <?php if ($stat_3_number): ?>
-        <div class="text-center p-4">
-          <div class="font-['Literata'] text-[28px] lg:text-[40px] font-semibold text-[#F28A2E] mb-2">
+        <div class="text-center bg-[#F2E8DA] rounded-[24px] border border-px border-[#D9CCBC] shadow-lg lg:px-[20px] lg:py-[50px]">
+          <?php if ($stat_3_icon): ?>
+            <img src="<?php echo esc_url($stat_3_icon); ?>" alt="icon" class="w-auto h-[53px] object-contain mx-auto mb-5">
+          <?php endif; ?>
+          <div class="font-['Literata'] text-[20px] lg:text-[36px] font-light text-black mb-5">
             <?php echo esc_html($stat_3_number); ?>
           </div>
-          <div class="text-sm lg:text-base text-[#6B5A4A]">
+          <div class="text-[13px] lg:text-lg text-black leading-[1.2] font-light">
             <?php echo esc_html($stat_3_label); ?>
           </div>
         </div>

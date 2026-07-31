@@ -182,6 +182,22 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 require get_template_directory() . '/inc/acf-fields.php';
 
 /**
+ * Flush ACF field group cache when theme files change.
+ * ACF caches field groups in DB; this forces a refresh.
+ */
+function georgeag_flush_acf_cache() {
+	$flush_key = 'georgeag_acf_flush_v3';
+	$saved     = get_option( $flush_key, '' );
+	if ( $saved !== '1' ) {
+		wp_cache_flush();
+		global $wpdb;
+		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '%_transient_acf%' OR option_name LIKE '%_transient_timeout_acf%'" );
+		update_option( $flush_key, '1' );
+	}
+}
+add_action( 'after_setup_theme', 'georgeag_flush_acf_cache' );
+
+/**
  * Load Events Custom Post Type.
  */
 require get_template_directory() . '/inc/events-cpt.php';
