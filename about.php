@@ -42,10 +42,11 @@ $education_masterclass_button = get_field('about_education_masterclass_button');
 $shop_title = get_field('about_shop_title');
 $shop_link_text = get_field('about_shop_link_text');
 $shop_products = wc_get_products(array(
-    'status' => 'publish',
-    'limit'  => 4,
-    'order'  => 'DESC',
-    'orderby' => 'date',
+    'status'   => 'publish',
+    'limit'    => 4,
+    'order'    => 'DESC',
+    'orderby'  => 'date',
+    'category' => array( 'knigi' ),
 ));
 
 $events_title = get_field('about_events_title');
@@ -113,12 +114,12 @@ function get_about_event_type_label($type) {
       <?php endif; ?>
       <div class="flex flex-col sm:flex-row gap-3 justify-start gap-5 w-full">
         <?php if ($hero_cta_primary_text): ?>
-          <a href="<?php echo esc_url($hero_cta_primary_url ?: '#'); ?>" class="btn-primary w-[285px]">
+          <a href="<?php echo esc_url($hero_cta_primary_url ?: '#'); ?>" class="btn-primary md:max-w-[285px]">
             <?php echo esc_html($hero_cta_primary_text); ?>
           </a>
         <?php endif; ?>
         <?php if ($hero_cta_secondary_text): ?>
-          <a href="<?php echo esc_url($hero_cta_secondary_url ?: '#'); ?>" class="btn-secondary">
+          <a href="<?php echo esc_url($hero_cta_secondary_url ?: '#'); ?>" class="md:max-w-[285px] btn-secondary">
             <?php echo esc_html($hero_cta_secondary_text); ?>
           </a>
         <?php endif; ?>

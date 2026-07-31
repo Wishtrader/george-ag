@@ -12,10 +12,6 @@ $hero_cta_primary_url = get_field('vystavki_hero_cta_primary_url') ?: '#';
 $hero_cta_secondary_text = get_field('vystavki_hero_cta_secondary_text') ?: 'Купить билет';
 $hero_cta_secondary_url = get_field('vystavki_hero_cta_secondary_url') ?: '#';
 
-$filters = get_field('vystavki_filters');
-
-$vystavki_list = get_field('vystavki_list');
-
 $how_title = get_field('vystavki_how_title') ?: 'Как устроены выставки музея';
 $how_description = get_field('vystavki_how_description') ?: 'Выставочная программа музея построена так, чтобы посетитель мог увидеть наивное искусство в разных форматах и контекстах.';
 $how_items = get_field('vystavki_how_items');
@@ -29,15 +25,6 @@ $cta_primary = get_field('vystavki_cta_primary') ?: 'Купить билет';
 $cta_primary_url = get_field('vystavki_cta_primary_url') ?: '#';
 $cta_secondary = get_field('vystavki_cta_secondary') ?: 'Посмотреть афишу';
 $cta_secondary_url = get_field('vystavki_cta_secondary_url') ?: '#';
-
-function get_vystavki_category_label($category) {
-    $labels = array(
-        'permanent'    => 'Постоянная экспозиция',
-        'temporary'    => 'Временные выставки',
-        'accompanying' => 'Сопутствующие',
-    );
-    return $labels[$category] ?? 'Выставка';
-}
 ?>
 
 <?php get_header(); ?>
@@ -68,12 +55,12 @@ function get_vystavki_category_label($category) {
       <?php endif; ?>
       <div class="flex flex-col sm:flex-row gap-3 justify-start gap-5 w-full">
         <?php if ($hero_cta_primary_text): ?>
-          <a href="<?php echo esc_url($hero_cta_primary_url); ?>" class="btn-primary w-[285px]">
+          <a href="<?php echo esc_url($hero_cta_primary_url); ?>" class="btn-primary md:max-w-[285px]">
             <?php echo esc_html($hero_cta_primary_text); ?>
           </a>
         <?php endif; ?>
         <?php if ($hero_cta_secondary_text): ?>
-          <a href="<?php echo esc_url($hero_cta_secondary_url); ?>" class="btn-secondary">
+          <a href="<?php echo esc_url($hero_cta_secondary_url); ?>" class="btn-secondary md:max-w-[285px]">
             <?php echo esc_html($hero_cta_secondary_text); ?>
           </a>
         <?php endif; ?>
@@ -82,57 +69,58 @@ function get_vystavki_category_label($category) {
   </div>
 </section>
 
-<!-- ============ FILTER TABS ============ -->
-<?php if ($filters): ?>
-<section class="py-8 lg:py-10">
-  <div class="container-main">
-    <div class="flex flex-wrap gap-3 justify-center lg:justify-start" id="exhibition-filters">
-      <?php foreach ($filters as $index => $filter): ?>
-      <button
-        data-filter="<?php echo esc_attr($filter['slug']); ?>"
-        class="filter-btn px-5 py-2.5 rounded-full border text-sm font-medium transition <?php echo $index === 0 ? 'bg-[#F28A2E] text-white border-[#F28A2E]' : 'bg-white text-[#2D2926] border-[#E8D5BE] hover:border-[#F28A2E] hover:text-[#F28A2E]'; ?>"
-      >
-        <?php echo esc_html($filter['label']); ?>
-      </button>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
-<?php endif; ?>
+
 
 <!-- ============ FEATURED EXHIBITION ============ -->
 <?php get_template_part('template-parts/special-exposition'); ?>
 
 <!-- ============ EXHIBITIONS GRID ============ -->
-<?php if ($vystavki_list): ?>
+<?php
+$vystavki_query = new WP_Query( array(
+	'post_type'      => 'vystavka',
+	'posts_per_page' => -1,
+	'orderby'        => 'menu_order',
+	'order'          => 'ASC',
+) );
+if ( $vystavki_query->have_posts() ):
+?>
 <section class="py-12 lg:py-16">
   <div class="container-main">
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" id="exhibitions-grid">
-      <?php foreach ($vystavki_list as $expo): ?>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col exhibition-card" data-category="<?php echo esc_attr($expo['category']); ?>">
-        <?php if (!empty($expo['image'])): ?>
-          <img src="<?php echo esc_url($expo['image']); ?>" 
-               alt="<?php echo esc_attr($expo['title']); ?>" 
-               class="aspect-[4/3] object-cover w-full">
+      <?php while ( $vystavki_query->have_posts() ): $vystavki_query->the_post();
+        $badge      = get_field( 'sv_hero_badge' ) ?: 'Выставка';
+        $dates      = get_field( 'sv_hero_dates' );
+        $image      = get_field( 'sv_hero_image' );
+        $thumb_url  = get_the_post_thumbnail_url( get_the_ID(), 'medium_large' );
+        $card_image = $image ?: $thumb_url;
+      ?>
+      <a href="<?php the_permalink(); ?>" class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col exhibition-card group">
+        <?php if ( $card_image ): ?>
+          <img src="<?php echo esc_url( $card_image ); ?>"
+               alt="<?php the_title_attribute(); ?>"
+               class="aspect-[4/3] object-cover w-full group-hover:scale-105 transition duration-300">
         <?php else: ?>
           <div class="ph ph-art1 aspect-[4/3]"></div>
         <?php endif; ?>
         <div class="p-5 flex-1 flex flex-col">
           <span class="text-xs font-medium text-[#E8872C] mb-2">
-            <?php echo esc_html(get_vystavki_category_label($expo['category'])); ?>
+            <?php echo esc_html( $badge ); ?>
           </span>
-          <h3 class="font-['Literata'] text-lg font-semibold mb-2"><?php echo esc_html($expo['title']); ?></h3>
-          <p class="text-sm text-[#6B5A4A] mb-4 flex-1"><?php echo esc_html($expo['description']); ?></p>
-          <a href="<?php echo esc_url($expo['button_url'] ?: '#'); ?>" class="btn-outline w-full !py-2.5 text-sm mt-auto">
-            <?php echo esc_html($expo['button_text'] ?: 'Подробнее'); ?>
-          </a>
+          <h3 class="font-['Literata'] text-lg font-semibold mb-2"><?php the_title(); ?></h3>
+          <?php if ( $dates ): ?>
+          <p class="text-xs text-[#6B5A4A] mb-2"><?php echo esc_html( $dates ); ?></p>
+          <?php endif; ?>
+          <p class="text-sm text-[#6B5A4A] mb-4 flex-1"><?php echo wp_trim_words( get_the_excerpt(), 20 ); ?></p>
+          <span class="btn-outline w-full !py-2.5 text-sm mt-auto text-center">
+            Подробнее
+          </span>
         </div>
-      </div>
-      <?php endforeach; ?>
+      </a>
+      <?php endwhile; ?>
     </div>
   </div>
 </section>
-<?php endif; ?>
+<?php wp_reset_postdata(); endif; ?>
 
 <!-- ============ HOW EXHIBITIONS WORK ============ -->
 <?php if ($how_items): ?>
@@ -229,32 +217,6 @@ if ($subscriptions_query->have_posts()):
 </section>
 <?php endif; ?>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const filterButtons = document.querySelectorAll('.filter-btn');
-  const cards = document.querySelectorAll('.exhibition-card');
 
-  filterButtons.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      filterButtons.forEach(function(b) {
-        b.classList.remove('bg-[#F28A2E]', 'text-white', 'border-[#F28A2E]');
-        b.classList.add('bg-white', 'text-[#2D2926]', 'border-[#E8D5BE]');
-      });
-      btn.classList.remove('bg-white', 'text-[#2D2926]', 'border-[#E8D5BE]');
-      btn.classList.add('bg-[#F28A2E]', 'text-white', 'border-[#F28A2E]');
-
-      var filter = btn.getAttribute('data-filter');
-
-      cards.forEach(function(card) {
-        if (filter === 'all' || card.getAttribute('data-category') === filter) {
-          card.style.display = '';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
-  });
-});
-</script>
 
 <?php get_footer(); ?>

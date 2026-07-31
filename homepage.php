@@ -44,10 +44,11 @@ $classes_list = get_field('classes_list');
 $shop_title = get_field('shop_title');
 $shop_link_text = get_field('shop_link_text');
 $shop_products = wc_get_products(array(
-    'status' => 'publish',
-    'limit'  => 4,
-    'order'  => 'DESC',
-    'orderby' => 'date',
+    'status'   => 'publish',
+    'limit'    => 4,
+    'order'    => 'DESC',
+    'orderby'  => 'date',
+    'category' => array( 'knigi' ),
 ));
 
 $why_us_title = get_field('why_us_title');
@@ -628,7 +629,8 @@ function get_event_type_color($type) {
       </a>
     </div>
     
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:pt-6">
+    <!-- Desktop grid -->
+    <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:pt-6">
       <?php foreach ($shop_products as $product): ?>
         <?php
         $p_id = $product->get_id();
@@ -676,6 +678,70 @@ function get_event_type_color($type) {
         </div>
       <?php endforeach; ?>
     </div>
+
+    <!-- Mobile: Swiper -->
+    <div class="sm:hidden">
+      <div class="swiper shop-swiper">
+        <div class="swiper-wrapper">
+          <?php foreach ($shop_products as $product): ?>
+            <?php
+            $p_id = $product->get_id();
+            $p_name = $product->get_name();
+            $p_price = $product->get_price_html();
+            $p_desc = $product->get_short_description();
+            $p_image = wp_get_attachment_url($product->get_image_id());
+            $p_link = get_permalink($p_id);
+            ?>
+          <div class="swiper-slide">
+            <div class="bg-[#FFFDF8] rounded-3xl overflow-hidden shadow-sm flex flex-col">
+              <a href="<?php echo esc_url($p_link); ?>" class="block">
+                <?php if ($p_image): ?>
+                  <img src="<?php echo esc_url($p_image); ?>"
+                       alt="<?php echo esc_attr($p_name); ?>"
+                       class="object-cover w-full min-h-[343px]">
+                <?php else: ?>
+                  <div class="ph ph-shop aspect-square"></div>
+                <?php endif; ?>
+              </a>
+              <div class="p-5 flex flex-col flex-1">
+                <h3 class="!font-['Golos_Text'] text-xl mb-2 leading-snug text-medium">
+                  <a href="<?php echo esc_url($p_link); ?>" class="hover:text-[#E8872C] transition">
+                    <?php echo esc_html($p_name); ?>
+                  </a>
+                </h3>
+                <?php if ($p_desc): ?>
+                  <p class="text-sm text-[#2D2926] mb-4 leading-snug line-clamp-3 lg:text-base leading-[1.2]">
+                    <?php echo wp_kses_post($p_desc); ?>
+                  </p>
+              <div class="border-b-[1px] border-[#D9CCBC] mb-5"></div>
+                <?php endif; ?>
+                <div class="mt-auto flex items-center gap-3 text-xl text-[#E8872C] font-medium">
+                  <?php if ($p_price): ?>
+                    <?php
+                     $price_html = wp_kses_post($p_price);
+                     $price_html = str_replace('Br', '<span class="font-medium">BYN</span>', $price_html);
+                     echo $price_html;
+                     ?>
+                  <?php endif; ?>
+                  <a href="<?php echo esc_url($p_link); ?>" class="btn-primary !py-2 !px-4 text-sm ml-auto whitespace-nowrap">
+                    В корзину
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+      <div class="flex items-center justify-between mt-2">
+        <div class="shop-nav-prev cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/alm.svg" alt="Назад" class="w-6 h-6">
+        </div>
+        <div class="shop-nav-next cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/arm.svg" alt="Вперёд" class="w-6 h-6">
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 <?php endif; ?>
@@ -696,7 +762,7 @@ function get_event_type_color($type) {
           <img src="<?php echo esc_url($item['icon']); ?>" alt="" class="w-full h-full object-contain" />
           <?php endif; ?>
         </div>
-        <h3 class="!font-body text-lg lg:text-[28px] !font-medium mb-5"><?php echo esc_html($item['title']); ?></h3>
+        <h3 class="font-body text-[20px] :text-[28px] !font-medium mb-5"><?php echo esc_html($item['title']); ?></h3>
         <p class="text-[15px] lg:text-lg text-[#2D2926] leading-[1.2]"><?php echo esc_html($item['description']); ?></p>
       </div>
       <?php endforeach; ?>
@@ -719,7 +785,7 @@ function get_event_type_color($type) {
     <?php endif; ?>
   <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col items-center justify-center h-full relative text-center">
     <?php if ($cta_title): ?>
-    <h2 class="!text-[#FFFDF8] mb-6 mx-auto max-w-[260px] md:max-w-full">
+    <h2 class="!text-[#FFFDF8] mb-6 mx-auto max-w-[260px] md:max-w-full !leading-[1.6]">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>

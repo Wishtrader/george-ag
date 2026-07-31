@@ -629,7 +629,11 @@
   <div class="container-main py-2.5 text-center text-sm md:text-lg text-[#2D2926]">
     <span class="inline-flex items-center gap-2">
       <img src="<?php echo esc_url( get_template_directory_uri() . '/img/alarm-outline.svg' ); ?>" alt="clock" class="" />
-      сегодня музей работает с 10:00 до 22:00
+      <?php if (current_time('w') === 0): ?>
+        сегодня музей выходной
+      <?php else: ?>
+        сегодня музей работает с 10:00 до 22:00
+      <?php endif; ?>
     </span>
   </div>
 </div>

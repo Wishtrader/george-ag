@@ -108,12 +108,12 @@ $subscriptions_query = new WP_Query(array(
       <?php endif; ?>
       <div class="flex flex-col sm:flex-row gap-5 w-full">
         <?php if ($hero_cta_primary_text): ?>
-          <a href="<?php echo esc_url($hero_cta_primary_url); ?>" class="btn-primary w-[285px]">
+          <a href="<?php echo esc_url($hero_cta_primary_url); ?>" class="btn-primary md:max-w-[285px]">
             <?php echo esc_html($hero_cta_primary_text); ?>
           </a>
         <?php endif; ?>
         <?php if ($hero_cta_secondary_text): ?>
-          <a href="<?php echo esc_url($hero_cta_secondary_url); ?>" class="btn-secondary">
+          <a href="<?php echo esc_url($hero_cta_secondary_url); ?>" class="btn-secondary md:max-w-[285px]">
             <?php echo esc_html($hero_cta_secondary_text); ?>
           </a>
         <?php endif; ?>

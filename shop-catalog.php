@@ -18,10 +18,11 @@ $banner_btn_secondary = get_field('sc_banner_btn_secondary');
 
 // Get all WooCommerce products
 $products = wc_get_products(array(
-    'status' => 'publish',
-    'limit'  => -1,
-    'order'  => 'DESC',
-    'orderby' => 'date',
+    'status'   => 'publish',
+    'limit'    => -1,
+    'order'    => 'DESC',
+    'orderby'  => 'date',
+    'category' => array( 'knigi' ),
 ));
 ?>
 
