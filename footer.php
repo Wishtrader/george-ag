@@ -245,6 +245,15 @@
       slidesPerView: 1.15,
       spaceBetween: 8,
     });
+
+    new Swiper('.classes-swiper', {
+      slidesPerView: 1,
+      spaceBetween: 0,
+      navigation: {
+        prevEl: '.classes-nav-prev',
+        nextEl: '.classes-nav-next',
+      },
+    });
   }
 </script>
 <?php wp_footer(); ?>

@@ -460,7 +460,7 @@ function get_event_type_color($type) {
 
 <!-- ============ MASTER CLASSES AND LECTURES ============ -->
 <?php if ($classes_main || $classes_list): ?>
-<section id="classes" class="py-16 lg:py-24">
+<section id="classes" class="py-8 lg:py-24">
   <div class="container-main lg:pt-20">
     <div class="flex flex-col md:flex-row items-start gap-5 md:items-center justify-between mb-10">
       <h2 class="!font-medium">
@@ -473,25 +473,25 @@ function get_event_type_color($type) {
       </a>
     </div>
     
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:pt-[26px]">
-<!-- Main class card -->
-       <?php if ($classes_main): ?>
-<div class="bg-white rounded-3xl overflow-hidden shadow-sm">
-         <?php if (!empty($classes_main['image'])): ?>
-           <img src="<?php echo esc_url($classes_main['image']); ?>" 
-                alt="<?php echo esc_attr($classes_main['title']); ?>" 
-                class="aspect-[16/10] object-cover w-full rounded-t-2xl md:h-[558px]">
-         <?php else: ?>
-           <div class="ph ph-art1 aspect-[16/10] rounded-t-2xl md:h-[558px]"></div>
-         <?php endif; ?>
+    <!-- Desktop: 2-column grid -->
+    <div class="hidden lg:grid lg:grid-cols-2 gap-5 lg:pt-[26px]">
+      <?php if ($classes_main): ?>
+      <div class="bg-white rounded-3xl overflow-hidden shadow-sm">
+        <?php if (!empty($classes_main['image'])): ?>
+          <img src="<?php echo esc_url($classes_main['image']); ?>" 
+               alt="<?php echo esc_attr($classes_main['title']); ?>" 
+               class="aspect-[16/10] object-cover w-full rounded-t-2xl md:h-[558px]">
+        <?php else: ?>
+          <div class="ph ph-art1 aspect-[16/10] rounded-t-2xl md:h-[558px]"></div>
+        <?php endif; ?>
         <div class="p-6">
-<div class="flex items-center justify-between mb-3">
-              <span class="event-badge" style="color: <?php echo esc_attr(get_event_type_color($classes_main['type'])); ?>">
-                <?php echo get_event_type_icon($classes_main['type']); ?>
-                <?php echo esc_html(get_event_type_label($classes_main['type'])); ?>
-              </span>
-              <span class="text-xs font-medium" style="color: <?php echo esc_attr(get_event_type_color($classes_main['type'])); ?>"><?php echo esc_html($classes_main['datetime']); ?></span>
-            </div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="event-badge" style="color: <?php echo esc_attr(get_event_type_color($classes_main['type'])); ?>">
+              <?php echo get_event_type_icon($classes_main['type']); ?>
+              <?php echo esc_html(get_event_type_label($classes_main['type'])); ?>
+            </span>
+            <span class="text-xs font-medium" style="color: <?php echo esc_attr(get_event_type_color($classes_main['type'])); ?>"><?php echo esc_html($classes_main['datetime']); ?></span>
+          </div>
           <h3 class="!font-['Golos_Text'] text-base !font-medium text-[#2D2926] lg:text-xl mb-3 !important"><?php echo esc_html($classes_main['title']); ?></h3>
           <p class="text-sm text-[#6B5A4A] mb-5 lg:text-base leading-[1.2]"><?php echo esc_html($classes_main['description']); ?></p>
           <a href="/classes" class="btn-primary !min-w-full !py-2.5 text-base">
@@ -500,28 +500,27 @@ function get_event_type_color($type) {
         </div>
       </div>
       <?php endif; ?>
-      
-<!-- Right column - classes list -->
-       <?php if ($classes_list): ?>
-       <div class="flex flex-col gap-5">
-         <?php foreach ($classes_list as $class): ?>
-<div class="bg-white rounded-3xl overflow-hidden shadow-sm grid md:grid-cols-[1fr_1fr] gap-0 md:grid-cols-[285px_1fr]">
-           <?php if (!empty($class['image'])): ?>
-             <img src="<?php echo esc_url($class['image']); ?>" 
-                  alt="<?php echo esc_attr($class['title']); ?>" 
-                  class="object-cover w-full h-full md:rounded-l-3xl">
-           <?php else: ?>
-             <div class="ph ph-art2 w-full h-full md:h-[259px] md:rounded-l-3xl"></div>
-           <?php endif; ?>
+
+      <?php if ($classes_list): ?>
+      <div class="flex flex-col gap-5">
+        <?php foreach ($classes_list as $class): ?>
+        <div class="bg-white rounded-3xl overflow-hidden shadow-sm grid md:grid-cols-[1fr_1fr] gap-0 md:grid-cols-[285px_1fr]">
+          <?php if (!empty($class['image'])): ?>
+            <img src="<?php echo esc_url($class['image']); ?>" 
+                 alt="<?php echo esc_attr($class['title']); ?>" 
+                 class="object-cover w-full h-full md:rounded-l-3xl">
+          <?php else: ?>
+            <div class="ph ph-art2 w-full h-full md:h-[259px] md:rounded-l-3xl"></div>
+          <?php endif; ?>
           <div class="p-5 flex flex-col justify-between">
             <div>
-<div class="flex items-center justify-between mb-3">
-                 <span class="event-badge" style="color: <?php echo esc_attr(get_event_type_color($class['type'])); ?>">
-                   <?php echo get_event_type_icon($class['type']); ?>
-                   <?php echo esc_html(get_event_type_label($class['type'])); ?>
-                 </span>
-                 <span class="text-xs font-medium" style="color: <?php echo esc_attr(get_event_type_color($class['type'])); ?>"><?php echo esc_html($class['datetime']); ?></span>
-               </div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="event-badge" style="color: <?php echo esc_attr(get_event_type_color($class['type'])); ?>">
+                  <?php echo get_event_type_icon($class['type']); ?>
+                  <?php echo esc_html(get_event_type_label($class['type'])); ?>
+                </span>
+                <span class="text-xs font-medium" style="color: <?php echo esc_attr(get_event_type_color($class['type'])); ?>"><?php echo esc_html($class['datetime']); ?></span>
+              </div>
               <h3 class="!font-['Golos_Text'] text-base !font-medium text-[#2D2926] lg:!text-xl mb-2 !important leading-[1.2]"><?php echo esc_html($class['title']); ?></h3>
               <p class="text-base text-[#6B5A4A] leading-[1.2]"><?php echo esc_html($class['description']); ?></p>
             </div>
@@ -533,6 +532,83 @@ function get_event_type_color($type) {
         <?php endforeach; ?>
       </div>
       <?php endif; ?>
+    </div>
+
+    <!-- Mobile: Swiper (main + list) -->
+    <div class="lg:hidden">
+      <div class="swiper classes-swiper">
+        <div class="swiper-wrapper">
+          <?php if ($classes_main): ?>
+          <div class="swiper-slide">
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col">
+              <?php if (!empty($classes_main['image'])): ?>
+                <img src="<?php echo esc_url($classes_main['image']); ?>" 
+                     alt="<?php echo esc_attr($classes_main['title']); ?>" 
+                     class="object-cover w-full h-[180px]">
+              <?php else: ?>
+                <div class="ph ph-art1 w-full h-[180px]"></div>
+              <?php endif; ?>
+              <div class="p-5 flex flex-col justify-between flex-1">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="event-badge text-[13px] font-medium" style="color: <?php echo esc_attr(get_event_type_color($classes_main['type'])); ?>">
+                      <?php echo get_event_type_icon($classes_main['type']); ?>
+                      <?php echo esc_html(get_event_type_label($classes_main['type'])); ?>
+                    </span>
+                    <span class="text-[13px] font-medium" style="color: <?php echo esc_attr(get_event_type_color($classes_main['type'])); ?>"><?php echo esc_html($classes_main['datetime']); ?></span>
+                  </div>
+                  <h3 class="!font-['Golos_Text'] text-base !font-medium text-[#2D2926] mb-2 leading-[1.2]"><?php echo esc_html($classes_main['title']); ?></h3>
+                  <p class="text-[13px] text-[#6B5A4A] leading-[1.2]"><?php echo esc_html($classes_main['description']); ?></p>
+                </div>
+                <a href="/classes" class="btn-primary w-full !py-2.5 text-sm mt-4">
+                  <?php echo esc_html($classes_main['button_text']); ?>
+                </a>
+              </div>
+            </div>
+          </div>
+          <?php endif; ?>
+
+          <?php if ($classes_list): ?>
+          <?php foreach ($classes_list as $class): ?>
+          <div class="swiper-slide">
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col">
+              <?php if (!empty($class['image'])): ?>
+                <img src="<?php echo esc_url($class['image']); ?>" 
+                     alt="<?php echo esc_attr($class['title']); ?>" 
+                     class="object-cover w-full h-[180px]">
+              <?php else: ?>
+                <div class="ph ph-art2 w-full h-[180px]"></div>
+              <?php endif; ?>
+              <div class="p-5 flex flex-col justify-between flex-1">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="event-badge text-[13px] font-medium" style="color: <?php echo esc_attr(get_event_type_color($class['type'])); ?>">
+                      <?php echo get_event_type_icon($class['type']); ?>
+                      <?php echo esc_html(get_event_type_label($class['type'])); ?>
+                    </span>
+                    <span class="text-[13px] font-medium" style="color: <?php echo esc_attr(get_event_type_color($class['type'])); ?>"><?php echo esc_html($class['datetime']); ?></span>
+                  </div>
+                  <h3 class="!font-['Golos_Text'] text-base !font-medium text-[#2D2926] mb-2 leading-[1.2]"><?php echo esc_html($class['title']); ?></h3>
+                  <p class="text-[13px] text-[#6B5A4A] leading-[1.2]"><?php echo esc_html($class['description']); ?></p>
+                </div>
+                <a href="#" class="btn-outline w-full !py-2 text-sm mt-4">
+                  <?php echo esc_html($class['button_text']); ?>
+                </a>
+              </div>
+            </div>
+          </div>
+          <?php endforeach; ?>
+          <?php endif; ?>
+        </div>
+      </div>
+      <div class="flex items-center justify-between mt-2">
+        <div class="classes-nav-prev cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/alm.svg" alt="Назад" class="w-6 h-6">
+        </div>
+        <div class="classes-nav-next cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/arm.svg" alt="Вперёд" class="w-6 h-6">
+        </div>
+      </div>
     </div>
   </div>
 </section>
