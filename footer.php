@@ -63,15 +63,15 @@
         <p class="text-2xl font-medium mb-5">Контакты</p>
         <ul class="space-y-4 text-[15px] font-medium text-black">
           <li class="flex items-start gap-3">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2" class="mt-0.5 flex-shrink-0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <img src="<?php echo get_template_directory_uri(); ?>/img/location-outline.svg" class="" alt="pin" />
             <span>Минск, пр-т Победителей, 84,<br/>2 этаж, ТЦ «Арена Сити»</span>
           </li>
           <li class="flex items-start gap-3">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2" class="mt-0.5 flex-shrink-0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <img src="<?php echo get_template_directory_uri(); ?>/img/call-outline.svg" class="" alt="call" />
             <a href="tel:+375445743082" class="hover:text-[#E8872C] transition">+375 44 574-30-82</a>
           </li>
           <li class="flex items-start gap-3">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8872C" stroke-width="2" class="mt-0.5 flex-shrink-0"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+            <img src="<?php echo get_template_directory_uri(); ?>/img/mail-outline.svg" class="" alt="mail" />
             <a href="mailto:naifartsmuseum@yandex.by" class="hover:text-[#E8872C] transition">naifartsmuseum@yandex.by</a>
           </li>
         </ul>
