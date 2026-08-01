@@ -261,67 +261,117 @@ $what_to_do_items = $what_to_do_items ?: $what_to_do_items_default;
 
 <!-- ============ EXPOSITIONS ============ -->
 <?php
-$expositions_list_default = array(
-	array(
-		'image'       => '',
-		'title'       => 'Наивное искусство Беларуси',
-		'description' => 'Коллекция работ белорусских художников-самоучек.',
+$expositions_query = new WP_Query( array(
+	'post_type'      => 'event',
+	'posts_per_page' => 4,
+	'tax_query'      => array(
+		array(
+			'taxonomy' => 'event_category',
+			'field'    => 'slug',
+			'terms'    => 'vystavki',
+		),
 	),
-	array(
-		'image'       => '',
-		'title'       => 'Детство как искусство творчества',
-		'description' => 'Детское творчество как источник вдохновения.',
-	),
-	array(
-		'image'       => '',
-		'title'       => 'Подарки тетрадки и летний артбук',
-		'description' => 'Работы в технике коллажа, смешанной техники и авторской графики.',
-	),
-	array(
-		'image'       => '',
-		'title'       => 'Мудрость имени народного искусства',
-		'description' => 'Традиции народного искусства в современном прочтении.',
-	),
-);
-$expositions_list = $expositions_list ?: $expositions_list_default;
+	'orderby'        => 'date',
+	'order'          => 'DESC',
+) );
+if ( $expositions_query->have_posts() ):
 ?>
-<?php if ($expositions_list): ?>
 <section class="py-16 lg:py-20">
   <div class="container-main">
-    <div class="flex items-end justify-between mb-10">
-      <h2>
+    <div class="flex flex-col md:flex-row lg:items-end gap-5 justify-between mb-10">
+      <h2 class="!font-medium md:mb-10">
         <?php echo esc_html($expositions_title ?: 'Экспозиции музея'); ?>
       </h2>
-      <a href="<?php echo esc_url(home_url('/expositions/')); ?>" class="link-arrow text-sm">
+      <a href="<?php echo esc_url(home_url('/events/')); ?>" class="link-arrow text-base md:mb-10">
         <?php echo esc_html($expositions_link_text ?: 'Все экспозиции'); ?>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
-    
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <?php foreach ($expositions_list as $expo): ?>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <?php if (!empty($expo['image'])): ?>
-          <img src="<?php echo esc_url($expo['image']); ?>" 
-               alt="<?php echo esc_attr($expo['title']); ?>" 
-               class="aspect-[4/3] object-cover w-full">
+
+    <!-- Desktop: Grid -->
+    <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <?php while ( $expositions_query->have_posts() ): $expositions_query->the_post();
+        $event_id = get_the_ID();
+        $event_date = get_field('event_date');
+        $event_time = get_field('event_time');
+        $event_brief = get_field('event_brief_description');
+        $event_thumbnail = get_field('event_thumbnail');
+        $event_hero_image = get_field('event_hero_image');
+        $card_image = $event_thumbnail ?: $event_hero_image;
+        $event_terms = get_the_terms( $event_id, 'event_category' );
+        $cat_label = '';
+        $cat_icon_url = '';
+        if ( $event_terms && ! is_wp_error( $event_terms ) ) {
+          $cat_label = $event_terms[0]->name;
+          $cat_icon_url = get_term_meta( $event_terms[0]->term_id, 'event_cat_icon', true );
+        }
+      ?>
+      <a href="<?php the_permalink(); ?>" class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col group">
+        <?php if ( $card_image ): ?>
+          <img src="<?php echo esc_url( $card_image ); ?>"
+               alt="<?php the_title_attribute(); ?>"
+               class="aspect-[4/3] object-cover w-full group-hover:scale-105 transition duration-300 max-h-[162px]">
         <?php else: ?>
           <div class="ph ph-art1 aspect-[4/3]"></div>
         <?php endif; ?>
-        <div class="p-5">
-          <h3 class="font-['Literata'] text-lg font-semibold mb-2"><?php echo esc_html($expo['title']); ?></h3>
-          <p class="text-sm text-[#6B5A4A] mb-4"><?php echo esc_html($expo['description']); ?></p>
-          <a href="#" class="link-arrow text-sm">
-            <?php echo esc_html($expositions_link_text ?: 'Все экспозиции'); ?>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
+        <div class="p-5 flex-1 flex flex-col">
+          <h3 class="!font-['Golos_Text'] text-base lg:text-xl !font-medium mb-2"><?php the_title(); ?></h3>
+          <?php if ( $event_brief ): ?>
+          <p class="text-base text-black mb-4 flex-1 leading-[1.2]"><?php echo wp_trim_words( $event_brief, 20 ); ?></p>
+          <?php endif; ?>
+          <span class="link-arrow text-base mt-auto">
+            Подробнее
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+      <?php endwhile; ?>
+    </div>
+
+    <!-- Mobile: Swiper -->
+    <div class="sm:hidden">
+      <div class="swiper about-expositions-swiper">
+        <div class="swiper-wrapper">
+          <?php $expositions_query->rewind_posts(); while ( $expositions_query->have_posts() ): $expositions_query->the_post();
+            $event_id = get_the_ID();
+            $event_brief = get_field('event_brief_description');
+            $event_thumbnail = get_field('event_thumbnail');
+            $event_hero_image = get_field('event_hero_image');
+            $card_image = $event_thumbnail ?: $event_hero_image;
+            $event_terms = get_the_terms( $event_id, 'event_category' );
+            $cat_label = '';
+            $cat_icon_url = '';
+            if ( $event_terms && ! is_wp_error( $event_terms ) ) {
+              $cat_label = $event_terms[0]->name;
+              $cat_icon_url = get_term_meta( $event_terms[0]->term_id, 'event_cat_icon', true );
+            }
+          ?>
+          <div class="swiper-slide">
+            <a href="<?php the_permalink(); ?>" class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col group">
+              <?php if ( $card_image ): ?>
+                <img src="<?php echo esc_url( $card_image ); ?>"
+                     alt="<?php the_title_attribute(); ?>"
+                     class="aspect-[4/3] object-cover w-full max-h-[162px]">
+              <?php else: ?>
+                <div class="ph ph-art1 aspect-[4/3]"></div>
+              <?php endif; ?>
+              <div class="p-2.5 flex-1 flex flex-col">
+                <h3 class="!font-['Golos_Text'] text-base !font-medium mb-2"><?php the_title(); ?></h3>
+                <?php if ( $event_brief ): ?>
+                <p class="text-[13px] text-black mb-4 flex-1 leading-[1.2]"><?php echo wp_trim_words( $event_brief, 20 ); ?></p>
+                <?php endif; ?>
+                <span class="btn-primary mt-auto">Подробнее</span>
+              </div>
+            </a>
+          </div>
+          <?php endwhile; ?>
         </div>
       </div>
-      <?php endforeach; ?>
     </div>
+
   </div>
 </section>
-<?php endif; ?>
+<?php wp_reset_postdata(); endif; ?>
 
 <!-- ============ SPECIAL EXPOSITION BANNER ============ -->
 <?php get_template_part('template-parts/special-exposition'); ?>

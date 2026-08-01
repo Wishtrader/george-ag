@@ -246,6 +246,11 @@
       spaceBetween: 8,
     });
 
+    new Swiper('.about-expositions-swiper', {
+      slidesPerView: 1.15,
+      spaceBetween: 8,
+    });
+
     new Swiper('.classes-swiper', {
       slidesPerView: 1,
       spaceBetween: 0,
