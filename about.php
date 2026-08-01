@@ -35,10 +35,12 @@ $expositions_list = get_field('about_expositions_list');
 $education_title = get_field('about_education_title');
 $education_link_text = get_field('about_education_link_text');
 $education_lectures_title = get_field('about_education_lectures_title');
+$education_lectures_description = get_field('about_education_lectures_description');
 $education_lectures_items = get_field('about_education_lectures_items');
 $education_lectures_image = get_field('about_education_lectures_image');
 $education_lectures_button = get_field('about_education_lectures_button');
 $education_masterclass_title = get_field('about_education_masterclass_title');
+$education_masterclass_description = get_field('about_education_masterclass_description');
 $education_masterclass_items = get_field('about_education_masterclass_items');
 $education_masterclass_image = get_field('about_education_masterclass_image');
 $education_masterclass_button = get_field('about_education_masterclass_button');
@@ -393,83 +395,95 @@ $education_masterclass_items_default = array(
 $education_masterclass_items = $education_masterclass_items ?: $education_masterclass_items_default;
 ?>
 <?php if ($education_lectures_title || $education_masterclass_title): ?>
-<section class="py-16 lg:py-20">
+<section class="py-8 lg:py-20">
   <div class="container-main">
-    <div class="flex items-end justify-between mb-10">
-      <h2>
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-5">
+      <h2 class="!font-medium max-w-[680px] md:!leading-[1.6]">
         <?php echo esc_html($education_title ?: 'Образовательная и творческая программа'); ?>
       </h2>
-      <a href="<?php echo esc_url(home_url('/classes/')); ?>" class="link-arrow text-sm">
+      <a href="<?php echo esc_url(home_url('/classes/')); ?>" class="link-arrow text-base">
         <?php echo esc_html($education_link_text ?: 'Все мастер-классы и лекции'); ?>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
-    
-    <div class="grid lg:grid-cols-2 gap-5">
-      <!-- Lectures -->
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
+
+    <!-- Lectures: Image left, text right -->
+    <div class="grid lg:grid-cols-[3fr_2fr] gap-8 lg:gap-5 mb-10 lg:mb-14 items-center">
+      <div class="rounded-[24px] overflow-hidden order-2 lg:order-1">
         <?php if ($education_lectures_image): ?>
-          <img src="<?php echo esc_url($education_lectures_image); ?>" 
-               alt="<?php echo esc_attr($education_lectures_title); ?>" 
-               class="aspect-[16/10] object-cover w-full">
+          <img src="<?php echo esc_url($education_lectures_image); ?>"
+               alt="<?php echo esc_attr($education_lectures_title); ?>"
+               class="w-full h-auto object-cover">
         <?php else: ?>
-          <div class="ph ph-art1 aspect-[16/10]"></div>
+          <div class="ph ph-art1 aspect-[4/3]"></div>
         <?php endif; ?>
-        <div class="p-6">
-          <?php if ($education_lectures_title): ?>
-          <h3 class="font-['Literata'] text-xl font-semibold mb-4">
-            <?php echo esc_html($education_lectures_title); ?>
-          </h3>
-          <?php endif; ?>
-          <?php if ($education_lectures_items): ?>
-          <ul class="text-sm text-[#6B5A4A] mb-5 space-y-2">
-            <?php foreach ($education_lectures_items as $item): ?>
-            <li class="flex items-start gap-2">
-              <span class="text-[#F28A2E] mt-1">&#8226;</span>
-              <?php echo esc_html($item['text']); ?>
-            </li>
-            <?php endforeach; ?>
-          </ul>
-          <?php endif; ?>
-          <?php if ($education_lectures_button): ?>
-          <a href="<?php echo esc_url(home_url('/classes/')); ?>" class="btn-primary">
-            <?php echo esc_html($education_lectures_button); ?>
-          </a>
-          <?php endif; ?>
-        </div>
       </div>
-      
-      <!-- Masterclasses -->
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <?php if ($education_masterclass_image): ?>
-          <img src="<?php echo esc_url($education_masterclass_image); ?>" 
-               alt="<?php echo esc_attr($education_masterclass_title); ?>" 
-               class="aspect-[16/10] object-cover w-full">
-        <?php else: ?>
-          <div class="ph ph-art2 aspect-[16/10]"></div>
+      <div class="flex flex-col order-1 lg:order-2">
+        <?php if ($education_lectures_title): ?>
+        <h3 class="!font-['Golos_Text'] text-[20px] lg:text-[28px] !font-medium mb-4 lg:mb-[58px] text-black leading-[1.2]">
+          <?php echo esc_html($education_lectures_title); ?>
+        </h3>
         <?php endif; ?>
-        <div class="p-6">
-          <?php if ($education_masterclass_title): ?>
-          <h3 class="font-['Literata'] text-xl font-semibold mb-4">
-            <?php echo esc_html($education_masterclass_title); ?>
-          </h3>
-          <?php endif; ?>
-          <?php if ($education_masterclass_items): ?>
-          <ul class="text-sm text-[#6B5A4A] mb-5 space-y-2">
-            <?php foreach ($education_masterclass_items as $item): ?>
-            <li class="flex items-start gap-2">
-              <span class="text-[#F28A2E] mt-1">&#8226;</span>
-              <?php echo esc_html($item['text']); ?>
-            </li>
-            <?php endforeach; ?>
-          </ul>
-          <?php endif; ?>
-          <?php if ($education_masterclass_button): ?>
-          <a href="<?php echo esc_url(home_url('/classes/')); ?>" class="btn-primary">
-            <?php echo esc_html($education_masterclass_button); ?>
-          </a>
-          <?php endif; ?>
-        </div>
+        <?php if ($education_lectures_description): ?>
+        <p class="text-[15px] lg:text-xl text-[#2D2926] mb-6 leading-[1.2]">
+          <?php echo wp_kses_post($education_lectures_description); ?>
+        </p>
+        <?php endif; ?>
+        <?php if ($education_lectures_items): ?>
+        <ul class="text-[15px] lg:text-lg text-black mb-10 leading-[1.2]">
+          <?php foreach ($education_lectures_items as $item): ?>
+          <li class="flex items-start gap-2">
+            <span class="text-[#2D2926] mt-0.5">&#8226;</span>
+            <span><?php echo esc_html($item['text']); ?></span>
+          </li>
+          <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
+        <?php if ($education_lectures_button): ?>
+        <a href="<?php echo esc_url(home_url('/classes/')); ?>" class="btn-primary w-full text-center">
+          <?php echo esc_html($education_lectures_button); ?>
+        </a>
+        <?php endif; ?>
+      </div>
+    </div>
+
+    <!-- Masterclasses: Text left, image right -->
+    <div class="grid lg:grid-cols-[2fr_3fr] gap-8 lg:gap-5 items-center">
+      <div class="flex flex-col order-1 lg:order-1">
+        <?php if ($education_masterclass_title): ?>
+        <h3 class="!font-['Golos_Text'] text-[20px] lg:text-[28px] !font-medium mb-4 lg:mb-[28px] text-black leading-[1.2]">
+          <?php echo esc_html($education_masterclass_title); ?>
+        </h3>
+        <?php endif; ?>
+        <?php if ($education_masterclass_description): ?>
+        <p class="text-[15px] lg:text-xl text-[#2D2926] mb-5 leading-[1.2]">
+          <?php echo wp_kses_post($education_masterclass_description); ?>
+        </p>
+        <?php endif; ?>
+        <?php if ($education_masterclass_items): ?>
+        <ul class="text-[15px] lg:text-lg text-black mb-10 leading-[1.2]">
+          <?php foreach ($education_masterclass_items as $item): ?>
+          <li class="flex items-start gap-2">
+            <span class="text-[#2D2926] mt-0.5">&#8226;</span>
+            <span><?php echo esc_html($item['text']); ?></span>
+          </li>
+          <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
+        <?php if ($education_masterclass_button): ?>
+        <a href="<?php echo esc_url(home_url('/classes/')); ?>" class="btn-primary w-full text-center">
+          <?php echo esc_html($education_masterclass_button); ?>
+        </a>
+        <?php endif; ?>
+      </div>
+      <div class="rounded-[24px] overflow-hidden order-2 lg:order-2">
+        <?php if ($education_masterclass_image): ?>
+          <img src="<?php echo esc_url($education_masterclass_image); ?>"
+               alt="<?php echo esc_attr($education_masterclass_title); ?>"
+               class="w-full h-auto object-cover">
+        <?php else: ?>
+          <div class="ph ph-art2 aspect-[4/3]"></div>
+        <?php endif; ?>
       </div>
     </div>
   </div>
@@ -478,19 +492,20 @@ $education_masterclass_items = $education_masterclass_items ?: $education_master
 
 <!-- ============ MUSEUM SHOP ============ -->
 <?php if ($shop_products): ?>
-<section class="py-16 lg:py-20 bg-[#F5EADB]">
+<section class="py-8 lg:py-16">
   <div class="container-main">
-    <div class="flex items-end justify-between mb-10">
-      <h2>
+    <div class="flex flex-col lg:flex-row gap-5 lg:items-center justify-between mb-8 lg:mb-[60px]">
+      <h2 class="max-w-[740px] leading-[1.2] !font-medium">
         <?php echo esc_html($shop_title ?: 'Искусство, книги и музейные сувениры'); ?>
       </h2>
-      <a href="<?php echo esc_url(home_url('/shop/')); ?>" class="link-arrow text-sm">
+      <a href="<?php echo esc_url(home_url('/magazin/')); ?>" class="link-arrow text-base">
         <?php echo esc_html($shop_link_text ?: 'В магазин'); ?>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
     
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <!-- Desktop: Grid -->
+    <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
       <?php foreach ($shop_products as $product): ?>
         <?php
         $p_id = $product->get_id();
@@ -511,19 +526,20 @@ $education_masterclass_items = $education_masterclass_items ?: $education_master
             <?php endif; ?>
           </a>
           <div class="p-5 flex flex-col flex-1">
-            <h3 class="font-['Literata'] text-base mb-2 leading-snug">
+            <h3 class="!font-['Golos_Text'] text-base lg:text-xl mb-2 leading-[1.2]">
               <a href="<?php echo esc_url($p_link); ?>" class="hover:text-[#E8872C] transition">
                 <?php echo esc_html($p_name); ?>
               </a>
             </h3>
             <?php if ($p_desc): ?>
-              <p class="text-sm text-[#6B5A4A] mb-4 leading-snug line-clamp-3">
+              <p class="text-[13px] lg:text-base text-[#2D2926] mb-4 leading-[1.2] line-clamp-3">
                 <?php echo wp_kses_post($p_desc); ?>
               </p>
+              <hr class="text-[#D9CCBC] mb-5" />
             <?php endif; ?>
             <div class="mt-auto flex items-center gap-3">
               <?php if ($p_price): ?>
-                <span class="font-semibold text-lg"><?php echo wp_kses_post($p_price); ?></span>
+                <span class="font-medium text-xl text-[#DA7421]"><?php echo wp_kses_post($p_price); ?></span>
               <?php endif; ?>
               <a href="<?php echo esc_url($p_link); ?>" class="btn-primary !py-2 !px-4 text-sm ml-auto whitespace-nowrap">
                 В корзину
@@ -532,6 +548,66 @@ $education_masterclass_items = $education_masterclass_items ?: $education_master
           </div>
         </div>
       <?php endforeach; ?>
+    </div>
+
+    <!-- Mobile: Swiper -->
+    <div class="sm:hidden">
+      <div class="swiper about-shop-swiper">
+        <div class="swiper-wrapper">
+          <?php foreach ($shop_products as $product): ?>
+            <?php
+            $p_id = $product->get_id();
+            $p_name = $product->get_name();
+            $p_price = $product->get_price_html();
+            $p_desc = $product->get_short_description();
+            $p_image = wp_get_attachment_url($product->get_image_id());
+            $p_link = get_permalink($p_id);
+            ?>
+          <div class="swiper-slide">
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
+              <a href="<?php echo esc_url($p_link); ?>" class="block">
+                <?php if ($p_image): ?>
+                  <img src="<?php echo esc_url($p_image); ?>"
+                       alt="<?php echo esc_attr($p_name); ?>"
+                       class="object-cover w-full min-h-[280px]">
+                <?php else: ?>
+                  <div class="ph ph-shop aspect-square"></div>
+                <?php endif; ?>
+              </a>
+              <div class="p-5 flex flex-col flex-1">
+                <h3 class="!font-['Golos_Text'] text-base mb-2 leading-[1.2]">
+                  <a href="<?php echo esc_url($p_link); ?>" class="hover:text-[#E8872C] transition">
+                    <?php echo esc_html($p_name); ?>
+                  </a>
+                </h3>
+                <?php if ($p_desc): ?>
+                  <p class="text-[13px] text-[#2D2926] mb-4 leading-[1.2] line-clamp-3">
+                    <?php echo wp_kses_post($p_desc); ?>
+                  </p>
+                  <hr class="text-[#D9CCBC] mb-5" />
+                <?php endif; ?>
+                <div class="mt-auto flex items-center gap-3">
+                  <?php if ($p_price): ?>
+                    <span class="font-medium text-xl text-[#DA7421]"><?php echo wp_kses_post($p_price); ?></span>
+                  <?php endif; ?>
+                  <a href="<?php echo esc_url($p_link); ?>" class="btn-primary !py-2 !px-4 text-sm ml-auto whitespace-nowrap">
+                    В корзину
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+      <div class="flex items-center justify-between mt-2">
+        <div class="about-shop-nav-prev cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/alm.svg" alt="Назад" class="w-6 h-6">
+        </div>
+        <div class="about-shop-nav-next cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/arm.svg" alt="Вперёд" class="w-6 h-6">
+        </div>
+      </div>
     </div>
   </div>
 </section>

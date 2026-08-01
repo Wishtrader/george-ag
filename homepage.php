@@ -664,11 +664,7 @@ function get_event_type_color($type) {
             <?php endif; ?>
             <div class="mt-auto flex items-center gap-3 text-xl text-[#E8872C] font-medium">
               <?php if ($p_price): ?>
-                <?php
-                 $price_html = wp_kses_post($p_price);
-                 $price_html = str_replace('Br', '<span class="font-medium">BYN</span>', $price_html);
-                 echo $price_html;
-                 ?>
+                <?php echo wp_kses_post($p_price); ?>
               <?php endif; ?>
               <a href="<?php echo esc_url($p_link); ?>" class="btn-primary !py-2 !px-4 text-sm ml-auto whitespace-nowrap">
                 В корзину
@@ -717,11 +713,7 @@ function get_event_type_color($type) {
                 <?php endif; ?>
                 <div class="mt-auto flex items-center gap-3 text-xl text-[#E8872C] font-medium">
                   <?php if ($p_price): ?>
-                    <?php
-                     $price_html = wp_kses_post($p_price);
-                     $price_html = str_replace('Br', '<span class="font-medium">BYN</span>', $price_html);
-                     echo $price_html;
-                     ?>
+                    <?php echo wp_kses_post($p_price); ?>
                   <?php endif; ?>
                   <a href="<?php echo esc_url($p_link); ?>" class="btn-primary !py-2 !px-4 text-sm ml-auto whitespace-nowrap">
                     В корзину

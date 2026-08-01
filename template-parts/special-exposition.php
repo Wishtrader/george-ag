@@ -20,7 +20,7 @@ $button_url = home_url('/special/');
 ?>
 
 <?php if ($title || $description): ?>
-<section class="relative py-12 md:max-h-[412px] px-2.5 md:px-0">
+<section class="relative pb-6 lg:py-12 px-2.5 md:px-0">
   <div class="relative h-[450px] md:h-[412px] overflow-hidden rounded-2xl">
     <?php if ($image): ?>
       <img src="<?php echo esc_url($image); ?>" 

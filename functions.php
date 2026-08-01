@@ -649,3 +649,12 @@ function georgeag_submit_order() {
 add_action( 'wp_ajax_georgeag_submit_order', 'georgeag_submit_order' );
 add_action( 'wp_ajax_nopriv_georgeag_submit_order', 'georgeag_submit_order' );
 
+add_filter( 'woocommerce_currency_symbols', function( $symbols ) {
+	$symbols['BYN'] = 'BYN';
+	return $symbols;
+} );
+
+add_filter( 'woocommerce_get_price_html', function( $price, $product ) {
+	return str_replace( 'Br', 'BYN', $price );
+}, 10, 2 );
+

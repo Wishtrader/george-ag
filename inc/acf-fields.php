@@ -1843,6 +1843,14 @@ acf_add_local_field_group( array(
 			'default_value' => 'Лекции, экскурсии и встречи',
 		),
 		array(
+			'key'           => 'field_about_education_lectures_description',
+			'label'         => 'Лекции: описание',
+			'name'          => 'about_education_lectures_description',
+			'type'          => 'textarea',
+			'rows'          => 4,
+			'default_value' => 'Групповые и индивидуальные экскурсии, авторские лекции по истории искусства, тематические встречи с искусствоведами.',
+		),
+		array(
 			'key'           => 'field_about_education_lectures_image',
 			'label'         => 'Лекции: изображение',
 			'name'          => 'about_education_lectures_image',
@@ -1879,6 +1887,14 @@ acf_add_local_field_group( array(
 			'name'          => 'about_education_masterclass_title',
 			'type'          => 'text',
 			'default_value' => 'Мастер-классы и творческие активности',
+		),
+		array(
+			'key'           => 'field_about_education_masterclass_description',
+			'label'         => 'Мастер-классы: описание',
+			'name'          => 'about_education_masterclass_description',
+			'type'          => 'textarea',
+			'rows'          => 4,
+			'default_value' => 'Практические занятия для взрослых и детей, где можно создать свою работу под руководством преподавателя.',
 		),
 		array(
 			'key'           => 'field_about_education_masterclass_image',
