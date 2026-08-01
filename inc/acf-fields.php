@@ -1541,8 +1541,16 @@ acf_add_local_field_group( array(
 		),
 		array(
 			'key'           => 'field_about_hero_image',
-			'label'         => 'Изображение',
+			'label'         => 'Изображение (десктоп)',
 			'name'          => 'about_hero_image',
+			'type'          => 'image',
+			'return_format' => 'url',
+			'library'       => 'all',
+		),
+		array(
+			'key'           => 'field_about_hero_image_mobile',
+			'label'         => 'Изображение (мобайл)',
+			'name'          => 'about_hero_image_mobile',
 			'type'          => 'image',
 			'return_format' => 'url',
 			'library'       => 'all',

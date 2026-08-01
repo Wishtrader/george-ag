@@ -7,6 +7,7 @@
 $hero_title = get_field('about_hero_title');
 $hero_description = get_field('about_hero_description');
 $hero_image = get_field('about_hero_image');
+$hero_image_mobile = get_field('about_hero_image_mobile');
 $hero_cta_primary_text = get_field('about_hero_cta_primary_text');
 $hero_cta_primary_url = get_field('about_hero_cta_primary_url');
 $hero_cta_secondary_text = get_field('about_hero_cta_secondary_text');
@@ -87,11 +88,11 @@ function get_about_event_type_label($type) {
 
 <!-- ============ HERO ============ -->
 <?php if ($hero_title || $hero_description): ?>
-<section class="mt-[40px] lg:mt-[60px] relative overflow-hidden h-[236px] lg:h-[376px]">
-  <div class="absolute inset-0" style="background-image: url('<?php echo esc_url($hero_image); ?>'); background-size: cover; background-position: center;"></div>
+<section class="mt-[40px] lg:mt-[60px] relative overflow-hidden lg:h-[376px]">
+  <div class="absolute inset-0 hidden lg:block" style="background-image: url('<?php echo esc_url($hero_image); ?>'); background-size: cover; background-position: center;"></div>
 
   <div class="container-main relative h-full flex flex-col justify-center py-10">
-    <nav class="absolute top-6 left-[20px] lg:left-[20px]">
+    <nav class="absolute top-0 lg:top-6 left-[10px] lg:left-[20px]">
       <ul class="breadcrumbs">
         <li><a href="/">Главная</a></li>
         <li><img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" alt="" class="breadcrumbs-separator"></li>
@@ -106,11 +107,11 @@ function get_about_event_type_label($type) {
       </h1>
       <?php endif; ?>
       <?php if ($hero_description): ?>
-      <p class="text-[16px] md:text-[20px] max-w-[692px] text-[#2D2926] mb-8 leading-[1.2]">
+      <p class="text-[16px] md:text-[20px] max-w-[692px] text-[#2D2926] mb-5 lg:mb-8 leading-[1.2]">
         <?php echo wp_kses_post($hero_description); ?>
       </p>
       <?php endif; ?>
-      <div class="flex flex-col sm:flex-row gap-3 justify-start gap-5 w-full">
+      <div class="flex flex-col sm:flex-row justify-start gap-2.5 lg:gap-5 w-full">
         <?php if ($hero_cta_primary_text): ?>
           <a href="/poster" class="btn-primary md:max-w-[285px]">
             <?php echo esc_html($hero_cta_primary_text); ?>
@@ -125,6 +126,11 @@ function get_about_event_type_label($type) {
     </div>
   </div>
 </section>
+<?php if ($hero_image_mobile): ?>
+<div class="lg:hidden px-2.5 -mt-4 relative z-10">
+  <img src="<?php echo esc_url($hero_image_mobile); ?>" alt="" class="w-full h-auto object-cover rounded-[15px]">
+</div>
+<?php endif; ?>
 <?php endif; ?>
 
 <!-- ============ MISSION / STATS ============ -->
@@ -134,23 +140,23 @@ function get_about_event_type_label($type) {
     <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
       <div class="max-w-[590px] w-full	">
         <?php if ($mission_title): ?>
-        <h2 class="mb-5 !text-xl lg:!text-4xl text-[#2D2926] !font-medium leading-[1.2]">
+        <h2 class="mb-5 !text-xl lg:!text-4xl text-[#2D2926] !font-normal leading-[1.2]">
           <?php echo esc_html($mission_title); ?>
         </h2>
         <?php endif; ?>
         <?php if ($mission_description): ?>
-        <p class="text-[16px] md:text-[20px] text-[#2D2926] leading-[1.2] !leading-[1.2]">
+        <p class="text-[15px] md:text-[20px] text-[#2D2926] leading-[1.2] !leading-[1.2]">
           <?php echo wp_kses_post($mission_description); ?>
         </p>
         <?php endif; ?>
       </div>
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <?php if ($stat_1_number): ?>
-        <div class="text-center bg-[#F2E8DA] rounded-[24px] border border-px border-[#D9CCBC] shadow-lg lg:px-[20px] lg:py-[50px]">
+        <div class="text-center bg-[#F2E8DA] rounded-[24px] border border-px border-[#D9CCBC] shadow-lg lg:px-[20px] lg:py-[50px] p-2.5">
           <?php if ($stat_1_icon): ?>
-            <img src="<?php echo esc_url($stat_1_icon); ?>" alt="icon" class="w-auto h-[53px] object-contain mx-auto mb-5">
+            <img src="<?php echo esc_url($stat_1_icon); ?>" alt="icon" class="w-auto h-[26px] lg:h-[53px] object-contain mx-auto mb-2.5 lg:mb-5">
           <?php endif; ?>
-          <div class="font-['Literata'] text-[20px] lg:text-[36px] font-light text-black mb-5">
+          <div class="font-['Literata'] text-[20px] lg:text-[36px] font-light text-black mb-2.5 lg:mb-5">
             <?php echo esc_html($stat_1_number); ?>
           </div>
           <div class="text-[13px] lg:text-lg text-black leading-[1.2] font-light">
@@ -159,11 +165,11 @@ function get_about_event_type_label($type) {
         </div>
         <?php endif; ?>
         <?php if ($stat_2_number): ?>
-        <div class="text-center bg-[#F2E8DA] rounded-[24px] border border-px border-[#D9CCBC] shadow-lg lg:px-[20px] lg:py-[50px]">
+        <div class="text-center bg-[#F2E8DA] rounded-[24px] border border-px border-[#D9CCBC] shadow-lg lg:px-[20px] lg:py-[50px] p-2.5">
           <?php if ($stat_2_icon): ?>
-            <img src="<?php echo esc_url($stat_2_icon); ?>" alt="" class="w-auto h-[53px] object-contain mx-auto mb-5">
+            <img src="<?php echo esc_url($stat_2_icon); ?>" alt="" class="w-auto h-[26px] lg:h-[53px] object-contain mx-auto mb-2.5 lg:mb-5">
           <?php endif; ?>
-          <div class="font-['Literata'] text-[20px] lg:text-[36px] font-light text-black mb-5">
+          <div class="font-['Literata'] text-[20px] lg:text-[36px] font-light text-black mb-2.5 lg:mb-5">
             <?php echo esc_html($stat_2_number); ?>
           </div>
           <div class="text-[13px] lg:text-lg text-black leading-[1.2] font-light">
@@ -172,11 +178,11 @@ function get_about_event_type_label($type) {
         </div>
         <?php endif; ?>
         <?php if ($stat_3_number): ?>
-        <div class="text-center bg-[#F2E8DA] rounded-[24px] border border-px border-[#D9CCBC] shadow-lg lg:px-[20px] lg:py-[50px]">
+        <div class="text-center bg-[#F2E8DA] rounded-[24px] border border-px border-[#D9CCBC] shadow-lg lg:px-[20px] lg:py-[50px] col-span-2 lg:col-span-1 p-2.5">
           <?php if ($stat_3_icon): ?>
-            <img src="<?php echo esc_url($stat_3_icon); ?>" alt="icon" class="w-auto h-[53px] object-contain mx-auto mb-5">
+            <img src="<?php echo esc_url($stat_3_icon); ?>" alt="icon" class="w-auto h-[26px] lg:h-[53px] object-contain mx-auto mb-2.5 lg:mb-5">
           <?php endif; ?>
-          <div class="font-['Literata'] text-[20px] lg:text-[36px] font-light text-black mb-5">
+          <div class="font-['Literata'] text-[20px] lg:text-[36px] font-light text-black mb-2.5 lg:mb-5">
             <?php echo esc_html($stat_3_number); ?>
           </div>
           <div class="text-[13px] lg:text-lg text-black leading-[1.2] font-light">
@@ -227,23 +233,23 @@ $what_to_do_items_default = array(
 $what_to_do_items = $what_to_do_items ?: $what_to_do_items_default;
 ?>
 <?php if ($what_to_do_items): ?>
-<section class="py-16 lg:py-20 bg-[#FAF6EF]">
+<section class="py-8 lg:py-20 bg-[#FAF6EF]">
   <div class="container-main">
-    <h2 class="mb-10">
+    <h2 class="mb-15">
       <?php echo esc_html($what_to_do_title ?: 'Что можно сделать в музее'); ?>
     </h2>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
       <?php foreach ($what_to_do_items as $item): ?>
-      <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <div class="flex flex-col items-start rounded-[24px] px-3 py-5 shadow-lg border-[1px] border-[#D9CCBC]">
         <?php if (!empty($item['icon'])): ?>
-        <div class="w-12 h-12 mb-4">
+        <div class="w-auto h-[30px] lg:h-[53px] mb-4">
           <img src="<?php echo esc_url($item['icon']); ?>" alt="" class="w-full h-full object-contain">
         </div>
         <?php endif; ?>
-        <h3 class="font-['Literata'] text-lg font-semibold mb-3">
+        <p class="text-xl lg:text-[28px] font-medium mb-5 text-black leading-[1.2]">
           <?php echo esc_html($item['title']); ?>
-        </h3>
-        <p class="text-sm text-[#6B5A4A] leading-relaxed">
+        </p>
+        <p class="text-[15px] text-[#2D2926] lg:text-lg leading-[1.2]">
           <?php echo esc_html($item['description']); ?>
         </p>
       </div>
@@ -575,20 +581,20 @@ $events = $events ?: $events_default;
     ?>
     <div class="absolute inset-0 block lg:hidden" style="background-image: url('<?php echo esc_url($cta_bg_mobile); ?>'); background-size: cover; background-position: center;"></div>
     <?php endif; ?>
-  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col items-center justify-center h-full relative text-center">
+  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col lg:flex-row items-center justify-center lg:justify-between h-full relative text-center">
     <?php if ($cta_title): ?>
-    <h2 class="text-white mb-6 mx-auto max-w-[260px] md:max-w-full">
+    <h2 class="!text-white mb-6 mx-auto max-w-[230px] md:max-w-full lg:text-left !leading-[1.5]">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>
-    <div class="flex flex-col sm:flex-row gap-[10px] md:gap-5 justify-center w-full">
+    <div class="flex flex-col gap-[10px] md:gap-5 justify-center w-full lg:items-end">
       <?php if ($cta_primary): ?>
-        <a href="#" class="btn-primary md:max-w-[285px]">
+        <a href="#" class="btn-primary md:max-w-[485px]">
           <?php echo esc_html($cta_primary); ?>
         </a>
       <?php endif; ?>
       <?php if ($cta_secondary): ?>
-        <a href="#" class="btn-secondary md:max-w-[285px]">
+        <a href="#" class="btn-secondary md:max-w-[485px]">
           <?php echo esc_html($cta_secondary); ?>
         </a>
       <?php endif; ?>

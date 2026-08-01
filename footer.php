@@ -267,5 +267,177 @@
 </script>
 <?php wp_footer(); ?>
 
+<script>
+(function(){
+var EASE = "cubic-bezier(0.25, 0.1, 0.25, 1)";
+var done = new WeakSet();
+
+function anim(el, kf, dur, delay) {
+  if (!el || done.has(el)) return;
+  done.add(el);
+  el.style.removeProperty("opacity");
+  el.style.removeProperty("transform");
+  el.classList.add("m-ready");
+  el.animate(kf, { duration: dur, delay: delay, fill: "both", easing: EASE });
+}
+
+function kfFor(type) {
+  switch(type) {
+    case "up":    return [{opacity:0,transform:"translateY(40px)"},{opacity:1,transform:"translateY(0)"}];
+    case "left":  return [{opacity:0,transform:"translateX(-50px)"},{opacity:1,transform:"translateX(0)"}];
+    case "right": return [{opacity:0,transform:"translateX(50px)"},{opacity:1,transform:"translateX(0)"}];
+    case "scale": return [{opacity:0,transform:"scale(0.9)"},{opacity:1,transform:"scale(1)"}];
+    case "fade":  return [{opacity:0},{opacity:1}];
+    default:      return [{opacity:0},{opacity:1}];
+  }
+}
+
+function animEl(el, type, delay, dur) {
+  anim(el, kfFor(type), (dur||1)*1000, (delay||0)*1000);
+}
+
+function animNodes(nodes, baseDelay, stagger, dur) {
+  nodes.forEach(function(el, i) {
+    animEl(el, el.getAttribute("data-m") || "up", baseDelay + i * stagger, dur);
+  });
+}
+
+function observeSection(el, callback) {
+  if (!el) return;
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        callback(e.target);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: "0px 0px -50px 0px", threshold: 0.05 });
+  obs.observe(el);
+}
+
+/* ── HEADER — smooth slide down ────────────────────────── */
+document.querySelectorAll('[data-m="header"]').forEach(function(el, i) {
+  anim(el, [
+    {opacity: 0, transform: "translateY(-15px)"},
+    {opacity: 1, transform: "translateY(0)"}
+  ], 900, i * 120);
+});
+
+var h1 = document.querySelector("h1");
+if (!h1) return;
+var hero = h1.closest("section") || h1.parentElement;
+
+/* ── HERO — pure fade-in on all pages ─────────────────── */
+animEl(h1, "fade", 0.3, 1.0);
+
+var col = h1.parentElement;
+if (col) {
+  var p = col.querySelector("p");
+  if (p) animEl(p, "fade", 0.5, 1.0);
+  col.querySelectorAll("a").forEach(function(a, i) {
+    animEl(a, "fade", 0.7 + i * 0.15, 0.8);
+  });
+}
+
+hero.querySelectorAll("img").forEach(function(img) {
+  animEl(img, "fade", 0.2, 1.2);
+});
+
+// Background image div (div with background-image style or .ph-* placeholder)
+var heroBgDiv = hero.querySelector(".absolute.inset-0");
+if (heroBgDiv && !heroBgDiv.querySelector("img")) {
+  animEl(heroBgDiv, "fade", 0, 1.2);
+}
+var ph = hero.querySelector(".ph-hero, .ph-museum");
+if (ph) animEl(ph, "fade", 0, 1.2);
+
+/* ── UNIVERSAL SCROLL SECTIONS ──────────────────────── */
+function animSection(s) {
+  var container = s.querySelector(".container-main");
+  if (!container) return;
+
+  // h2 titles
+  s.querySelectorAll("h2").forEach(function(h2) {
+    if (h2.closest(".swiper")) return;
+    animEl(h2, "up", 0, 1.2);
+  });
+
+  // Left/right two-column layouts (image + text)
+  var grid = s.querySelector(".grid");
+  if (grid && grid.children.length === 2) {
+    var left = grid.children[0];
+    var right = grid.children[1];
+    var leftImg = left.querySelector("img, [class*='ph-']");
+    var leftH2 = left.querySelector("h2");
+    var rightImg = right.querySelector("img, [class*='ph-']");
+    var rightH2 = right.querySelector("h2");
+    if (leftImg && rightH2) {
+      animEl(leftImg, "left", 0.2, 1.3);
+      animEl(right, "right", 0.2, 1.3);
+    } else if (rightImg && leftH2) {
+      animEl(left, "left", 0.2, 1.3);
+      animEl(rightImg, "right", 0.2, 1.3);
+    } else {
+      animEl(left, "left", 0.2, 1.3);
+      animEl(right, "right", 0.2, 1.3);
+    }
+  }
+
+  // Card grids (3 or 4 columns)
+  var cards = [];
+  s.querySelectorAll(".grid > div").forEach(function(c) {
+    if (c.closest(".swiper")) return;
+    if (c.querySelector("h3") || c.querySelector("h2") || c.querySelector("img")) cards.push(c);
+  });
+  if (cards.length > 0) {
+    animNodes(cards, 0.3, 0.12, 1.0);
+  }
+
+  // Full-width images / placeholders
+  s.querySelectorAll("img, [class*='ph-']").forEach(function(img) {
+    if (img.closest(".grid") || img.closest(".swiper") || img.closest("nav") || img.closest("button")) return;
+    if (img.closest(".container-main") && !img.querySelector("h2")) {
+      animEl(img, "scale", 0.2, 1.4);
+    }
+  });
+
+  // CTA sections (bg image + h2 + buttons)
+  var bgImg = s.querySelector("[class*='bg-'] img, [class*='ph-']");
+  if (bgImg && s.querySelector("h2") && (s.querySelector(".btn-primary") || s.querySelector(".btn-secondary"))) {
+    animEl(bgImg, "scale", 0.1, 1.6);
+    s.querySelectorAll("h2, .btn-primary, .btn-secondary").forEach(function(el) {
+      animEl(el, "up", 0.3, 1.2);
+    });
+  }
+
+  // Practical info cards (icon + label + value rows)
+  var infoRows = [];
+  s.querySelectorAll("h3").forEach(function(h3) {
+    var parent = h3.closest(".bg-white") || h3.closest(".rounded-3xl") || h3.closest("[class*='bg-']");
+    if (parent && parent.querySelector("img")) {
+      infoRows.push(parent);
+    }
+  });
+  if (infoRows.length > 0) {
+    animNodes(infoRows, 0.3, 0.15, 1.0);
+  }
+
+  // Subscription cards
+  s.querySelectorAll("template-parts/subscription-card, [class*='subscription']").forEach(function(card) {
+    animEl(card, "up", 0.3, 1.0);
+  });
+}
+
+// Observe ALL sections except hero
+document.querySelectorAll("section").forEach(function(s) {
+  if (s === hero) return;
+  if (s.querySelector("h1")) return;
+  if (s.closest("header") || s.closest("footer")) return;
+  observeSection(s, function() { animSection(s); });
+});
+
+})();
+</script>
+
 </body>
 </html>

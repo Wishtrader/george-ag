@@ -71,8 +71,8 @@
 
     h2 {
       font-size: 26px;
-      font-weight: 600;
-      color: #2D2926;
+      font-weight: 400;
+      color: #000000;
     }
 
     @media (min-width: 768px) {
@@ -573,6 +573,95 @@
       color: #2D2926 !important;
     }
   </style>
+
+  <style>
+    [data-m]{visibility:hidden}
+    [data-m].m-ready{visibility:visible}
+    @media(prefers-reduced-motion:reduce){[data-m]{visibility:visible!important;opacity:1!important;transform:none!important}}
+  </style>
+
+  <script>
+  (function(){
+    var transforms = {
+      up:    "translateY(40px)",
+      left:  "translateX(-50px)",
+      right: "translateX(50px)",
+      scale: "scale(0.9)"
+    };
+
+    function tag(el, t) {
+      if (!el) return;
+      var type = t || "up";
+      el.setAttribute("data-m", type);
+      el.style.opacity = "0";
+      el.style.transform = transforms[type] || "none";
+      el.style.transition = "none";
+    }
+
+    var h1 = document.querySelector("h1");
+    if (!h1) return;
+    var hero = h1.closest("section") || h1.parentElement;
+
+    tag(h1, "fade");
+    var col = h1.parentElement;
+    if (col) {
+      tag(col.querySelector("p"), "fade");
+      col.querySelectorAll("a").forEach(function(a) { tag(a, "fade"); });
+    }
+    hero.querySelectorAll("img").forEach(function(img) {
+      tag(img, "fade");
+    });
+    hero.querySelectorAll(".absolute.inset-0").forEach(function(d) {
+      if (!d.querySelector("img")) tag(d, "fade");
+    });
+    tag(hero.querySelector(".ph-hero"), "fade");
+    tag(hero.querySelector(".ph-museum"), "fade");
+    hero.querySelectorAll(".bg-white.rounded-3xl").forEach(function(c) {
+      if (!c.closest(".swiper")) tag(c, "fade");
+    });
+
+    ["events", "expositions", "classes", "shop"].forEach(function(id) {
+      var s = document.getElementById(id);
+      if (!s) return;
+      var hdr = s.querySelector(".container-main");
+      var flex = hdr && hdr.firstElementChild;
+      if (flex && flex.querySelector("h2")) tag(flex);
+      s.querySelectorAll(".bg-white, .rounded-3xl").forEach(function(c) {
+        if (!c.closest(".swiper") && c.closest(".container-main")) tag(c);
+      });
+    });
+
+    var about = document.getElementById("about");
+    if (about) {
+      var grid = about.querySelector(".grid");
+      if (grid && grid.children.length >= 2) {
+        var imgEl = grid.children[0].querySelector("img") || grid.children[0].querySelector("[class*=ph]");
+        tag(imgEl, "left");
+        tag(grid.children[1], "right");
+      }
+    }
+
+    document.querySelectorAll("section").forEach(function(s) {
+      if (s.id) return;
+      var inner = s.querySelector(".overflow-hidden.rounded-2xl");
+      if (inner && !s.querySelector("h1")) tag(inner, "scale");
+    });
+
+    document.querySelectorAll("section").forEach(function(s) {
+      var h2 = s.querySelector(":scope > .container-main > h2");
+      if (h2 && h2.textContent.indexOf("Почему") !== -1) {
+        tag(h2);
+        s.querySelectorAll(".grid > div").forEach(function(item) { tag(item); });
+      }
+    });
+
+    document.querySelectorAll("section").forEach(function(s) {
+      if (!s.id && s.classList.contains("relative") && s.querySelector("h2") && s.querySelector(".btn-primary") && s.querySelector(".btn-secondary") && !s.querySelector("h1")) {
+        tag(s.querySelector(".flex.flex-col"), "scale");
+      }
+    });
+  })();
+  </script>
 </head>
 <body>
 
@@ -608,7 +697,25 @@
     <div class="flex items-center gap-3 min-w-0">
       <div class="hidden md:flex min-w-0">
 	<a href="/poster" class="btn-primary btn-header text-base block min-h-[52px] whitespace-nowrap md:max-w-[250px]">Купить билет</a>
-      </div>
+</div>
+
+<script>
+(function(){
+  var spans = document.querySelectorAll("span.inline-flex");
+  for (var i = 0; i < spans.length; i++) {
+    if (spans[i].textContent.indexOf("музей") !== -1) {
+      var bar = spans[i].closest(".container-main");
+      if (bar) {
+        bar.setAttribute("data-m", "header");
+        bar.style.opacity = "0";
+        bar.style.transform = "translateY(-15px)";
+        bar.style.transition = "none";
+      }
+      break;
+    }
+  }
+})();
+</script>
       <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="relative p-2" aria-label="Корзина">
 	<img src="<?php echo esc_url( get_template_directory_uri() . '/img/cart.svg' ); ?>" alt="cart" class="w-[30px]" />
         <span id="header-cart-count" class="absolute -top-0.5 -right-0.5 text-[#E8872C] bg-[#FAF6EF] text-[13px] w-[24px] h-[24px] border border-[1px] border-[#E8872C] rounded-full flex items-center justify-center font-semibold <?php echo WC()->cart->get_cart_contents_count() === 0 ? 'hidden' : ''; ?>"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
@@ -625,6 +732,21 @@
   </div>
 </header>
 
+<script>
+(function(){
+  var h = document.querySelector("header .container-main");
+  if (!h) return;
+  var items = [h.children[0], h.children[1], h.children[2]];
+  items.forEach(function(el) {
+    if (!el) return;
+    el.setAttribute("data-m", "header");
+    el.style.opacity = "0";
+    el.style.transform = "translateY(-15px)";
+    el.style.transition = "none";
+  });
+})();
+</script>
+
 <div class="bg-[#FAF6EF]">
   <div class="container-main py-2.5 text-center text-sm md:text-lg text-[#2D2926]">
     <span class="inline-flex items-center gap-2">
@@ -637,3 +759,21 @@
     </span>
   </div>
 </div>
+
+<script>
+(function(){
+  var spans = document.querySelectorAll("span.inline-flex");
+  for (var i = 0; i < spans.length; i++) {
+    if (spans[i].textContent.indexOf("музей") !== -1) {
+      var bar = spans[i].closest(".container-main");
+      if (bar) {
+        bar.setAttribute("data-m", "header");
+        bar.style.opacity = "0";
+        bar.style.transform = "translateY(-15px)";
+        bar.style.transition = "none";
+      }
+      break;
+    }
+  }
+})();
+</script>
