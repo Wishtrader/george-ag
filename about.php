@@ -65,25 +65,34 @@ $cta_title = get_field('about_cta_title');
 $cta_primary = get_field('about_cta_primary');
 $cta_secondary = get_field('about_cta_secondary');
 
-function get_about_event_type_icon($type) {
-    $icons = array(
-        'masterclass' => '<img src="' . esc_url(get_template_directory_uri() . '/img/palette-line.svg') . '">',
-        'lecture' => '<img src="' . esc_url(get_template_directory_uri() . '/img/book-open-line.svg') . '">',
-        'meeting' => '<img src="' . esc_url(get_template_directory_uri() . '/img/chat-3-line.svg') . '">',
-        'family' => '<img src="' . esc_url(get_template_directory_uri() . '/img/palette-line.svg') . '">',
-    );
-    return $icons[$type] ?? $icons['masterclass'];
-}
+if ( ! function_exists( 'get_event_type_label' ) ) :
+    function get_event_type_label( $type ) {
+        $term = get_term_by( 'slug', $type, 'event_category' );
+        return $term ? $term->name : 'Событие';
+    }
+endif;
 
-function get_about_event_type_label($type) {
-    $labels = array(
-        'masterclass' => 'Мастер-класс',
-        'lecture' => 'Лекция',
-        'meeting' => 'Встреча',
-        'family' => 'Семейное занятие',
-    );
-    return $labels[$type] ?? 'Событие';
-}
+if ( ! function_exists( 'get_event_type_color' ) ) :
+    function get_event_type_color( $type ) {
+        $term = get_term_by( 'slug', $type, 'event_category' );
+        if ( $term && ! empty( $term->meta['color'] ) ) {
+            return $term->meta['color'];
+        }
+        $colors = array(
+            'masterclass'        => '#E8A62E',
+            'lecture'            => '#28B6DA',
+            'meeting'            => '#C61B8C',
+            'tour'               => '#73B843',
+            'movie'              => '#9B59B6',
+            'for_children'       => '#E74C3C',
+            'for_adults'         => '#3498DB',
+            'family'             => '#F39C12',
+            'semejnoe-zanyatie'  => '#73B843',
+            'free'               => '#1ABC9C',
+        );
+        return $colors[ $type ] ?? '#6B5A4A';
+    }
+endif;
 ?>
 
 <?php get_header(); ?>
@@ -615,47 +624,18 @@ $education_masterclass_items = $education_masterclass_items ?: $education_master
 
 <!-- ============ EVENTS ============ -->
 <?php
-$events_default = array(
-	array(
-		'image'       => '',
-		'type'        => 'masterclass',
-		'datetime'    => '22 июня, 15:00',
-		'title'       => 'Мастер-класс: Создаём свою картину для детей и взрослых',
-		'description' => 'Создайте свою картину для детей и взрослых.',
-		'button_text' => 'Подробнее',
-	),
-	array(
-		'image'       => '',
-		'type'        => 'lecture',
-		'datetime'    => '25 июня, 19:00',
-		'title'       => 'Лекция: Как понимать искусство',
-		'description' => 'О жанрах, стилях и ощущениях.',
-		'button_text' => 'Подробнее',
-	),
-	array(
-		'image'       => '',
-		'type'        => 'meeting',
-		'datetime'    => '28 июня, 18:00',
-		'title'       => 'Встреча: Дизайн и пространство',
-		'description' => 'О дизайне, архитектуре и урбанистике.',
-		'button_text' => 'Подробнее',
-	),
-	array(
-		'image'       => '',
-		'type'        => 'family',
-		'datetime'    => '30 июня, 12:00',
-		'title'       => 'Семейное занятие: Цвет и форма',
-		'description' => 'Семейное творческое занятие в музее.',
-		'button_text' => 'Подробнее',
-	),
-);
-$events = $events ?: $events_default;
+$events_query = new WP_Query( array(
+	'post_type'      => 'event',
+	'posts_per_page' => 4,
+	'orderby'        => 'date',
+	'order'          => 'ASC',
+) );
+if ( $events_query->have_posts() ):
 ?>
-<?php if ($events): ?>
-<section class="py-16 lg:py-20">
+<section class="py-8 lg:py-16">
   <div class="container-main">
-    <div class="flex items-end justify-between mb-10">
-      <h2>
+    <div class="flex flex-col lg:flex-row gap-5 md:items-center justify-between mb-10">
+      <h2 class="max-w-[790px] !font-medium">
         <?php echo esc_html($events_title ?: 'События, ради которых хочется возвращаться'); ?>
       </h2>
       <a href="<?php echo esc_url(home_url('/events/')); ?>" class="link-arrow text-sm">
@@ -664,36 +644,149 @@ $events = $events ?: $events_default;
       </a>
     </div>
     
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <?php foreach ($events as $event): ?>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <?php if (!empty($event['image'])): ?>
-          <img src="<?php echo esc_url($event['image']); ?>" 
-               alt="<?php echo esc_attr($event['title']); ?>" 
-               class="aspect-square object-cover w-full">
+    <!-- Desktop: Grid -->
+    <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <?php while ( $events_query->have_posts() ): $events_query->the_post();
+        $event_id = get_the_ID();
+        $event_categories_list = wp_get_post_terms( $event_id, 'event_category', array( 'fields' => 'slugs' ) );
+        $event_date = get_field('event_date');
+        $event_time = get_field('event_time');
+        $event_price = get_field('event_price');
+        $event_brief = get_field('event_brief_description');
+        $event_thumbnail = get_field('event_thumbnail');
+        $event_hero_image = get_field('event_hero_image');
+        $event_audience_type = get_field('event_audience_type');
+        $event_audience_icon = get_field('event_audience_icon');
+        $primary_cat = ! empty( $event_categories_list ) ? $event_categories_list[0] : '';
+        $cat_icon_url = '';
+        if ( $primary_cat ) {
+          $cat_term = get_term_by( 'slug', $primary_cat, 'event_category' );
+          if ( $cat_term ) {
+            $cat_icon_url = get_term_meta( $cat_term->term_id, 'event_cat_icon', true );
+          }
+        }
+        $audience_labels = array(
+          'for_children' => 'Для детей',
+          'for_adults'   => 'Для взрослых',
+          'family'       => 'Семейный',
+        );
+        $audience_label = $audience_labels[ $event_audience_type ] ?? 'Для детей';
+      ?>
+      <a href="<?php the_permalink(); ?>" class="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col group">
+        <?php if ( $event_thumbnail ): ?>
+          <img src="<?php echo esc_url( $event_thumbnail ); ?>"
+               alt="<?php the_title_attribute(); ?>"
+               class="w-full h-[162px] object-cover group-hover:scale-105 transition duration-300">
+        <?php elseif ( $event_hero_image ): ?>
+          <img src="<?php echo esc_url( $event_hero_image ); ?>"
+               alt="<?php the_title_attribute(); ?>"
+               class="w-full h-[162px] object-cover group-hover:scale-105 transition duration-300">
         <?php else: ?>
-          <div class="ph ph-art1 aspect-square"></div>
+          <div class="ph ph-art1 w-full h-[162px]"></div>
         <?php endif; ?>
-        <div class="p-5">
+        <div class="p-5 flex-1 flex flex-col">
           <div class="flex items-center justify-between mb-3">
-            <span class="event-badge">
-              <?php echo get_about_event_type_icon($event['type']); ?>
-              <?php echo esc_html(get_about_event_type_label($event['type'])); ?>
+            <span class="flex items-center gap-1.5 text-xs font-medium leading-[1.2]" style="color: <?php echo esc_attr( get_event_type_color( $primary_cat ) ); ?>">
+              <?php if ( $cat_icon_url ): ?>
+                <img src="<?php echo esc_url( $cat_icon_url ); ?>" alt="" class="w-6 h-6">
+              <?php endif; ?>
+              <?php echo esc_html( get_event_type_label( $primary_cat ) ); ?>
             </span>
-            <span class="text-xs text-[#6B5A4A] font-medium"><?php echo esc_html($event['datetime']); ?></span>
+            <span class="text-xs font-medium whitespace-nowrap leading-[1.2]" style="color: <?php echo esc_attr( get_event_type_color( $primary_cat ) ); ?>">
+              <?php echo esc_html( $event_date . ( $event_time ? ', ' . $event_time : '' ) ); ?>
+            </span>
           </div>
-          <h3 class="font-['Literata'] text-lg font-semibold mb-3"><?php echo esc_html($event['title']); ?></h3>
-          <p class="text-sm text-[#6B5A4A] mb-5"><?php echo esc_html($event['description']); ?></p>
-          <a href="#" class="btn-outline w-full !py-2.5 text-sm">
-            <?php echo esc_html($event['button_text']); ?>
-          </a>
+          <h3 class="!font-['Golos_Text'] text-[20px] !font-medium mb-2 lg:mt-2"><?php the_title(); ?></h3>
+          <?php if ( $event_brief ): ?>
+          <p class="text-sm text-[#2D2926] mb-2 leading-[1.2] flex-1"><?php echo esc_html( $event_brief ); ?></p>
+          <?php endif; ?>
+          <div class="flex items-center gap-2 text-xs text-[#6B5A4A] mb-3">
+            <?php if ( $event_audience_icon ): ?>
+              <img src="<?php echo esc_url( $event_audience_icon ); ?>" alt="" class="w-6 h-6">
+            <?php endif; ?>
+            <span class="text-base"><?php echo esc_html( $audience_label ); ?></span>
+          </div>
+          <?php if ( $event_price ): ?>
+          <p class="text-lg font-medium text-[#2D2926] mb-3"><?php echo esc_html( $event_price ); ?></p>
+          <?php endif; ?>
+          <span class="btn-outline w-full !py-2.5 text-sm mt-auto">
+            Подробнее
+          </span>
+        </div>
+      </a>
+      <?php endwhile; ?>
+    </div>
+
+    <!-- Mobile: Swiper -->
+    <div class="sm:hidden">
+      <div class="swiper about-events-swiper">
+        <div class="swiper-wrapper">
+          <?php $events_query->rewind_posts(); while ( $events_query->have_posts() ): $events_query->the_post();
+            $event_id = get_the_ID();
+            $event_categories_list = wp_get_post_terms( $event_id, 'event_category', array( 'fields' => 'slugs' ) );
+            $event_date = get_field('event_date');
+            $event_time = get_field('event_time');
+            $event_price = get_field('event_price');
+            $event_brief = get_field('event_brief_description');
+            $event_thumbnail = get_field('event_thumbnail');
+            $event_hero_image = get_field('event_hero_image');
+            $primary_cat = ! empty( $event_categories_list ) ? $event_categories_list[0] : '';
+            $cat_icon_url = '';
+            if ( $primary_cat ) {
+              $cat_term = get_term_by( 'slug', $primary_cat, 'event_category' );
+              if ( $cat_term ) {
+                $cat_icon_url = get_term_meta( $cat_term->term_id, 'event_cat_icon', true );
+              }
+            }
+          ?>
+          <div class="swiper-slide">
+            <a href="<?php the_permalink(); ?>" class="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col group">
+              <?php if ( $event_thumbnail ): ?>
+                <img src="<?php echo esc_url( $event_thumbnail ); ?>"
+                     alt="<?php the_title_attribute(); ?>"
+                     class="w-full h-[162px] object-cover">
+              <?php elseif ( $event_hero_image ): ?>
+                <img src="<?php echo esc_url( $event_hero_image ); ?>"
+                     alt="<?php the_title_attribute(); ?>"
+                     class="w-full h-[162px] object-cover">
+              <?php else: ?>
+                <div class="ph ph-art1 w-full h-[162px]"></div>
+              <?php endif; ?>
+              <div class="p-5 flex-1 flex flex-col">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="flex items-center gap-1.5 text-xs font-medium leading-[1.2]" style="color: <?php echo esc_attr( get_event_type_color( $primary_cat ) ); ?>">
+                    <?php if ( $cat_icon_url ): ?>
+                      <img src="<?php echo esc_url( $cat_icon_url ); ?>" alt="" class="w-6 h-6">
+                    <?php endif; ?>
+                    <?php echo esc_html( get_event_type_label( $primary_cat ) ); ?>
+                  </span>
+                  <span class="text-xs font-medium whitespace-nowrap leading-[1.2]" style="color: <?php echo esc_attr( get_event_type_color( $primary_cat ) ); ?>">
+                    <?php echo esc_html( $event_date . ( $event_time ? ', ' . $event_time : '' ) ); ?>
+                  </span>
+                </div>
+                <h3 class="!font-['Golos_Text'] text-[20px] !font-medium mb-2"><?php the_title(); ?></h3>
+                <?php if ( $event_brief ): ?>
+                <p class="text-sm text-[#2D2926] mb-4 leading-[1.2] flex-1"><?php echo esc_html( $event_brief ); ?></p>
+                <?php endif; ?>
+                <span class="btn-primary w-full !py-2.5 text-sm mt-auto">Подробнее</span>
+              </div>
+            </a>
+          </div>
+          <?php endwhile; ?>
+        </div>
+        <div class="flex items-center justify-between mt-2">
+          <div class="about-events-nav-prev cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+            <img src="<?php echo get_template_directory_uri(); ?>/img/alm.svg" alt="Назад" class="w-6 h-6">
+          </div>
+          <div class="about-events-nav-next cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+            <img src="<?php echo get_template_directory_uri(); ?>/img/arm.svg" alt="Вперёд" class="w-6 h-6">
+          </div>
         </div>
       </div>
-      <?php endforeach; ?>
     </div>
   </div>
 </section>
-<?php endif; ?>
+<?php wp_reset_postdata(); endif; ?>
 
 <!-- ============ CTA SECTION ============ -->
 <?php if ($cta_title || $cta_primary || $cta_secondary): ?>

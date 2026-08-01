@@ -277,6 +277,15 @@
         nextEl: '.about-shop-nav-next',
       },
     });
+
+    new Swiper('.about-events-swiper', {
+      slidesPerView: 1,
+      spaceBetween: 0,
+      navigation: {
+        prevEl: '.about-events-nav-prev',
+        nextEl: '.about-events-nav-next',
+      },
+    });
   }
 </script>
 <?php wp_footer(); ?>
