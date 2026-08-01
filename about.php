@@ -534,7 +534,7 @@ $education_masterclass_items = $education_masterclass_items ?: $education_master
               <div class="ph ph-shop aspect-square"></div>
             <?php endif; ?>
           </a>
-          <div class="p-5 flex flex-col flex-1">
+          <div class="p-2.5 md:p-5 flex flex-col flex-1">
             <h3 class="!font-['Golos_Text'] text-base lg:text-xl mb-2 leading-[1.2]">
               <a href="<?php echo esc_url($p_link); ?>" class="hover:text-[#E8872C] transition">
                 <?php echo esc_html($p_name); ?>
@@ -578,12 +578,12 @@ $education_masterclass_items = $education_masterclass_items ?: $education_master
                 <?php if ($p_image): ?>
                   <img src="<?php echo esc_url($p_image); ?>"
                        alt="<?php echo esc_attr($p_name); ?>"
-                       class="object-cover w-full min-h-[280px]">
+                       class="object-cover w-full h-[343px]">
                 <?php else: ?>
                   <div class="ph ph-shop aspect-square"></div>
                 <?php endif; ?>
               </a>
-              <div class="p-5 flex flex-col flex-1">
+              <div class="p-2.5 flex flex-col flex-1">
                 <h3 class="!font-['Golos_Text'] text-base mb-2 leading-[1.2]">
                   <a href="<?php echo esc_url($p_link); ?>" class="hover:text-[#E8872C] transition">
                     <?php echo esc_html($p_name); ?>
@@ -638,9 +638,9 @@ if ( $events_query->have_posts() ):
       <h2 class="max-w-[790px] !font-medium">
         <?php echo esc_html($events_title ?: 'События, ради которых хочется возвращаться'); ?>
       </h2>
-      <a href="<?php echo esc_url(home_url('/events/')); ?>" class="link-arrow text-sm">
+      <a href="<?php echo esc_url(home_url('/events/')); ?>" class="link-arrow text-base">
         <?php echo esc_html($events_link_text ?: 'Смотреть все события'); ?>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
     
@@ -700,15 +700,6 @@ if ( $events_query->have_posts() ):
           <?php if ( $event_brief ): ?>
           <p class="text-sm text-[#2D2926] mb-2 leading-[1.2] flex-1"><?php echo esc_html( $event_brief ); ?></p>
           <?php endif; ?>
-          <div class="flex items-center gap-2 text-xs text-[#6B5A4A] mb-3">
-            <?php if ( $event_audience_icon ): ?>
-              <img src="<?php echo esc_url( $event_audience_icon ); ?>" alt="" class="w-6 h-6">
-            <?php endif; ?>
-            <span class="text-base"><?php echo esc_html( $audience_label ); ?></span>
-          </div>
-          <?php if ( $event_price ): ?>
-          <p class="text-lg font-medium text-[#2D2926] mb-3"><?php echo esc_html( $event_price ); ?></p>
-          <?php endif; ?>
           <span class="btn-outline w-full !py-2.5 text-sm mt-auto">
             Подробнее
           </span>
@@ -752,7 +743,7 @@ if ( $events_query->have_posts() ):
               <?php else: ?>
                 <div class="ph ph-art1 w-full h-[162px]"></div>
               <?php endif; ?>
-              <div class="p-5 flex-1 flex flex-col">
+              <div class="p-2.5 flex-1 flex flex-col">
                 <div class="flex items-center justify-between mb-3">
                   <span class="flex items-center gap-1.5 text-xs font-medium leading-[1.2]" style="color: <?php echo esc_attr( get_event_type_color( $primary_cat ) ); ?>">
                     <?php if ( $cat_icon_url ): ?>

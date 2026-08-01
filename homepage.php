@@ -13,13 +13,13 @@ $preview_events = get_field('preview_events');
 
 $upcoming_title = get_field('upcoming_title');
 $upcoming_link_text = get_field('upcoming_link_text');
-$upcoming_events = get_field('upcoming_events');
 
-usort($upcoming_events, function ($a, $b) {
-	$da = parse_event_datetime($a['datetime'] ?? '');
-	$db = parse_event_datetime($b['datetime'] ?? '');
-	return $da - $db;
-});
+$upcoming_query = new WP_Query( array(
+	'post_type'      => 'event',
+	'posts_per_page' => 4,
+	'orderby'        => 'date',
+	'order'          => 'ASC',
+) );
 
 $about_title = get_field('about_title');
 $about_description = get_field('about_description');
@@ -60,55 +60,46 @@ $cta_title = get_field('cta_title');
 $cta_primary = get_field('cta_primary');
 $cta_secondary = get_field('cta_secondary');
 
-// Парсинг строки даты события в timestamp для сортировки
-function parse_event_datetime($datetime) {
-	$months = array(
-		'января' => 1, 'февраля' => 2, 'марта' => 3, 'апреля' => 4,
-		'мая' => 5, 'июня' => 6, 'июля' => 7, 'августа' => 8,
-		'сентября' => 9, 'октября' => 10, 'ноября' => 11, 'декабря' => 12,
-	);
-	if (preg_match('/(\d{1,2})\s+([а-яё]+)/u', $datetime, $m)) {
-		$day = (int) $m[1];
-		$month = $months[$m[2]] ?? null;
-		if ($month) {
-			return mktime(0, 0, 0, $month, $day);
-		}
-	}
-	return 0;
-}
+if ( ! function_exists( 'get_event_type_icon' ) ) :
+    function get_event_type_icon($type) {
+        $icons = array(
+            'masterclass' => '<img src="' . esc_url(get_template_directory_uri() . '/img/palette-line.svg') . '">',
+            'lecture' => '<img src="' . esc_url(get_template_directory_uri() . '/img/book-open-line.svg') . '">',
+            'meeting' => '<img src="' . esc_url(get_template_directory_uri() . '/img/chat-3-line.svg') . '">',
+            'family' => '<img src="' . esc_url(get_template_directory_uri() . '/img/palette-line.svg') . '">',
+        );
+        return $icons[$type] ?? $icons['masterclass'];
+    }
+endif;
 
-// Вспомогательная функция для иконки типа события
-function get_event_type_icon($type) {
-    $icons = array(
-        'masterclass' => '<img src="' . esc_url(get_template_directory_uri() . '/img/palette-line.svg') . '">',
-        'lecture' => '<img src="' . esc_url(get_template_directory_uri() . '/img/book-open-line.svg') . '">',
-        'meeting' => '<img src="' . esc_url(get_template_directory_uri() . '/img/chat-3-line.svg') . '">',
-        'family' => '<img src="' . esc_url(get_template_directory_uri() . '/img/palette-line.svg') . '">',
-    );
-    return $icons[$type] ?? $icons['masterclass'];
-}
+if ( ! function_exists( 'get_event_type_label' ) ) :
+    function get_event_type_label( $type ) {
+        $term = get_term_by( 'slug', $type, 'event_category' );
+        return $term ? $term->name : 'Событие';
+    }
+endif;
 
-// Вспомогательная функция для перевода типа события
-function get_event_type_label($type) {
-    $labels = array(
-        'masterclass' => 'Мастер-класс',
-        'lecture' => 'Лекция',
-        'meeting' => 'Встреча',
-        'family' => 'Семейное занятие',
-    );
-    return $labels[$type] ?? 'Событие';
-}
-
-// Вспомогательная функция для получения цвета типа события
-function get_event_type_color($type) {
-    $colors = array(
-        'masterclass' => '#E8A62E',
-        'lecture' => '#28B6DA',
-        'meeting' => '#C61B8C',
-        'family' => '#73B843',
-    );
-    return $colors[$type] ?? '#6B5A4A';
-}
+if ( ! function_exists( 'get_event_type_color' ) ) :
+    function get_event_type_color( $type ) {
+        $term = get_term_by( 'slug', $type, 'event_category' );
+        if ( $term && ! empty( $term->meta['color'] ) ) {
+            return $term->meta['color'];
+        }
+        $colors = array(
+            'masterclass'        => '#E8A62E',
+            'lecture'            => '#28B6DA',
+            'meeting'            => '#C61B8C',
+            'tour'               => '#73B843',
+            'movie'              => '#9B59B6',
+            'for_children'       => '#E74C3C',
+            'for_adults'         => '#3498DB',
+            'family'             => '#F39C12',
+            'semejnoe-zanyatie'  => '#73B843',
+            'free'               => '#1ABC9C',
+        );
+        return $colors[ $type ] ?? '#6B5A4A';
+    }
+endif;
 ?>
 
 <?php get_header(); ?>
@@ -195,7 +186,7 @@ function get_event_type_color($type) {
         <div class="swiper-wrapper">
           <?php foreach ($preview_events as $event): ?>
           <div class="swiper-slide">
-            <div class="bg-white rounded-3xl p-5 flex gap-4 items-start shadow-sm lg:min-h-[233px]">
+            <div class="bg-white rounded-3xl p-2.5 md:p-5 flex gap-4 items-start shadow-sm lg:min-h-[233px]">
               <div class="flex-1 flex flex-col h-full justify-between">
                 <div class="flex items-center justify-between mb-2">
                   <span class="event-badge text-[13px] text-[#2D2926] font-medium mb-5">
@@ -233,7 +224,7 @@ function get_event_type_color($type) {
 <?php endif; ?>
 
 <!-- ============ UPCOMING EVENTS ============ -->
-<?php if ($upcoming_events): ?>
+<?php if ( $upcoming_query->have_posts() ): ?>
 <section id="events" class="py-0 lg:py-16 overflow-x-hidden">
   <div class="container-main !p-2.5 md:p-5">
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 gap-5">
@@ -242,53 +233,72 @@ function get_event_type_color($type) {
       </h2>
       <a href="<?php echo esc_url(home_url('/poster/')); ?>" class="link-arrow text-base lg:mt-4">
         <?php echo esc_html($upcoming_link_text ?: 'Смотреть все события'); ?>
-        <img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" class="w-6 h-6" />
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
     
     <!-- Desktop grid -->
-    <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:mt-16">
-      <?php foreach ($upcoming_events as $event): ?>
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
-        <?php if (!empty($event['image'])): ?>
-          <img src="<?php echo esc_url($event['image']); ?>" 
-               alt="<?php echo esc_attr($event['title']); ?>" 
-               class="w-full h-[162px] object-cover">
+    <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <?php while ( $upcoming_query->have_posts() ): $upcoming_query->the_post();
+        $event_id = get_the_ID();
+        $event_categories_list = wp_get_post_terms( $event_id, 'event_category', array( 'fields' => 'slugs' ) );
+        $event_date = get_field('event_date');
+        $event_time = get_field('event_time');
+        $event_price = get_field('event_price');
+        $event_brief = get_field('event_brief_description');
+        $event_thumbnail = get_field('event_thumbnail');
+        $event_hero_image = get_field('event_hero_image');
+        $event_audience_type = get_field('event_audience_type');
+        $event_audience_icon = get_field('event_audience_icon');
+        $primary_cat = ! empty( $event_categories_list ) ? $event_categories_list[0] : '';
+        $cat_icon_url = '';
+        if ( $primary_cat ) {
+          $cat_term = get_term_by( 'slug', $primary_cat, 'event_category' );
+          if ( $cat_term ) {
+            $cat_icon_url = get_term_meta( $cat_term->term_id, 'event_cat_icon', true );
+          }
+        }
+        $audience_labels = array(
+          'for_children' => 'Для детей',
+          'for_adults'   => 'Для взрослых',
+          'family'       => 'Семейный',
+        );
+        $audience_label = $audience_labels[ $event_audience_type ] ?? 'Для детей';
+      ?>
+      <a href="<?php the_permalink(); ?>" class="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col group">
+        <?php if ( $event_thumbnail ): ?>
+          <img src="<?php echo esc_url( $event_thumbnail ); ?>"
+               alt="<?php the_title_attribute(); ?>"
+               class="w-full h-[162px] object-cover group-hover:scale-105 transition duration-300">
+        <?php elseif ( $event_hero_image ): ?>
+          <img src="<?php echo esc_url( $event_hero_image ); ?>"
+               alt="<?php the_title_attribute(); ?>"
+               class="w-full h-[162px] object-cover group-hover:scale-105 transition duration-300">
         <?php else: ?>
           <div class="ph ph-art1 w-full h-[162px]"></div>
         <?php endif; ?>
-        <div class="p-5 flex-1 flex flex-col">
+        <div class="p-2.5 md:p-5 flex-1 flex flex-col">
           <div class="flex items-center justify-between mb-3">
-            <span class="event-badge leading-[1.2] <?php
-              if ($event['type'] === 'masterclass') echo 'text-[#E8A62E]';
-              elseif ($event['type'] === 'lecture') echo 'text-[#28B6DA]';
-              elseif ($event['type'] === 'meeting') echo 'text-[#C61B8C]';
-              elseif ($event['type'] === 'family') echo 'text-[#73B843]';
-              else echo 'text-[#6B5A4A]';
-            ?>">
-              <?php if (!empty($event['icon'])): ?>
-                <img src="<?php echo esc_url($event['icon']); ?>" alt="">
-              <?php else: ?>
-                <?php echo get_event_type_icon($event['type']); ?>
+            <span class="flex items-center gap-1.5 text-xs font-medium leading-[1.2]" style="color: <?php echo esc_attr( get_event_type_color( $primary_cat ) ); ?>">
+              <?php if ( $cat_icon_url ): ?>
+                <img src="<?php echo esc_url( $cat_icon_url ); ?>" alt="" class="w-6 h-6">
               <?php endif; ?>
-              <?php echo esc_html(get_event_type_label($event['type'])); ?>
+              <?php echo esc_html( get_event_type_label( $primary_cat ) ); ?>
             </span>
-            <span class="text-xs font-medium whitespace-nowrap leading-[1.2] <?php
-              if ($event['type'] === 'masterclass') echo 'text-[#E8A62E]';
-              elseif ($event['type'] === 'lecture') echo 'text-[#28B6DA]';
-              elseif ($event['type'] === 'meeting') echo 'text-[#C61B8C]';
-              elseif ($event['type'] === 'family') echo 'text-[#73B843]';
-              else echo 'text-[#6B5A4A]';
-            ?>"><?php echo esc_html($event['datetime']); ?></span>
+            <span class="text-xs font-medium whitespace-nowrap leading-[1.2]" style="color: <?php echo esc_attr( get_event_type_color( $primary_cat ) ); ?>">
+              <?php echo esc_html( $event_date . ( $event_time ? ', ' . $event_time : '' ) ); ?>
+            </span>
           </div>
-          <h3 class="!font-['Golos_Text'] text-[20px] !font-medium mb-3"><?php echo esc_html($event['title']); ?></h3>
-          <p class="text-base text-[#2D2926] mb-2 leading-[1.2]"><?php echo esc_html($event['description']); ?></p>
-          <a href="#" class="btn-outline w-full !py-2.5 text-sm mt-auto">
-            <?php echo esc_html($event['button_text']); ?>
-          </a>
+          <h3 class="!font-['Golos_Text'] text-[20px] !font-medium mb-2 lg:mt-2"><?php the_title(); ?></h3>
+          <?php if ( $event_brief ): ?>
+          <p class="text-sm text-[#2D2926] mb-2 leading-[1.2] flex-1"><?php echo esc_html( $event_brief ); ?></p>
+          <?php endif; ?>
+          <span class="btn-outline w-full !py-2.5 text-sm mt-auto">
+            Подробнее
+          </span>
         </div>
-      </div>
-      <?php endforeach; ?>
+      </a>
+      <?php endwhile; ?>
     </div>
 
   </div>
@@ -297,52 +307,61 @@ function get_event_type_color($type) {
   <div class="sm:hidden mt-0 px-2.5">
     <div class="swiper upcoming-swiper">
       <div class="swiper-wrapper">
-        <?php foreach ($upcoming_events as $event): ?>
+        <?php $upcoming_query->rewind_posts(); while ( $upcoming_query->have_posts() ): $upcoming_query->the_post();
+          $event_id = get_the_ID();
+          $event_categories_list = wp_get_post_terms( $event_id, 'event_category', array( 'fields' => 'slugs' ) );
+          $event_date = get_field('event_date');
+          $event_time = get_field('event_time');
+          $event_price = get_field('event_price');
+          $event_brief = get_field('event_brief_description');
+          $event_thumbnail = get_field('event_thumbnail');
+          $event_hero_image = get_field('event_hero_image');
+          $primary_cat = ! empty( $event_categories_list ) ? $event_categories_list[0] : '';
+          $cat_icon_url = '';
+          if ( $primary_cat ) {
+            $cat_term = get_term_by( 'slug', $primary_cat, 'event_category' );
+            if ( $cat_term ) {
+              $cat_icon_url = get_term_meta( $cat_term->term_id, 'event_cat_icon', true );
+            }
+          }
+        ?>
         <div class="swiper-slide">
-          <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
-            <?php if (!empty($event['image'])): ?>
-              <img src="<?php echo esc_url($event['image']); ?>" 
-                   alt="<?php echo esc_attr($event['title']); ?>" 
+          <a href="<?php the_permalink(); ?>" class="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col group">
+            <?php if ( $event_thumbnail ): ?>
+              <img src="<?php echo esc_url( $event_thumbnail ); ?>"
+                   alt="<?php the_title_attribute(); ?>"
+                   class="w-full h-[162px] object-cover">
+            <?php elseif ( $event_hero_image ): ?>
+              <img src="<?php echo esc_url( $event_hero_image ); ?>"
+                   alt="<?php the_title_attribute(); ?>"
                    class="w-full h-[162px] object-cover">
             <?php else: ?>
               <div class="ph ph-art1 w-full h-[162px]"></div>
             <?php endif; ?>
-            <div class="p-2.5 md:p-5 flex-1 flex flex-col">
+            <div class="!p-2.5 md:p-5 flex-1 flex flex-col">
               <div class="flex items-center justify-between mb-3">
-                <span class="event-badge leading-[1.2] <?php
-                  if ($event['type'] === 'masterclass') echo 'text-[#E8A62E]';
-                  elseif ($event['type'] === 'lecture') echo 'text-[#28B6DA]';
-                  elseif ($event['type'] === 'meeting') echo 'text-[#C61B8C]';
-                  elseif ($event['type'] === 'family') echo 'text-[#73B843]';
-                  else echo 'text-[#6B5A4A]';
-                ?>">
-                  <?php if (!empty($event['icon'])): ?>
-                    <img src="<?php echo esc_url($event['icon']); ?>" alt="">
-                  <?php else: ?>
-                    <?php echo get_event_type_icon($event['type']); ?>
+                <span class="flex items-center gap-1.5 text-xs font-medium leading-[1.2]" style="color: <?php echo esc_attr( get_event_type_color( $primary_cat ) ); ?>">
+                  <?php if ( $cat_icon_url ): ?>
+                    <img src="<?php echo esc_url( $cat_icon_url ); ?>" alt="" class="w-6 h-6">
                   <?php endif; ?>
-                  <?php echo esc_html(get_event_type_label($event['type'])); ?>
+                  <?php echo esc_html( get_event_type_label( $primary_cat ) ); ?>
                 </span>
-                <span class="text-xs font-medium whitespace-nowrap leading-[1.2] <?php
-                  if ($event['type'] === 'masterclass') echo 'text-[#E8A62E]';
-                  elseif ($event['type'] === 'lecture') echo 'text-[#28B6DA]';
-                  elseif ($event['type'] === 'meeting') echo 'text-[#C61B8C]';
-                  elseif ($event['type'] === 'family') echo 'text-[#73B843]';
-                  else echo 'text-[#6B5A4A]';
-                ?>"><?php echo esc_html($event['datetime']); ?></span>
+                <span class="text-xs font-medium whitespace-nowrap leading-[1.2]" style="color: <?php echo esc_attr( get_event_type_color( $primary_cat ) ); ?>">
+                  <?php echo esc_html( $event_date . ( $event_time ? ', ' . $event_time : '' ) ); ?>
+                </span>
               </div>
-              <h3 class="!font-['Golos_Text'] text-base md:text-[20px] !font-semibold md:!font-medium mb-3"><?php echo esc_html($event['title']); ?></h3>
-              <p class="text-[13px] md:text-base text-[#2D2926] mb-2 leading-[1.2]"><?php echo esc_html($event['description']); ?></p>
-              <a href="#" class="btn-outline w-full !py-2.5 text-sm mt-auto">
-                <?php echo esc_html($event['button_text']); ?>
-              </a>
+              <h3 class="!font-['Golos_Text'] text-[20px] !font-medium mb-2"><?php the_title(); ?></h3>
+              <?php if ( $event_brief ): ?>
+              <p class="text-sm text-[#2D2926] mb-4 leading-[1.2] flex-1"><?php echo esc_html( $event_brief ); ?></p>
+              <?php endif; ?>
+              <span class="btn-primary w-full !py-2.5 text-sm mt-auto">Подробнее</span>
             </div>
-          </div>
+          </a>
         </div>
-        <?php endforeach; ?>
+        <?php endwhile; ?>
       </div>
     </div>
-    <div class="flex items-center justify-between  mt-2">
+    <div class="flex items-center justify-between mt-2">
       <div class="upcoming-nav-prev cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
         <img src="<?php echo get_template_directory_uri(); ?>/img/alm.svg" alt="Назад" class="w-6 h-6">
       </div>
@@ -352,7 +371,7 @@ function get_event_type_color($type) {
     </div>
   </div>
 </section>
-<?php endif; ?>
+<?php wp_reset_postdata(); endif; ?>
 
 <!-- ============ ABOUT MUSEUM ============ -->
 <?php if ($about_title || $about_description || $about_image): ?>
@@ -412,7 +431,7 @@ function get_event_type_color($type) {
         <?php else: ?>
           <div class="ph ph-art1 aspect-[4/3]"></div>
         <?php endif; ?>
-        <div class="p-5">
+        <div class="p-2.5 md:p-5">
           <h3 class="!font-['Golos_Text'] text-base lg:text-xl !font-medium mb-2"><?php echo esc_html($expo['title']); ?></h3>
           <p class="text-sm lg:text-base text-[#2D2926] mb-2 leading-[1.2] pt-1"><?php echo esc_html($expo['description']); ?></p>
           <a href="vystavki" class="link-arrow text-base">
@@ -438,7 +457,7 @@ function get_event_type_color($type) {
               <?php else: ?>
                 <div class="ph ph-art1 aspect-[4/3]"></div>
               <?php endif; ?>
-              <div class="p-5">
+              <div class="p-2.5">
                 <h3 class="!font-['Golos_Text'] text-base lg:text-xl !font-medium mb-2"><?php echo esc_html($expo['title']); ?></h3>
                 <p class="text-sm lg:text-base text-[#2D2926] mb-2 leading-[1.2] pt-1"><?php echo esc_html($expo['description']); ?></p>
                 <a href="vystavki" class="link-arrow text-base">
@@ -549,7 +568,7 @@ function get_event_type_color($type) {
               <?php else: ?>
                 <div class="ph ph-art1 w-full h-[180px]"></div>
               <?php endif; ?>
-              <div class="p-5 flex flex-col justify-between flex-1">
+              <div class="p-2.5 md:p-5 flex flex-col justify-between flex-1">
                 <div>
                   <div class="flex items-center justify-between mb-3">
                     <span class="event-badge text-[13px] font-medium" style="color: <?php echo esc_attr(get_event_type_color($classes_main['type'])); ?>">
@@ -699,7 +718,7 @@ function get_event_type_color($type) {
                   <div class="ph ph-shop aspect-square"></div>
                 <?php endif; ?>
               </a>
-              <div class="p-5 flex flex-col flex-1">
+              <div class="p-2.5 md:p-5 flex flex-col flex-1">
                 <h3 class="!font-['Golos_Text'] text-xl mb-2 leading-snug text-medium">
                   <a href="<?php echo esc_url($p_link); ?>" class="hover:text-[#E8872C] transition">
                     <?php echo esc_html($p_name); ?>
