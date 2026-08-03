@@ -27,10 +27,10 @@ $thumbnail_url      = get_the_post_thumbnail_url($subscription_id, 'full');
   <?php endif; ?>
 
   <div class="subscription-card__body">
-    <h3 class="subscription-card__title !font-medium"><?php echo esc_html($subscription_title); ?></h3>
+    <h3 class="subscription-card__title !font-medium !text-xl lg:!text-[28px] leading-[1.2]"><?php echo esc_html($subscription_title); ?></h3>
 
     <?php if ($subscription_desc): ?>
-    <p class="subscription-card__desc lg:pt-2"><?php echo wp_kses_post($subscription_desc); ?></p>
+    <p class="subscription-card__desc lg:pt-2 !text-[15px] lg:!text-xl"><?php echo wp_kses_post($subscription_desc); ?></p>
     <?php endif; ?>
 
     <?php if ($what_includes): ?>
@@ -38,14 +38,14 @@ $thumbnail_url      = get_the_post_thumbnail_url($subscription_id, 'full');
       <span class="subscription-card__includes-label">Что входит</span>
       <div class="subscription-card__includes-line"></div>
     </div>
-    <ul class="subscription-card__list">
+    <ul class="subscription-card__list !gap-2.5 lg:!gap-5">
       <?php foreach ($what_includes as $row): ?>
       <li class="subscription-card__list-item">
         <span class="subscription-card__list-icon">
             <img src="<?php echo esc_url($row['icon']); ?>" alt="" class="subscription-card__list-icon-img">
             </svg>
         </span>
-        <span class="subscription-card__list-text"><?php echo esc_html($row['item']); ?></span>
+        <span class="subscription-card__list-text !text-[13px] lg:!text-base"><?php echo esc_html($row['item']); ?></span>
       </li>
       <?php endforeach; ?>
     </ul>

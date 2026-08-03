@@ -322,21 +322,15 @@ $subscriptions_query = new WP_Query(array(
 
 <!-- ============ CTA SECTION ============ -->
 <?php if ($cta_title || $cta_primary || $cta_secondary): ?>
-<section class="relative h-[347px] lg:h-[300px] lg:mt-14">
+<section class="bg-white lg:bg-transparent relative h-auto lg:h-[300px] lg:mt-14">
     <?php if ($cta_background_image): ?>
     <div class="absolute inset-0 hidden lg:block" style="background-image: url('<?php echo esc_url($cta_background_image); ?>'); background-size: cover; background-position: center;"></div>
     <?php endif; ?>
-    <?php
-    $cta_bg_mobile = $cta_background_image_mobile ?: $cta_background_image;
-    if ($cta_bg_mobile):
-    ?>
-    <div class="absolute inset-0 block lg:hidden" style="background-image: url('<?php echo esc_url($cta_bg_mobile); ?>'); background-size: cover; background-position: center;"></div>
-    <?php endif; ?>
-  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col md:flex-row items-center justify-start h-full relative text-center">
-    <div class="flex flex-col flex-1"></div>
+  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col md:flex-row items-center justify-start lg:h-full relative text-center py-10 lg:py-0">
+    <div class="hidden lg:flex flex-col flex-1"></div>
     <div class="flex flex-col flex-1 justify-start lg:-ml-40">
     <?php if ($cta_title): ?>
-    <h2 class="text-white mb-6 max-w-[260px] md:max-w-[380px] text-start !text-[26px] lg:!text-[36px] !font-medium">
+    <h2 class="text-[#2D2926] lg:text-white mb-6 max-w-[260px] md:max-w-[380px] text-start !text-[26px] lg:!text-[36px] !font-medium">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>
@@ -354,6 +348,14 @@ $subscriptions_query = new WP_Query(array(
       </div>
     </div>
   </div>
+  <?php
+  $cta_bg_mobile = $cta_background_image_mobile ?: $cta_background_image;
+  if ($cta_bg_mobile):
+  ?>
+  <div class="max-w-[1200px] mx-auto px-[10px] lg:hidden">
+    <img src="<?php echo esc_url($cta_bg_mobile); ?>" alt="" class="w-full h-[190px] object-cover rounded-2xl mt-2">
+  </div>
+  <?php endif; ?>
 </section>
 <?php endif; ?>
 

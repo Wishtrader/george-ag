@@ -361,10 +361,31 @@ if ($subscriptions_query->have_posts()):
 <section class="py-10 lg:py-16 px-2.5 lg:px-0">
   <div class="max-w-[1200px] mx-auto">
     <h2 class="mb-10 lg:mb-14 !font-medium"><?php echo esc_html($subscriptions_title); ?></h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <!-- Desktop: grid -->
+    <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
       <?php while ($subscriptions_query->have_posts()): $subscriptions_query->the_post();
         get_template_part('template-parts/subscription-card');
       endwhile; ?>
+    </div>
+    <!-- Mobile: Swiper -->
+    <div class="sm:hidden">
+      <div class="swiper subscriptions-swiper">
+        <div class="swiper-wrapper">
+          <?php $subscriptions_query->rewind_posts(); while ($subscriptions_query->have_posts()): $subscriptions_query->the_post(); ?>
+          <div class="swiper-slide">
+            <?php get_template_part('template-parts/subscription-card'); ?>
+          </div>
+          <?php endwhile; ?>
+        </div>
+      </div>
+      <div class="flex items-center justify-between mt-2">
+        <div class="subscriptions-nav-prev cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/alm.svg" alt="Назад" class="w-6 h-6">
+        </div>
+        <div class="subscriptions-nav-next cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/arm.svg" alt="Вперёд" class="w-6 h-6">
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -372,21 +393,15 @@ if ($subscriptions_query->have_posts()):
 
 <!-- ============ CTA SECTION ============ -->
 <?php if ($cta_title || $cta_primary || $cta_secondary): ?>
-<section class="relative h-[347px] lg:h-[300px] lg:mt-14 shadow-md">
+<section class="bg-white lg:bg-transparent relative h-auto lg:h-[300px] lg:mt-14 shadow-md lg:shadow-md p-2.5 lg:p-5">
     <?php if ($cta_background_image): ?>
     <div class="absolute inset-0 hidden lg:block" style="background-image: url('<?php echo esc_url($cta_background_image); ?>'); background-size: cover; background-position: center;"></div>
     <?php endif; ?>
-    <?php
-    $cta_bg_mobile = $cta_background_image_mobile ?: $cta_background_image;
-    if ($cta_bg_mobile):
-    ?>
-    <div class="absolute inset-0 block lg:hidden" style="background-image: url('<?php echo esc_url($cta_bg_mobile); ?>'); background-size: cover; background-position: center;"></div>
-    <?php endif; ?>
-  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col md:flex-row items-center justify-start h-full relative text-center">
-    <div class="flex flex-col flex-1"></div>
-    <div class="flex flex-col flex-1 justify-start lg:-ml-40">
+  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col md:flex-row items-center justify-start lg:h-full relative text-center py-10 lg:py-0">
+    <div class="hidden lg:flex flex-col flex-1"></div>
+    <div class="flex flex-col flex-1 justify-center lg:justify-start lg:-ml-40 w-full">
     <?php if ($cta_title): ?>
-    <h2 class="text-white mb-6 max-w-[260px] md:max-w-[380px] text-start !text-[26px] lg:!text-[36px] !font-normal">
+    <h2 class="text-[#2D2926] lg:text-white mb-6 md:max-w-[380px] text-start !text-[26px] lg:!text-[36px] !font-normal !text-center md:!text-left">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>
@@ -404,6 +419,14 @@ if ($subscriptions_query->have_posts()):
       </div>
     </div>
   </div>
+  <?php
+  $cta_bg_mobile = $cta_background_image_mobile ?: $cta_background_image;
+  if ($cta_bg_mobile):
+  ?>
+  <div class="max-w-[1200px] mx-auto lg:hidden">
+    <img src="<?php echo esc_url($cta_bg_mobile); ?>" alt="" class="w-full object-cover rounded-2xl mt-2">
+  </div>
+  <?php endif; ?>
 </section>
 <?php endif; ?>
 

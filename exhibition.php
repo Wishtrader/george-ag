@@ -304,19 +304,13 @@ if ($subscriptions_query->have_posts()):
 
 <!-- ============ CTA SECTION ============ -->
 <?php if ($cta_title || $cta_primary || $cta_secondary): ?>
-<section class="relative h-[347px] lg:h-[300px]">
+<section class="bg-white lg:bg-transparent relative h-auto lg:h-[300px]">
     <?php if ($cta_background_image): ?>
     <div class="absolute inset-0 hidden lg:block" style="background-image: url('<?php echo esc_url($cta_background_image); ?>'); background-size: cover; background-position: center;"></div>
     <?php endif; ?>
-    <?php
-    $cta_bg_mobile = $cta_background_image_mobile ?: $cta_background_image;
-    if ($cta_bg_mobile):
-    ?>
-    <div class="absolute inset-0 block lg:hidden" style="background-image: url('<?php echo esc_url($cta_bg_mobile); ?>'); background-size: cover; background-position: center;"></div>
-    <?php endif; ?>
-  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col items-center justify-center h-full relative text-center">
+  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col items-center justify-center lg:h-full relative text-center py-10 lg:py-0">
     <?php if ($cta_title): ?>
-    <h2 class="text-white !font-['Literata'] mb-6 mx-auto max-w-[260px] md:max-w-[700px] !font-normal lg:!text-[36px]">
+    <h2 class="text-[#2D2926] lg:text-white !font-['Literata'] mb-6 mx-auto max-w-[260px] md:max-w-[700px] !font-normal lg:!text-[36px]">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>
@@ -332,6 +326,12 @@ if ($subscriptions_query->have_posts()):
         </a>
       <?php endif; ?>
     </div>
+    <?php
+    $cta_bg_mobile = $cta_background_image_mobile ?: $cta_background_image;
+    if ($cta_bg_mobile):
+    ?>
+    <img src="<?php echo esc_url($cta_bg_mobile); ?>" alt="" class="block lg:hidden w-full h-[190px] object-cover rounded-2xl mt-6">
+    <?php endif; ?>
   </div>
 </section>
 <?php endif; ?>

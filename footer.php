@@ -278,6 +278,15 @@
       },
     });
 
+    new Swiper('.subscriptions-swiper', {
+      slidesPerView: 1,
+      spaceBetween: 0,
+      navigation: {
+        prevEl: '.subscriptions-nav-prev',
+        nextEl: '.subscriptions-nav-next',
+      },
+    });
+
     new Swiper('.about-events-swiper', {
       slidesPerView: 1,
       spaceBetween: 0,
