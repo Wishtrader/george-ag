@@ -80,15 +80,15 @@ function get_event_type_color($type) {
 <?php get_header(); ?>
 
 <!-- ============ HERO ============ -->
-<section class="mt-[40px] relative overflow-hidden h-[236px] lg:h-[376px]">
+<section class="mt-[40px] relative overflow-hidden rounded-[24px] lg:rounded-none lg:h-[376px]">
   <?php if ($hero_image): ?>
-  <div class="absolute inset-0" style="background-image: url('<?php echo esc_url($hero_image); ?>'); background-size: cover; background-position: center;"></div>
+  <div class="absolute inset-0 hidden lg:block" style="background-image: url('<?php echo esc_url($hero_image); ?>'); background-size: cover; background-position: center;"></div>
   <?php else: ?>
-  <div class="absolute inset-0 ph ph-museum"></div>
+  <div class="absolute inset-0 hidden lg:block ph ph-museum"></div>
   <?php endif; ?>
 
-  <div class="container-main relative h-full flex flex-col justify-center py-10">
-    <nav class="absolute top-2 left-[20px] lg:left-[20px]">
+  <div class="container-main relative lg:h-full flex flex-col justify-center py-10">
+    <nav class="absolute top-0 md:top-2 left-2.5 md:left-[20px] lg:left-[20px]">
       <ul class="breadcrumbs">
         <li><a href="/">Главная</a></li>
         <li><img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" alt="" class="breadcrumbs-separator"></li>
@@ -98,7 +98,7 @@ function get_event_type_color($type) {
 
     <div>
       <?php if ($hero_title): ?>
-      <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] leading-[1.05] mb-10 !font-medium text-[#2D2926]">
+      <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] leading-[1.05] mb-5 !font-medium text-[#2D2926]">
         <?php echo esc_html($hero_title); ?>
       </h1>
       <?php endif; ?>
@@ -107,7 +107,7 @@ function get_event_type_color($type) {
         <?php echo wp_kses_post($hero_description); ?>
       </p>
       <?php endif; ?>
-      <div class="flex flex-col sm:flex-row gap-5 w-full">
+      <div class="flex flex-col sm:flex-row gap-2.5 md:gap-5 w-full">
         <?php if ($hero_cta_primary_text): ?>
           <a href="<?php echo esc_url($hero_cta_primary_url); ?>" class="btn-primary md:max-w-[285px]">
             <?php echo esc_html($hero_cta_primary_text); ?>
@@ -121,30 +121,48 @@ function get_event_type_color($type) {
       </div>
     </div>
   </div>
+
+  <?php if ($hero_image): ?>
+  <div class="block lg:hidden px-2.5 pb-4">
+    <img src="<?php echo esc_url($hero_image); ?>" alt="" class="w-full h-[236px] object-cover rounded-[24px]">
+  </div>
+  <?php else: ?>
+  <div class="block lg:hidden px-4 pb-4">
+    <div class="ph ph-museum w-full h-[180px] rounded-[24px]"></div>
+  </div>
+  <?php endif; ?>
 </section>
 
 <!-- ============ FILTER TABS ============ -->
 <?php if ($event_categories && !is_wp_error($event_categories)): ?>
 <section class="py-8 lg:py-6">
   <div class="container-main">
-    <div class="flex flex-wrap gap-[19px] justify-center lg:justify-start" id="event-filters">
-      <button
-        data-filter="all"
-        class="filter-btn filter-btn--active"
-      >
-        Все события
-      </button>
-      <?php foreach ($event_categories as $category): ?>
-      <button
-        data-filter="<?php echo esc_attr($category->slug); ?>"
-        class="filter-btn"
-      >
-        <?php echo esc_html($category->name); ?>
-      </button>
-      <?php endforeach; ?>
+    <div class="filter-scroll-wrapper">
+      <div class="filter-scroll" id="event-filters">
+        <button
+          data-filter="all"
+          class="filter-btn filter-btn--active"
+        >
+          Все события
+        </button>
+        <?php foreach ($event_categories as $category): ?>
+        <button
+          data-filter="<?php echo esc_attr($category->slug); ?>"
+          class="filter-btn"
+        >
+          <?php echo esc_html($category->name); ?>
+        </button>
+        <?php endforeach; ?>
+      </div>
+      <div class="filter-dots lg:hidden" id="filter-dots"></div>
     </div>
   </div>
 </section>
+<style>
+  @media (max-width: 1023px) {
+    #event-filters .filter-btn { border-radius: 12px !important; padding: 15px !important; height: auto !important; min-width: max-content !important; }
+  }
+</style>
 <?php endif; ?>
 
 <!-- ============ FEATURED EVENT ============ -->
@@ -354,7 +372,7 @@ if ($subscriptions_query->have_posts()):
 
 <!-- ============ CTA SECTION ============ -->
 <?php if ($cta_title || $cta_primary || $cta_secondary): ?>
-<section class="relative h-[347px] lg:h-[300px] lg:mt-14">
+<section class="relative h-[347px] lg:h-[300px] lg:mt-14 shadow-md">
     <?php if ($cta_background_image): ?>
     <div class="absolute inset-0 hidden lg:block" style="background-image: url('<?php echo esc_url($cta_background_image); ?>'); background-size: cover; background-position: center;"></div>
     <?php endif; ?>
@@ -368,7 +386,7 @@ if ($subscriptions_query->have_posts()):
     <div class="flex flex-col flex-1"></div>
     <div class="flex flex-col flex-1 justify-start lg:-ml-40">
     <?php if ($cta_title): ?>
-    <h2 class="text-white mb-6 max-w-[260px] md:max-w-[380px] text-start !text-[26px] lg:!text-[36px] !font-medium">
+    <h2 class="text-white mb-6 max-w-[260px] md:max-w-[380px] text-start !text-[26px] lg:!text-[36px] !font-normal">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>
@@ -413,6 +431,51 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
+
+  var scrollContainer = document.querySelector('.filter-scroll');
+  var dotsContainer = document.getElementById('filter-dots');
+
+  if (scrollContainer && dotsContainer) {
+    function isMobile() {
+      return window.innerWidth < 1024;
+    }
+
+    function updateDots() {
+      if (!isMobile()) {
+        dotsContainer.innerHTML = '';
+        return;
+      }
+
+      var totalWidth = scrollContainer.scrollWidth;
+      var visibleWidth = scrollContainer.clientWidth;
+      var maxScroll = totalWidth - visibleWidth;
+
+      if (maxScroll <= 10) {
+        dotsContainer.innerHTML = '';
+        return;
+      }
+
+      var numDots = Math.ceil(totalWidth / visibleWidth);
+      var currentDot = Math.round(scrollContainer.scrollLeft / (maxScroll / (numDots - 1 || 1)));
+
+      dotsContainer.innerHTML = '';
+      for (var i = 0; i < numDots; i++) {
+        var dot = document.createElement('div');
+        dot.className = 'filter-dot' + (i === currentDot ? ' filter-dot--active' : '');
+        dot.setAttribute('data-index', i);
+        dot.addEventListener('click', function() {
+          var idx = parseInt(this.getAttribute('data-index'));
+          var targetScroll = (maxScroll / (numDots - 1 || 1)) * idx;
+          scrollContainer.scrollTo({ left: targetScroll, behavior: 'smooth' });
+        });
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    scrollContainer.addEventListener('scroll', updateDots);
+    updateDots();
+    window.addEventListener('resize', updateDots);
+  }
 });
 </script>
 

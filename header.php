@@ -273,8 +273,8 @@
     }
 
     .filter-btn {
-      width: 184px;
       height: 57px;
+      min-width: 183px;
       border-radius: 24px;
       border: 1px solid #E8D5BE !important;
       background: transparent !important;
@@ -294,6 +294,55 @@
       background: transparent !important;
       border: 1px solid #F28A2E !important;
       color: #F28A2E !important;
+    }
+
+    .filter-scroll-wrapper {
+      position: relative;
+    }
+    .filter-scroll {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 19px;
+      justify-content: center;
+    }
+    @media (max-width: 1023px) {
+      .filter-scroll {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        justify-content: flex-start;
+        padding-bottom: 12px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        margin: 0 -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+      .filter-scroll::-webkit-scrollbar {
+        display: none;
+      }
+      .filter-scroll .filter-btn {
+        flex: 0 0 auto;
+        min-width: max-content;
+      }
+    }
+    .filter-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding-top: 14px;
+    }
+    .filter-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #E8D5BE;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .filter-dot--active {
+      background: #F28A2E;
+      transform: scale(1.2);
     }
 
     .featured-card {

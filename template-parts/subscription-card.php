@@ -15,7 +15,7 @@ $what_includes      = get_field('subscription_what_includes');
 $thumbnail_url      = get_the_post_thumbnail_url($subscription_id, 'full');
 ?>
 
-<div class="subscription-card">
+<div class="subscription-card !bg-[#FFFDF8]">
   <?php if ($thumbnail_url): ?>
   <div class="subscription-card__image">
     <img src="<?php echo esc_url($thumbnail_url); ?>" alt="<?php echo esc_attr($subscription_title); ?>" class="subscription-card__img">
@@ -27,7 +27,7 @@ $thumbnail_url      = get_the_post_thumbnail_url($subscription_id, 'full');
   <?php endif; ?>
 
   <div class="subscription-card__body">
-    <h3 class="subscription-card__title"><?php echo esc_html($subscription_title); ?></h3>
+    <h3 class="subscription-card__title !font-medium"><?php echo esc_html($subscription_title); ?></h3>
 
     <?php if ($subscription_desc): ?>
     <p class="subscription-card__desc lg:pt-2"><?php echo wp_kses_post($subscription_desc); ?></p>
@@ -52,8 +52,8 @@ $thumbnail_url      = get_the_post_thumbnail_url($subscription_id, 'full');
     <?php endif; ?>
 
     <div class="subscription-card__footer">
-      <span class="subscription-card__price">от <strong><?php echo esc_html($subscription_price); ?></strong> BYN</span>
-      <a href="<?php echo esc_url($subscription_btn_url); ?>" class="btn-outline subscription-card__btn">
+      <span class="subscription-card__price">от <strong class="!font-medium"><?php echo esc_html($subscription_price); ?></strong> BYN</span>
+      <a href="<?php echo esc_url($subscription_btn_url); ?>" class="btn-outline subscription-card__btn !bg-[#FAF6EF]">
         <?php echo esc_html($subscription_btn_text); ?>
       </a>
     </div>
