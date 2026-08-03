@@ -172,19 +172,19 @@ function get_event_type_color($type) {
     <div class="featured-card rounded-3xl overflow-hidden">
       <div class="grid lg:grid-cols-[1fr_auto_1fr] gap-0">
         <!-- Left image -->
-        <div class="featured-card__image featured-card__image--left">
+        <div class="featured-card__image--left !p-2.5 md:!p-5">
           <?php if ($featured_image_left): ?>
             <img src="<?php echo esc_url($featured_image_left); ?>"
                  alt="<?php echo esc_attr($featured_title); ?>"
-                 class="w-full h-full object-cover">
+                 class="max-h-[143px] w-full md:max-h-full object-cover rounded rounded-[12px]">
           <?php else: ?>
             <div class="ph ph-museum w-full h-full"></div>
           <?php endif; ?>
         </div>
 
         <!-- Center content -->
-        <div class="featured-card__content !justify-start">
-          <h2 class="featured-card__title !font-['Golos_Text'] !font-medium">
+        <div class="featured-card__content !justify-start p-2.5">
+          <h2 class="!text-xl md:!text-[28px] !font-['Golos_Text'] !font-medium">
             <?php echo esc_html($featured_title); ?>
           </h2>
 
@@ -194,7 +194,7 @@ function get_event_type_color($type) {
           </p>
           <?php endif; ?>
 
-          <div class="featured-card__meta">
+          <div class="featured-card__meta !grid !grid-cols-2 md:!grid-cols-[1fr_auto_1fr] gap-2.5">
             <?php if ($featured_type): ?>
             <div class="featured-card__meta-item">
               <span class="featured-card__meta-icon">
@@ -224,7 +224,7 @@ function get_event_type_color($type) {
             </div>
             <?php endif; ?>
             <?php if ($featured_date || $featured_time): ?>
-            <div class="featured-card__meta-item">
+            <div class="featured-card__meta-item col-span-2 md:col-span-1 items-center justify-center mb-2.5 md:mb-0">
               <span class="featured-card__meta-value" style="color: <?php echo esc_attr(get_event_type_color($featured_type)); ?>">
                 <?php
                   $parts = array_filter(array($featured_date, $featured_time));
@@ -237,12 +237,12 @@ function get_event_type_color($type) {
 
           <div class="featured-card__actions !mt-auto">
             <?php if ($featured_button_detail_text): ?>
-            <a href="<?php echo esc_url($featured_button_detail_url); ?>" class="btn-outline featured-card__btn">
+            <a href="<?php echo esc_url($featured_button_detail_url); ?>" class="btn-outline featured-card__btn min-h-[52px]">
               <?php echo esc_html($featured_button_detail_text); ?>
             </a>
             <?php endif; ?>
             <?php if ($featured_button_buy_text): ?>
-            <a href="<?php echo esc_url($featured_button_buy_url); ?>" class="btn-primary featured-card__btn">
+            <a href="<?php echo esc_url($featured_button_buy_url); ?>" class="btn-primary featured-card__btn min-h-[52px]">
               <?php echo esc_html($featured_button_buy_text); ?>
             </a>
             <?php endif; ?>
@@ -250,11 +250,11 @@ function get_event_type_color($type) {
         </div>
 
         <!-- Right image -->
-        <div class="featured-card__image featured-card__image--right">
+        <div class="!p-2.5 md:p-5 !max-h-[163px] md:!max-h-full">
           <?php if ($featured_image_right): ?>
             <img src="<?php echo esc_url($featured_image_right); ?>"
                  alt="<?php echo esc_attr($featured_title); ?>"
-                 class="w-full h-full object-cover">
+                 class="max-h-[143px] w-full md:max-h-full object-cover rounded rounded-[12px]">
           <?php else: ?>
             <div class="ph ph-art2 w-full h-full"></div>
           <?php endif; ?>
@@ -309,7 +309,7 @@ function get_event_type_color($type) {
         <?php else: ?>
           <div class="ph ph-art1 w-full h-[162px]"></div>
         <?php endif; ?>
-        <div class="p-5 flex-1 flex flex-col">
+        <div class="p-2.5 md:p-5 flex-1 flex flex-col">
           <div class="flex items-center justify-between mb-3">
             <span class="flex items-center gap-1.5 text-xs font-medium leading-[1.2]" style="color: <?php echo esc_attr(get_event_type_color($primary_cat)); ?>">
               <?php if ($cat_icon_url): ?>
@@ -358,7 +358,7 @@ $subscriptions_query = new WP_Query(array(
 ));
 if ($subscriptions_query->have_posts()):
 ?>
-<section class="py-10 lg:py-16 lg:mt-28">
+<section class="py-10 lg:py-16 px-2.5 lg:px-0">
   <div class="max-w-[1200px] mx-auto">
     <h2 class="mb-10 lg:mb-14 !font-medium"><?php echo esc_html($subscriptions_title); ?></h2>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
