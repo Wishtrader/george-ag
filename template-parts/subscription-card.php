@@ -26,7 +26,7 @@ $thumbnail_url      = get_the_post_thumbnail_url($subscription_id, 'full');
   </div>
   <?php endif; ?>
 
-  <div class="subscription-card__body !p-2.5 !lg:p-5">
+  <div class="subscription-card__body !p-2.5 lg:!p-5">
     <h3 class="subscription-card__title !font-medium !text-xl lg:!text-[28px] leading-[1.2]"><?php echo esc_html($subscription_title); ?></h3>
 
     <?php if ($subscription_desc): ?>
