@@ -87,15 +87,15 @@ $subscriptions_query = new WP_Query(array(
 <?php get_header(); ?>
 
 <!-- ============ HERO ============ -->
-<section class="mt-[40px] relative overflow-hidden h-[236px] lg:h-[376px]">
+<section class="mt-[40px] relative overflow-hidden rounded-[24px] lg:rounded-none lg:h-[376px]">
   <?php if ($hero_image): ?>
-  <div class="absolute inset-0" style="background-image: url('<?php echo esc_url($hero_image); ?>'); background-size: cover; background-position: center;"></div>
+  <div class="absolute inset-0 hidden lg:block" style="background-image: url('<?php echo esc_url($hero_image); ?>'); background-size: cover; background-position: center;"></div>
   <?php else: ?>
-  <div class="absolute inset-0 ph ph-museum"></div>
+  <div class="absolute inset-0 hidden lg:block ph ph-museum"></div>
   <?php endif; ?>
 
-  <div class="container-main relative h-full flex flex-col justify-center py-10">
-    <nav class="absolute top-2 left-[20px] lg:left-[20px]">
+  <div class="container-main relative lg:h-full flex flex-col justify-center py-10">
+    <nav class="absolute top-0 md:top-2 left-2.5 md:left-[20px] lg:left-[20px]">
       <ul class="breadcrumbs">
         <li><a href="/">Главная</a></li>
         <li><img src="<?php echo get_template_directory_uri(); ?>/img/arrow-forward-outline.svg" alt="" class="breadcrumbs-separator"></li>
@@ -105,7 +105,7 @@ $subscriptions_query = new WP_Query(array(
 
     <div>
       <?php if ($hero_title): ?>
-      <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] leading-[1.05] mb-10 !font-medium text-[#2D2926]">
+      <h1 class="text-[34px] sm:text-[44px] lg:text-[50px] leading-[1.05] mb-5 !font-medium text-[#2D2926]">
         <?php echo esc_html($hero_title); ?>
       </h1>
       <?php endif; ?>
@@ -114,7 +114,7 @@ $subscriptions_query = new WP_Query(array(
         <?php echo wp_kses_post($hero_description); ?>
       </p>
       <?php endif; ?>
-      <div class="flex flex-col sm:flex-row gap-5 w-full">
+      <div class="flex flex-col sm:flex-row gap-2.5 md:gap-5 w-full">
         <?php if ($hero_cta_primary_text): ?>
           <a href="<?php echo esc_url($hero_cta_primary_url); ?>" class="btn-primary md:max-w-[285px]">
             <?php echo esc_html($hero_cta_primary_text); ?>
@@ -128,6 +128,16 @@ $subscriptions_query = new WP_Query(array(
       </div>
     </div>
   </div>
+
+  <?php if ($hero_image): ?>
+  <div class="block lg:hidden px-2.5 pb-4">
+    <img src="<?php echo esc_url($hero_image); ?>" alt="" class="w-full h-[236px] object-cover rounded-[24px]">
+  </div>
+  <?php else: ?>
+  <div class="block lg:hidden px-4 pb-4">
+    <div class="ph ph-museum w-full h-[180px] rounded-[24px]"></div>
+  </div>
+  <?php endif; ?>
 </section>
 
 <!-- ============ FILTER TABS ============ -->
@@ -174,6 +184,7 @@ $subscriptions_query = new WP_Query(array(
   </div>
 </section>
 <style>
+  #mk-filters .filter-btn { padding-left: 14px; padding-right: 14px; }
   @media (max-width: 1023px) {
     #mk-filters .filter-btn { border-radius: 12px !important; padding: 15px !important; height: auto !important; min-width: max-content !important; }
   }
@@ -342,14 +353,14 @@ $subscriptions_query = new WP_Query(array(
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 lg:pt-[10px]">
       <?php foreach ($formats as $format): ?>
       <div class="text-center">
-        <div class="mx-auto mb-5 lg:mb-6 w-[60px] h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center">
+        <div class="mx-auto mb-5 lg:mb-6 w-[26px] h-[26px] lg:w-[80px] lg:h-[80px] flex items-center justify-center">
           <?php if (!empty($format['icon'])): ?>
           <img src="<?php echo esc_url($format['icon']); ?>" alt="" class="w-full h-full object-contain" />
           <?php endif; ?>
         </div>
         <h3 class="!font-['Golos_Text'] text-[16px] lg:text-[20px] !font-medium mb-3 text-[#2D2926]"><?php echo esc_html($format['title']); ?></h3>
         <?php if (!empty($format['description'])): ?>
-        <p class="text-[14px] lg:text-[16px] text-[#6B5A4A] leading-[1.3]"><?php echo esc_html($format['description']); ?></p>
+        <p class="text-[14px] lg:text-[16px] text-[#000000] leading-[1.3]"><?php echo esc_html($format['description']); ?></p>
         <?php endif; ?>
       </div>
       <?php endforeach; ?>
@@ -400,20 +411,20 @@ $subscriptions_query = new WP_Query(array(
     <div class="absolute inset-0 hidden lg:block" style="background-image: url('<?php echo esc_url($cta_background_image); ?>'); background-size: cover; background-position: center;"></div>
     <?php endif; ?>
   <div class="max-w-[1200px] w-full mx-auto px-[10px] lg:pl-[200px] lg:pr-[10px] flex flex-col md:flex-row items-center justify-start lg:h-full relative text-center py-10 lg:py-0">
-    <div class="flex flex-col flex-1 justify-start">
+    <div class="flex flex-col flex-1 justify-start w-full">
     <?php if ($cta_title): ?>
-    <h2 class="text-[#2D2926] lg:text-white mb-6 max-w-[260px] md:max-w-[380px] text-start !text-[26px] lg:!text-[36px] !font-medium">
+    <h2 class="text-[#2D2926] lg:text-white mb-6 max-w-[260px] md:max-w-[480px] text-start !text-[26px] lg:!text-[36px] !font-medium !text-center md:!text-left mx-auto md:mx-0">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>
     <div class="flex flex-col sm:flex-row gap-[10px] md:gap-5 justify-start w-full">
       <?php if ($cta_primary): ?>
-        <a href="<?php echo esc_url($cta_primary_url); ?>" class="btn-primary w-full lg:!w-[336px]">
+        <a href="<?php echo esc_url($cta_primary_url); ?>" class="btn-primary !w-full lg:!w-[336px]">
           <?php echo esc_html($cta_primary); ?>
         </a>
       <?php endif; ?>
       <?php if ($cta_secondary): ?>
-        <a href="<?php echo esc_url($cta_secondary_url); ?>" class="btn-secondary w-full lg:!w-[336px]">
+        <a href="<?php echo esc_url($cta_secondary_url); ?>" class="btn-secondary !w-full lg:!w-[336px]">
           <?php echo esc_html($cta_secondary); ?>
         </a>
         <?php endif; ?>
