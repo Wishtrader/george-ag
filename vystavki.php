@@ -167,17 +167,36 @@ $subscriptions_query = new WP_Query(array(
 ));
 if ($subscriptions_query->have_posts()):
 ?>
-<section class="py-16 lg:py-20 bg-[#FAF6EF]">
+<section class="py-10 lg:py-16 px-2.5 lg:px-0">
   <div class="max-w-[1200px] mx-auto">
     <?php if ($subscriptions_title): ?>
-    <h2 class="mb-10">
-      <?php echo esc_html($subscriptions_title); ?>
-    </h2>
+    <h2 class="mb-10 lg:mb-14 !font-medium"><?php echo esc_html($subscriptions_title); ?></h2>
     <?php endif; ?>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <!-- Desktop: grid -->
+    <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
       <?php while ($subscriptions_query->have_posts()): $subscriptions_query->the_post();
         get_template_part('template-parts/subscription-card');
       endwhile; ?>
+    </div>
+    <!-- Mobile: Swiper -->
+    <div class="sm:hidden">
+      <div class="swiper subscriptions-swiper">
+        <div class="swiper-wrapper">
+          <?php $subscriptions_query->rewind_posts(); while ($subscriptions_query->have_posts()): $subscriptions_query->the_post(); ?>
+          <div class="swiper-slide">
+            <?php get_template_part('template-parts/subscription-card'); ?>
+          </div>
+          <?php endwhile; ?>
+        </div>
+      </div>
+      <div class="flex items-center justify-between mt-2">
+        <div class="subscriptions-nav-prev cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/alm.svg" alt="Назад" class="w-6 h-6">
+        </div>
+        <div class="subscriptions-nav-next cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/arm.svg" alt="Вперёд" class="w-6 h-6">
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -185,35 +204,39 @@ if ($subscriptions_query->have_posts()):
 
 <!-- ============ CTA SECTION ============ -->
 <?php if ($cta_title || $cta_primary || $cta_secondary): ?>
-<section class="bg-white lg:bg-transparent relative h-auto lg:h-[300px]">
+<section class="bg-white lg:bg-transparent relative h-auto lg:h-[300px] lg:mt-14 shadow-lg">
     <?php if ($cta_background_image): ?>
     <div class="absolute inset-0 hidden lg:block" style="background-image: url('<?php echo esc_url($cta_background_image); ?>'); background-size: cover; background-position: center;"></div>
     <?php endif; ?>
-  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col items-center justify-center lg:h-full relative text-center py-10 lg:py-0">
+  <div class="max-w-[1200px] w-full mx-auto px-[10px] lg:pl-[200px] lg:pr-[10px] flex flex-col md:flex-row items-center justify-start lg:h-full relative text-center py-10 lg:py-0">
+    <div class="flex flex-col flex-1 justify-start w-full">
     <?php if ($cta_title): ?>
-    <h2 class="text-[#2D2926] lg:text-white mb-6 mx-auto max-w-[260px] md:max-w-full">
+    <h2 class="text-[#2D2926] lg:text-white mb-6 max-w-[260px] md:max-w-[480px] text-start !text-[26px] lg:!text-[36px] !font-medium !text-center md:!text-left mx-auto md:mx-0">
       <?php echo esc_html($cta_title); ?>
     </h2>
     <?php endif; ?>
-    <div class="flex flex-col sm:flex-row gap-[10px] md:gap-5 justify-center w-full">
+    <div class="flex flex-col sm:flex-row gap-[10px] md:gap-5 justify-start w-full">
       <?php if ($cta_primary): ?>
-        <a href="<?php echo esc_url($cta_primary_url); ?>" class="btn-primary md:max-w-[285px]">
+        <a href="<?php echo esc_url($cta_primary_url); ?>" class="btn-primary !w-full lg:!w-[336px]">
           <?php echo esc_html($cta_primary); ?>
         </a>
       <?php endif; ?>
       <?php if ($cta_secondary): ?>
-        <a href="<?php echo esc_url($cta_secondary_url); ?>" class="btn-secondary md:max-w-[285px]">
+        <a href="<?php echo esc_url($cta_secondary_url); ?>" class="btn-secondary !w-full lg:!w-[336px]">
           <?php echo esc_html($cta_secondary); ?>
         </a>
-      <?php endif; ?>
+        <?php endif; ?>
+      </div>
     </div>
-    <?php
-    $cta_bg_mobile = $cta_background_image_mobile ?: $cta_background_image;
-    if ($cta_bg_mobile):
-    ?>
-    <img src="<?php echo esc_url($cta_bg_mobile); ?>" alt="" class="block lg:hidden w-full h-[190px] object-cover rounded-2xl mt-6">
-    <?php endif; ?>
   </div>
+  <?php
+  $cta_bg_mobile = $cta_background_image_mobile ?: $cta_background_image;
+  if ($cta_bg_mobile):
+  ?>
+  <div class="max-w-[1200px] mx-auto px-[10px] lg:hidden">
+    <img src="<?php echo esc_url($cta_bg_mobile); ?>" alt="" class="w-full h-[190px] object-cover rounded-2xl mt-2">
+  </div>
+  <?php endif; ?>
 </section>
 <?php endif; ?>
 

@@ -194,21 +194,21 @@ $subscriptions_query = new WP_Query(array(
 <?php if ($featured_title): ?>
 <section class="py-6 lg:py-10">
   <div class="container-main">
-    <div class="bg-[#FFFDF8] rounded-3xl shadow-lg overflow-hidden h-[485px] lg:h-[324px]">
+    <div class="bg-[#FFFDF8] rounded-3xl shadow-lg overflow-hidden h-auto lg:h-[324px]">
       <div class="grid lg:grid-cols-[590px_1fr] gap-5 h-full">
         <!-- Left image -->
         <div class="p-2.5 lg:p-5 lg:pr-0 h-full flex flex-col">
           <?php if ($featured_image): ?>
             <img src="<?php echo esc_url($featured_image); ?>"
                  alt="<?php echo esc_attr($featured_title); ?>"
-                 class="w-full h-[284px] object-cover rounded-l-[12px] rounded-r-none">
+                 class="w-full h-[236px] lg:h-[284px] object-cover rounded-[12px]">
           <?php else: ?>
-            <div class="ph ph-museum w-full h-[284px] rounded-l-[12px] rounded-r-none"></div>
+            <div class="ph ph-museum w-full h-[236px] lg:h-[284px] rounded-[12px]"></div>
           <?php endif; ?>
         </div>
 
         <!-- Right content -->
-        <div class="flex flex-col justify-center px-5 py-5 lg:px-10 lg:py-10 gap-5">
+        <div class="flex flex-col justify-center px-[10px] py-[10px] lg:px-10 lg:py-10 gap-4 lg:gap-5">
           <h2 class="!font-['Golos_Text'] text-[20px] lg:!text-[28px] max-w-[390px] !font-medium text-[#000000] leading-[1.2] m-0">
             <?php echo esc_html($featured_title); ?>
           </h2>
@@ -240,14 +240,14 @@ $subscriptions_query = new WP_Query(array(
             <?php endif; ?>
           </div>
 
-          <div class="flex gap-3 mt-auto pt-4">
+          <div class="flex flex-col lg:flex-row gap-[10px] mt-auto pt-4">
             <?php if ($featured_button_detail_text): ?>
-            <a href="<?php echo esc_url($featured_button_detail_url); ?>" class="btn-outline lg:max-w-[182px] flex-1 h-[52px] text-[15px]">
+            <a href="<?php echo esc_url($featured_button_detail_url); ?>" class="btn-outline lg:max-w-[182px] flex-1 text-[15px]" style="height:52px;min-height:52px;max-height:52px;">
               <?php echo esc_html($featured_button_detail_text); ?>
             </a>
             <?php endif; ?>
             <?php if ($featured_button_buy_text): ?>
-            <a href="<?php echo esc_url($featured_button_buy_url); ?>" class="btn-primary lg:max-w-[182px] flex-1 h-[52px] text-[15px]">
+            <a href="<?php echo esc_url($featured_button_buy_url); ?>" class="btn-primary lg:max-w-[182px] flex-1 text-[15px]" style="height:52px;min-height:52px;max-height:52px;">
               <?php echo esc_html($featured_button_buy_text); ?>
             </a>
             <?php endif; ?>
@@ -309,7 +309,7 @@ $subscriptions_query = new WP_Query(array(
         <?php else: ?>
           <div class="ph ph-art1 w-full h-[162px]"></div>
         <?php endif; ?>
-        <div class="p-5 flex-1 flex flex-col">
+        <div class="p-2.5 lg:p-5 flex-1 flex flex-col">
           <div class="flex items-center justify-between mb-3">
             <span class="flex items-center gap-1.5 text-xs font-medium leading-[1.2]" style="color: <?php echo esc_attr(mk_get_event_type_color($primary_cat)); ?>">
               <?php if ($cat_icon_url): ?>
