@@ -12,26 +12,36 @@ $hero_cta_primary_url = get_field('mk_hero_cta_primary_url') ?: '#events';
 $hero_cta_secondary_text = get_field('mk_hero_cta_secondary_text') ?: 'Купить билет';
 $hero_cta_secondary_url = get_field('mk_hero_cta_secondary_url') ?: '#';
 
-$filters = get_field('mk_filters');
-
 $featured_title = get_field('mk_featured_title') ?: 'Живопись акрилом: весенний пейзаж';
 $featured_description = get_field('mk_featured_description') ?: 'Пишем яркий пейзаж под руководством преподавателя. Для взрослых и подростков.';
 $featured_image = get_field('mk_featured_image');
 $featured_date = get_field('mk_featured_date') ?: '23 мая, пт';
 $featured_time = get_field('mk_featured_time') ?: '18:30';
 $featured_audience = get_field('mk_featured_audience') ?: 'Для взрослых';
+$featured_materials = get_field('mk_featured_materials') ?: 'Материалы включены';
 $featured_button_detail_text = get_field('mk_featured_button_detail_text') ?: 'Подробнее';
 $featured_button_detail_url = get_field('mk_featured_button_detail_url') ?: '#';
 $featured_button_buy_text = get_field('mk_featured_button_buy_text') ?: 'Купить билет';
 $featured_button_buy_url = get_field('mk_featured_button_buy_url') ?: '#';
 
-$classes_title = get_field('mk_classes_title') ?: 'Мастер-классы';
-$classes = get_field('mk_classes');
+$mk_events_query = new WP_Query(array(
+	'post_type'      => 'event',
+	'posts_per_page' => -1,
+	'tax_query'      => array(
+		array(
+			'taxonomy' => 'event_category',
+			'field'    => 'slug',
+			'terms'    => 'masterclass',
+		),
+	),
+	'orderby'        => 'date',
+	'order'          => 'ASC',
+));
 
 $formats_title = get_field('mk_formats_title') ?: 'Форматы мастер-классов';
 $formats = get_field('mk_formats');
 
-$subscriptions_title = get_field('mk_subscriptions_title') ?: 'Абонементы и регулярные форматы';
+$subscriptions_title = 'Абонементы и регулярные форматы';
 
 $cta_background_image = get_field('mk_cta_background_image');
 $cta_background_image_mobile = get_field('mk_cta_background_image_mobile');
@@ -121,100 +131,116 @@ $subscriptions_query = new WP_Query(array(
 </section>
 
 <!-- ============ FILTER TABS ============ -->
-<?php if ($filters): ?>
 <section class="py-8 lg:py-6">
   <div class="container-main">
-    <div class="flex flex-wrap gap-[10px] lg:gap-[19px] justify-center lg:justify-start" id="mk-filters">
-      <button data-filter="all" class="filter-btn filter-btn--active">
-        Все мастер-классы
-      </button>
-      <?php foreach ($filters as $filter): ?>
-      <button data-filter="<?php echo esc_attr($filter['slug']); ?>" class="filter-btn">
-        <?php echo esc_html($filter['label']); ?>
-      </button>
-      <?php endforeach; ?>
+    <div class="filter-scroll-wrapper">
+      <div class="filter-scroll" id="mk-filters">
+        <button data-filter="all" class="filter-btn filter-btn--active">
+          Все мастер-классы
+        </button>
+        <button data-filter="for_children" class="filter-btn">
+          Для детей
+        </button>
+        <button data-filter="for_adults" class="filter-btn">
+          Для взрослых
+        </button>
+        <button data-filter="family" class="filter-btn">
+          Семейный
+        </button>
+        <button data-filter="beginners" class="filter-btn">
+          Для начинающих
+        </button>
+        <button data-filter="painting" class="filter-btn">
+          Живопись
+        </button>
+        <button data-filter="decorative" class="filter-btn">
+          Декоративные техники
+        </button>
+        <button data-filter="malevanka" class="filter-btn">
+          Малеванка
+        </button>
+        <button data-filter="embroidery" class="filter-btn">
+          Вышивка и текстиль
+        </button>
+        <button data-filter="custom" class="filter-btn">
+          Кастом
+        </button>
+        <button data-filter="subscription" class="filter-btn">
+          По абонементу
+        </button>
+      </div>
+      <div class="filter-dots lg:hidden" id="mk-filter-dots"></div>
     </div>
   </div>
 </section>
-<?php endif; ?>
+<style>
+  @media (max-width: 1023px) {
+    #mk-filters .filter-btn { border-radius: 12px !important; padding: 15px !important; height: auto !important; min-width: max-content !important; }
+  }
+</style>
 
 <!-- ============ FEATURED CLASS ============ -->
 <?php if ($featured_title): ?>
 <section class="py-6 lg:py-10">
   <div class="container-main">
-    <div class="featured-card rounded-3xl overflow-hidden">
-      <div class="grid lg:grid-cols-[1fr_auto_1fr] gap-0">
+    <div class="bg-[#FFFDF8] rounded-3xl shadow-lg overflow-hidden h-[485px] lg:h-[324px]">
+      <div class="grid lg:grid-cols-[590px_1fr] gap-5 h-full">
         <!-- Left image -->
-        <div class="featured-card__image featured-card__image--left">
+        <div class="p-2.5 lg:p-5 lg:pr-0 h-full flex flex-col">
           <?php if ($featured_image): ?>
             <img src="<?php echo esc_url($featured_image); ?>"
                  alt="<?php echo esc_attr($featured_title); ?>"
-                 class="w-full h-full object-cover">
+                 class="w-full h-[284px] object-cover rounded-l-[12px] rounded-r-none">
           <?php else: ?>
-            <div class="ph ph-museum w-full h-full"></div>
+            <div class="ph ph-museum w-full h-[284px] rounded-l-[12px] rounded-r-none"></div>
           <?php endif; ?>
         </div>
 
-        <!-- Center content -->
-        <div class="featured-card__content !justify-start">
-          <h2 class="featured-card__title !font-['Golos_Text'] !font-medium">
+        <!-- Right content -->
+        <div class="flex flex-col justify-center px-5 py-5 lg:px-10 lg:py-10 gap-5">
+          <h2 class="!font-['Golos_Text'] text-[20px] lg:!text-[28px] max-w-[390px] !font-medium text-[#000000] leading-[1.2] m-0">
             <?php echo esc_html($featured_title); ?>
           </h2>
 
           <?php if ($featured_description): ?>
-          <p class="featured-card__desc">
+          <p class="!font-['Golos_Text'] text-[13px] lg:text-base text-black max-w-[380px] leading-[1.4] m-0">
             <?php echo wp_kses_post($featured_description); ?>
           </p>
           <?php endif; ?>
 
-          <div class="featured-card__meta">
-            <div class="featured-card__meta-item">
-              <span class="featured-card__meta-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <div class="flex flex-wrap items-center gap-x-5 gap-y-2 mt-1">
+            <?php if ($featured_materials): ?>
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center justify-center flex-shrink-0">
+              <img src="<?php echo get_template_directory_uri(); ?>/img/palette-line.svg" alt="palette" class="" />
               </span>
-              <span class="featured-card__meta-value" style="color: #E8A62E;">
-                <?php echo esc_html($featured_date); ?>
-              </span>
-            </div>
-            <?php if ($featured_time): ?>
-            <div class="featured-card__meta-item">
-              <span class="featured-card__meta-value" style="color: #E8A62E;">
-                <?php echo esc_html($featured_time); ?>
+              <span class="font-['Golos_Text'] text-[13px] font-medium text-[#E8A62E]">
+                <?php echo esc_html($featured_materials); ?>
               </span>
             </div>
             <?php endif; ?>
-            <?php if ($featured_audience): ?>
-            <div class="featured-card__meta-item">
-              <span class="featured-card__meta-value" style="color: #E8A62E;">
-                <?php echo esc_html($featured_audience); ?>
-              </span>
-            </div>
+            <?php if ($featured_date || $featured_time): ?>
+            <span class="font-['Golos_Text'] text-[13px] font-medium text-[#E8A62E]">
+              <?php
+                $parts = array_filter(array($featured_date, $featured_time));
+                echo esc_html(implode(' · ', $parts));
+              ?>
+            </span>
             <?php endif; ?>
           </div>
 
-          <div class="featured-card__actions !mt-auto">
+          <div class="flex gap-3 mt-auto pt-4">
             <?php if ($featured_button_detail_text): ?>
-            <a href="<?php echo esc_url($featured_button_detail_url); ?>" class="btn-outline featured-card__btn">
+            <a href="<?php echo esc_url($featured_button_detail_url); ?>" class="btn-outline lg:max-w-[182px] flex-1 h-[52px] text-[15px]">
               <?php echo esc_html($featured_button_detail_text); ?>
             </a>
             <?php endif; ?>
             <?php if ($featured_button_buy_text): ?>
-            <a href="<?php echo esc_url($featured_button_buy_url); ?>" class="btn-primary featured-card__btn">
+            <a href="<?php echo esc_url($featured_button_buy_url); ?>" class="btn-primary lg:max-w-[182px] flex-1 h-[52px] text-[15px]">
               <?php echo esc_html($featured_button_buy_text); ?>
             </a>
             <?php endif; ?>
           </div>
-        </div>
-
-        <!-- Right image -->
-        <div class="featured-card__image featured-card__image--right">
-          <?php if ($featured_image): ?>
-            <img src="<?php echo esc_url($featured_image); ?>"
-                 alt="<?php echo esc_attr($featured_title); ?>"
-                 class="w-full h-full object-cover">
-          <?php else: ?>
-            <div class="ph ph-art2 w-full h-full"></div>
-          <?php endif; ?>
         </div>
       </div>
     </div>
@@ -223,64 +249,90 @@ $subscriptions_query = new WP_Query(array(
 <?php endif; ?>
 
 <!-- ============ CLASSES GRID ============ -->
-<?php if ($classes): ?>
+<?php if ($mk_events_query->have_posts()): ?>
 <section id="events" class="py-6">
   <div class="container-main">
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" id="mk-grid">
-      <?php foreach ($classes as $class):
+      <?php while ($mk_events_query->have_posts()): $mk_events_query->the_post();
+        $event_id = get_the_ID();
+        $event_categories_list = wp_get_post_terms($event_id, 'event_category', array('fields' => 'slugs'));
+        $event_date = get_field('event_date');
+        $event_time = get_field('event_time');
+        $event_price = get_field('event_price');
+        $event_brief = get_field('event_brief_description');
+        $event_thumbnail = get_field('event_thumbnail');
+        $event_hero_image = get_field('event_hero_image');
+        $event_audience_type = get_field('event_audience_type');
+        $event_audience_icon = get_field('event_audience_icon');
+        $primary_cat = !empty($event_categories_list) ? $event_categories_list[0] : '';
+        $cat_icon_url = '';
+        if ($primary_cat) {
+          $cat_term = get_term_by('slug', $primary_cat, 'event_category');
+          if ($cat_term) {
+            $cat_icon_url = get_term_meta($cat_term->term_id, 'event_cat_icon', true);
+          }
+        }
         $audience_labels = array(
           'for_children' => 'Для детей',
           'for_adults'   => 'Для взрослых',
-          'family'       => 'Семейное',
+          'family'       => 'Семейный',
+          'beginners'    => 'Для начинающих',
+          'painting'     => 'Живопись',
+          'decorative'   => 'Декоративные техники',
+          'malevanka'    => 'Малеванка',
+          'embroidery'   => 'Вышивка и текстиль',
+          'custom'       => 'Кастом',
+          'subscription' => 'По абонементу',
         );
-        $audience_label = $audience_labels[$class['audience']] ?? 'Для детей';
-        $audience_icon_url = '';
-        if (!empty($class['audience_icon'])) {
-          $audience_icon_url = $class['audience_icon'];
-        }
+        $audience_label = $audience_labels[$event_audience_type] ?? 'Для детей';
       ?>
-      <div class="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col mk-card" data-categories="<?php echo esc_attr($class['category'] ?? ''); ?>">
-        <?php if (!empty($class['image'])): ?>
-          <img src="<?php echo esc_url($class['image']); ?>"
-               alt="<?php echo esc_attr($class['title']); ?>"
+      <div class="bg-white rounded-3xl overflow-hidden shadow-sm flex flex-col mk-card" data-audience="<?php echo esc_attr($event_audience_type); ?>">
+        <?php if ($event_thumbnail): ?>
+          <img src="<?php echo esc_url($event_thumbnail); ?>"
+               alt="<?php echo esc_attr(get_the_title()); ?>"
+               class="w-full h-[162px] object-cover">
+        <?php elseif ($event_hero_image): ?>
+          <img src="<?php echo esc_url($event_hero_image); ?>"
+               alt="<?php echo esc_attr(get_the_title()); ?>"
                class="w-full h-[162px] object-cover">
         <?php else: ?>
           <div class="ph ph-art1 w-full h-[162px]"></div>
         <?php endif; ?>
         <div class="p-5 flex-1 flex flex-col">
           <div class="flex items-center justify-between mb-3">
-            <span class="flex items-center gap-1.5 text-xs font-medium leading-[1.2]" style="color: <?php echo esc_attr(mk_get_event_type_color($class['category'] ?? '')); ?>">
-              <?php echo esc_html(mk_get_event_type_label($class['category'] ?? '')); ?>
+            <span class="flex items-center gap-1.5 text-xs font-medium leading-[1.2]" style="color: <?php echo esc_attr(mk_get_event_type_color($primary_cat)); ?>">
+              <?php if ($cat_icon_url): ?>
+                <img src="<?php echo esc_url($cat_icon_url); ?>" alt="" class="w-5 h-5">
+              <?php endif; ?>
+              <?php echo esc_html(mk_get_event_type_label($primary_cat)); ?>
             </span>
-            <span class="text-xs font-medium whitespace-nowrap leading-[1.2]" style="color: <?php echo esc_attr(mk_get_event_type_color($class['category'] ?? '')); ?>">
-              <?php echo esc_html($class['date'] ?? ''); ?>
+            <span class="text-xs font-medium whitespace-nowrap leading-[1.2]" style="color: <?php echo esc_attr(mk_get_event_type_color($primary_cat)); ?>">
+              <?php echo esc_html($event_date . ($event_time ? ', ' . $event_time : '')); ?>
             </span>
           </div>
-          <h3 class="!font-['Golos_Text'] text-[16px] lg:text-[18px] !font-medium mb-2 leading-snug"><?php echo esc_html($class['title']); ?></h3>
-          <?php if (!empty($class['description'])): ?>
-          <p class="text-[13px] lg:text-[14px] text-[#2D2926] mb-2 leading-[1.2] flex-1 line-clamp-3"><?php echo esc_html($class['description']); ?></p>
+          <h3 class="!font-['Golos_Text'] text-[16px] lg:text-[18px] !font-medium mb-2 leading-snug"><?php echo esc_html(get_the_title()); ?></h3>
+          <?php if ($event_brief): ?>
+          <p class="text-[13px] lg:text-[14px] text-[#2D2926] mb-2 leading-[1.2] flex-1 line-clamp-3"><?php echo esc_html($event_brief); ?></p>
           <?php endif; ?>
           <div class="flex items-center gap-2 text-xs text-[#6B5A4A] mb-3">
-            <?php if ($audience_icon_url): ?>
-              <img src="<?php echo esc_url($audience_icon_url); ?>" alt="" class="w-5 h-5">
+            <?php if ($event_audience_icon): ?>
+              <img src="<?php echo esc_url($event_audience_icon); ?>" alt="" class="w-5 h-5">
             <?php endif; ?>
             <span class="text-[13px]"><?php echo esc_html($audience_label); ?></span>
           </div>
-          <?php if (!empty($class['price'])): ?>
-          <p class="text-[15px] font-medium text-[#2D2926] mb-3"><?php echo esc_html($class['price']); ?></p>
+          <?php if ($event_price): ?>
+          <p class="text-[15px] font-medium text-[#2D2926] mb-3"><?php echo esc_html($event_price); ?></p>
           <?php endif; ?>
-          <?php if (!empty($class['button_text']) && !empty($class['button_url'])): ?>
-          <a href="<?php echo esc_url($class['button_url']); ?>" class="btn-outline w-full !py-2.5 text-sm mt-auto">
-            <?php echo esc_html($class['button_text']); ?>
+          <a href="<?php echo esc_url(get_permalink()); ?>" class="btn-outline w-full !py-2.5 text-sm mt-auto">
+            Подробнее
           </a>
-          <?php endif; ?>
         </div>
       </div>
-      <?php endforeach; ?>
+      <?php endwhile; ?>
     </div>
   </div>
 </section>
-<?php endif; ?>
+<?php wp_reset_postdata(); endif; ?>
 
 <!-- ============ FORMATS ============ -->
 <?php if ($formats): ?>
@@ -308,13 +360,34 @@ $subscriptions_query = new WP_Query(array(
 
 <!-- ============ SUBSCRIPTIONS ============ -->
 <?php if ($subscriptions_query->have_posts()): ?>
-<section class="py-10 lg:py-16 lg:mt-10">
+<section class="py-10 lg:py-16 px-2.5 lg:px-0">
   <div class="max-w-[1200px] mx-auto">
     <h2 class="mb-10 lg:mb-14 !font-medium"><?php echo esc_html($subscriptions_title); ?></h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <!-- Desktop: grid -->
+    <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
       <?php while ($subscriptions_query->have_posts()): $subscriptions_query->the_post();
         get_template_part('template-parts/subscription-card');
       endwhile; ?>
+    </div>
+    <!-- Mobile: Swiper -->
+    <div class="sm:hidden">
+      <div class="swiper subscriptions-swiper">
+        <div class="swiper-wrapper">
+          <?php $subscriptions_query->rewind_posts(); while ($subscriptions_query->have_posts()): $subscriptions_query->the_post(); ?>
+          <div class="swiper-slide">
+            <?php get_template_part('template-parts/subscription-card'); ?>
+          </div>
+          <?php endwhile; ?>
+        </div>
+      </div>
+      <div class="flex items-center justify-between mt-2">
+        <div class="subscriptions-nav-prev cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/alm.svg" alt="Назад" class="w-6 h-6">
+        </div>
+        <div class="subscriptions-nav-next cursor-pointer w-12 h-12 flex items-center justify-center rounded-full">
+          <img src="<?php echo get_template_directory_uri(); ?>/img/arm.svg" alt="Вперёд" class="w-6 h-6">
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -322,13 +395,12 @@ $subscriptions_query = new WP_Query(array(
 
 <!-- ============ CTA SECTION ============ -->
 <?php if ($cta_title || $cta_primary || $cta_secondary): ?>
-<section class="bg-white lg:bg-transparent relative h-auto lg:h-[300px] lg:mt-14">
+<section class="bg-white lg:bg-transparent relative h-auto lg:h-[300px] lg:mt-14 shadow-lg">
     <?php if ($cta_background_image): ?>
     <div class="absolute inset-0 hidden lg:block" style="background-image: url('<?php echo esc_url($cta_background_image); ?>'); background-size: cover; background-position: center;"></div>
     <?php endif; ?>
-  <div class="max-w-[1200px] w-full mx-auto px-[10px] flex flex-col md:flex-row items-center justify-start lg:h-full relative text-center py-10 lg:py-0">
-    <div class="hidden lg:flex flex-col flex-1"></div>
-    <div class="flex flex-col flex-1 justify-start lg:-ml-40">
+  <div class="max-w-[1200px] w-full mx-auto px-[10px] lg:pl-[200px] lg:pr-[10px] flex flex-col md:flex-row items-center justify-start lg:h-full relative text-center py-10 lg:py-0">
+    <div class="flex flex-col flex-1 justify-start">
     <?php if ($cta_title): ?>
     <h2 class="text-[#2D2926] lg:text-white mb-6 max-w-[260px] md:max-w-[380px] text-start !text-[26px] lg:!text-[36px] !font-medium">
       <?php echo esc_html($cta_title); ?>
@@ -336,12 +408,12 @@ $subscriptions_query = new WP_Query(array(
     <?php endif; ?>
     <div class="flex flex-col sm:flex-row gap-[10px] md:gap-5 justify-start w-full">
       <?php if ($cta_primary): ?>
-        <a href="<?php echo esc_url($cta_primary_url); ?>" class="btn-primary lg:!min-w-[336px]">
+        <a href="<?php echo esc_url($cta_primary_url); ?>" class="btn-primary w-full lg:!w-[336px]">
           <?php echo esc_html($cta_primary); ?>
         </a>
       <?php endif; ?>
       <?php if ($cta_secondary): ?>
-        <a href="<?php echo esc_url($cta_secondary_url); ?>" class="btn-secondary lg:!min-w-[336px]">
+        <a href="<?php echo esc_url($cta_secondary_url); ?>" class="btn-secondary w-full lg:!w-[336px]">
           <?php echo esc_html($cta_secondary); ?>
         </a>
         <?php endif; ?>
@@ -374,8 +446,8 @@ document.addEventListener('DOMContentLoaded', function() {
       var filter = btn.getAttribute('data-filter');
 
       cards.forEach(function(card) {
-        var categories = card.getAttribute('data-categories');
-        if (filter === 'all' || categories.indexOf(filter) !== -1) {
+        var audience = card.getAttribute('data-audience');
+        if (filter === 'all' || audience === filter) {
           card.style.display = '';
         } else {
           card.style.display = 'none';
@@ -383,6 +455,51 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
+
+  var scrollContainer = document.querySelector('#mk-filters');
+  var dotsContainer = document.getElementById('mk-filter-dots');
+
+  if (scrollContainer && dotsContainer) {
+    function isMobile() {
+      return window.innerWidth < 1024;
+    }
+
+    function updateDots() {
+      if (!isMobile()) {
+        dotsContainer.innerHTML = '';
+        return;
+      }
+
+      var totalWidth = scrollContainer.scrollWidth;
+      var visibleWidth = scrollContainer.clientWidth;
+      var maxScroll = totalWidth - visibleWidth;
+
+      if (maxScroll <= 10) {
+        dotsContainer.innerHTML = '';
+        return;
+      }
+
+      var numDots = Math.ceil(totalWidth / visibleWidth);
+      var currentDot = Math.round(scrollContainer.scrollLeft / (maxScroll / (numDots - 1 || 1)));
+
+      dotsContainer.innerHTML = '';
+      for (var i = 0; i < numDots; i++) {
+        var dot = document.createElement('div');
+        dot.className = 'filter-dot' + (i === currentDot ? ' filter-dot--active' : '');
+        dot.setAttribute('data-index', i);
+        dot.addEventListener('click', function() {
+          var idx = parseInt(this.getAttribute('data-index'));
+          var targetScroll = (maxScroll / (numDots - 1 || 1)) * idx;
+          scrollContainer.scrollTo({ left: targetScroll, behavior: 'smooth' });
+        });
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    scrollContainer.addEventListener('scroll', updateDots);
+    updateDots();
+    window.addEventListener('resize', updateDots);
+  }
 });
 </script>
 

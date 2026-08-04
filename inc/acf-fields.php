@@ -4305,6 +4305,14 @@ acf_add_local_field_group( array(
 			'default_value' => 'Для взрослых',
 		),
 		array(
+			'key'          => 'field_mk_featured_materials',
+			'label'        => 'Материалы',
+			'name'         => 'mk_featured_materials',
+			'type'         => 'text',
+			'default_value' => 'Материалы включены',
+			'instructions' => 'Текст рядом с иконкой палитры. Оставьте пустым, чтобы скрыть.',
+		),
+		array(
 			'key'          => 'field_mk_featured_button_detail_text',
 			'label'        => 'Кнопка "Подробнее" (текст)',
 			'name'         => 'mk_featured_button_detail_text',
@@ -4341,128 +4349,6 @@ acf_add_local_field_group( array(
 		),
 	),
 	'menu_order' => 2,
-	'position'   => 'normal',
-) );
-
-// ============================================
-// ГРУППА: МАСТЕР-КЛАССЫ — СПИСОК МАСТЕР-КЛАССОВ
-// ============================================
-acf_add_local_field_group( array(
-	'key'      => 'group_mk_classes',
-	'title'    => 'Мастер-классы: Список',
-	'fields'   => array(
-		array(
-			'key'          => 'field_mk_classes_title',
-			'label'        => 'Заголовок секции',
-			'name'         => 'mk_classes_title',
-			'type'         => 'text',
-			'default_value' => 'Мастер-классы',
-		),
-		array(
-			'key'          => 'field_mk_classes',
-			'label'        => 'Мастер-классы',
-			'name'         => 'mk_classes',
-			'type'         => 'repeater',
-			'layout'       => 'block',
-			'button_label' => 'Добавить мастер-класс',
-			'sub_fields'   => array(
-				array(
-					'key'           => 'field_mk_class_image',
-					'label'         => 'Изображение',
-					'name'          => 'image',
-					'type'          => 'image',
-					'return_format' => 'url',
-					'library'       => 'all',
-				),
-				array(
-					'key'          => 'field_mk_class_category',
-					'label'        => 'Категория',
-					'name'         => 'category',
-					'type'         => 'select',
-					'choices'      => array(
-						'masterclass'  => 'Мастер-класс',
-						'lecture'      => 'Лекция',
-						'meeting'      => 'Встреча',
-						'family'       => 'Семейное',
-						'for_children' => 'Для детей',
-						'for_adults'   => 'Для взрослых',
-					),
-					'default_value' => 'masterclass',
-				),
-				array(
-					'key'          => 'field_mk_class_date',
-					'label'        => 'Дата и время',
-					'name'         => 'date',
-					'type'         => 'text',
-					'default_value' => '19 мая, вс · 12:00',
-				),
-				array(
-					'key'          => 'field_mk_class_title',
-					'label'        => 'Заголовок',
-					'name'         => 'title',
-					'type'         => 'text',
-				),
-				array(
-					'key'          => 'field_mk_class_description',
-					'label'        => 'Описание',
-					'name'         => 'description',
-					'type'         => 'textarea',
-					'rows'         => 3,
-				),
-				array(
-					'key'          => 'field_mk_class_audience',
-					'label'        => 'Аудитория',
-					'name'         => 'audience',
-					'type'         => 'select',
-					'choices'      => array(
-						'for_children' => 'Для детей',
-						'for_adults'   => 'Для взрослых',
-						'family'       => 'Семейное',
-					),
-					'default_value' => 'for_children',
-				),
-				array(
-					'key'           => 'field_mk_class_audience_icon',
-					'label'         => 'Иконка аудитории',
-					'name'          => 'audience_icon',
-					'type'          => 'image',
-					'return_format' => 'url',
-					'library'       => 'all',
-					'preview_size'  => 'thumbnail',
-				),
-				array(
-					'key'          => 'field_mk_class_price',
-					'label'        => 'Цена',
-					'name'         => 'price',
-					'type'         => 'text',
-					'default_value' => '00 BYN',
-				),
-				array(
-					'key'          => 'field_mk_class_button_text',
-					'label'        => 'Текст кнопки',
-					'name'         => 'button_text',
-					'type'         => 'text',
-					'default_value' => 'Записаться',
-				),
-				array(
-					'key'          => 'field_mk_class_button_url',
-					'label'        => 'Ссылка кнопки',
-					'name'         => 'button_url',
-					'type'         => 'url',
-				),
-			),
-		),
-	),
-	'location'   => array(
-		array(
-			array(
-				'param'    => 'page_template',
-				'operator' => '==',
-				'value'    => 'master-klassy.php',
-			),
-		),
-	),
-	'menu_order' => 3,
 	'position'   => 'normal',
 ) );
 
@@ -4524,34 +4410,6 @@ acf_add_local_field_group( array(
 		),
 	),
 	'menu_order' => 4,
-	'position'   => 'normal',
-) );
-
-// ============================================
-// ГРУППА: МАСТЕР-КЛАССЫ — АБОНЕМЕНТЫ
-// ============================================
-acf_add_local_field_group( array(
-	'key'      => 'group_mk_subscriptions',
-	'title'    => 'Мастер-классы: Абонементы',
-	'fields'   => array(
-		array(
-			'key'          => 'field_mk_subscriptions_title',
-			'label'        => 'Заголовок секции',
-			'name'         => 'mk_subscriptions_title',
-			'type'         => 'text',
-			'default_value' => 'Абонементы и регулярные форматы',
-		),
-	),
-	'location'   => array(
-		array(
-			array(
-				'param'    => 'page_template',
-				'operator' => '==',
-				'value'    => 'master-klassy.php',
-			),
-		),
-	),
-	'menu_order' => 5,
 	'position'   => 'normal',
 ) );
 

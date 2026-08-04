@@ -712,6 +712,13 @@ function georgeag_register_event_acf_fields() {
 				'for_children' => 'Для детей',
 				'for_adults'   => 'Для взрослых',
 				'family'       => 'Семейный',
+				'beginners'    => 'Для начинающих',
+				'painting'     => 'Живопись',
+				'decorative'   => 'Декоративные техники',
+				'malevanka'    => 'Малеванка',
+				'embroidery'   => 'Вышивка и текстиль',
+				'custom'       => 'Кастом',
+				'subscription' => 'По абонементу',
 			),
 			'default_value' => 'for_children',
 		),
@@ -1159,3 +1166,102 @@ function georgeag_duplicate_subscription() {
 	exit;
 }
 add_action( 'admin_init', 'georgeag_duplicate_subscription' );
+
+/**
+ * Add "Show on pages" meta box to Subscription post type
+ */
+function georgeag_subscription_display_meta_box() {
+	add_meta_box(
+		'georgeag_subscription_display',
+		'Отображение на страницах',
+		'georgeag_subscription_display_meta_box_cb',
+		'subscription',
+		'side',
+		'high'
+	);
+}
+add_action( 'add_meta_boxes', 'georgeag_subscription_display_meta_box' );
+
+/**
+ * Meta box callback: renders the checkbox
+ */
+function georgeag_subscription_display_meta_box_cb( $post ) {
+	wp_nonce_field( 'georgeag_subscription_display_nonce', 'georgeag_subscription_display_nonce_field' );
+	$visible = get_post_meta( $post->ID, 'georgeag_subscription_visible', true );
+	?>
+	<p>
+		<label>
+			<input type="checkbox" name="georgeag_subscription_visible" value="1" <?php checked( $visible, '1' ); ?> />
+			Показывать на страницах
+		</label>
+	</p>
+	<p class="description">Если отмечено, абонемент будет отображаться на сайтах. Снимите галочку, чтобы скрыть абонемент.</p>
+	<?php
+}
+
+/**
+ * Save the "Show on pages" checkbox value
+ */
+function georgeag_save_subscription_display( $post_id ) {
+	if ( ! isset( $_POST['georgeag_subscription_display_nonce_field'] ) ||
+	     ! wp_verify_nonce( $_POST['georgeag_subscription_display_nonce_field'], 'georgeag_subscription_display_nonce' ) ) {
+		return;
+	}
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	$visible = isset( $_POST['georgeag_subscription_visible'] ) ? '1' : '0';
+	update_post_meta( $post_id, 'georgeag_subscription_visible', $visible );
+}
+add_action( 'save_post_subscription', 'georgeag_save_subscription_display' );
+
+/**
+ * Helper: check if a subscription is visible on front-end
+ */
+function georgeag_is_subscription_visible( $post_id = null ) {
+	if ( ! $post_id ) {
+		$post_id = get_the_ID();
+	}
+	$visible = get_post_meta( $post_id, 'georgeag_subscription_visible', true );
+	// Default to visible for subscriptions created before this feature.
+	return $visible !== '0';
+}
+
+/**
+ * Hide subscriptions with unchecked "Show on pages" from all front-end queries
+ */
+function georgeag_filter_hidden_subscriptions( $query ) {
+	if ( is_admin() ) {
+		return;
+	}
+	if ( ! isset( $query->query_vars['post_type'] ) ) {
+		return;
+	}
+	$post_type = $query->query_vars['post_type'];
+	$is_subscription_query = ( is_string( $post_type ) && $post_type === 'subscription' ) ||
+	                         ( is_array( $post_type ) && in_array( 'subscription', $post_type, true ) );
+	if ( $is_subscription_query ) {
+		$meta_query = $query->get( 'meta_query' );
+		if ( ! is_array( $meta_query ) ) {
+			$meta_query = array();
+		}
+		$meta_query[] = array(
+			'relation' => 'OR',
+			array(
+				'key'     => 'georgeag_subscription_visible',
+				'value'   => '0',
+				'compare' => '!=',
+			),
+			array(
+				'key'     => 'georgeag_subscription_visible',
+				'compare' => 'NOT EXISTS',
+			),
+		);
+		$query->set( 'meta_query', $meta_query );
+	}
+}
+add_action( 'pre_get_posts', 'georgeag_filter_hidden_subscriptions' );
