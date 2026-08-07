@@ -5013,3 +5013,153 @@ acf_add_local_field_group( array(
 	'menu_order' => 7,
 	'position'   => 'normal',
 ) );
+
+// ============================================
+// ГРАФИК РАБОТЫ (Options Page)
+// ============================================
+
+if ( function_exists( 'acf_add_options_page' ) ) {
+	acf_add_options_page( array(
+		'page_title' => 'График работы',
+		'menu_title' => 'График работы',
+		'menu_slug'  => 'georgeag-schedule',
+		'parent_slug' => 'options-general.php',
+		'capability' => 'manage_options',
+	) );
+}
+
+/**
+ * Варианты времени для дроп-даунов графика работы (с шагом 1 час: 10:00–22:00).
+ */
+function georgeag_schedule_time_choices() {
+	$choices = array();
+	for ( $hour = 10; $hour <= 22; $hour++ ) {
+		$time                  = sprintf( '%02d:00', $hour );
+		$choices[ $time ] = $time;
+	}
+	return $choices;
+}
+
+/**
+ * Ключ дня недели (monday–sunday) для текущего времени с учётом часового пояса музея (UTC+3).
+ */
+function georgeag_get_schedule_day_key( $timestamp = null ) {
+	$ts = $timestamp ? (int) $timestamp : time() + 10800;
+	$w  = (int) gmdate( 'w', $ts );
+
+	$days = array(
+		0 => 'sunday',
+		1 => 'monday',
+		2 => 'tuesday',
+		3 => 'wednesday',
+		4 => 'thursday',
+		5 => 'friday',
+		6 => 'saturday',
+	);
+
+	return isset( $days[ $w ] ) ? $days[ $w ] : 'monday';
+}
+
+/**
+ * График работы на сегодняшний день из настроек (или значения по умолчанию).
+ */
+function georgeag_get_today_schedule() {
+	$day_key  = georgeag_get_schedule_day_key();
+	$schedule = function_exists( 'get_field' ) ? get_field( $day_key, 'option' ) : false;
+
+	if ( ! is_array( $schedule ) ) {
+		$schedule = array(
+			'is_day_off' => ( 'sunday' === $day_key ),
+			'start_time' => '10:00',
+			'end_time'   => '22:00',
+		);
+	}
+
+	return $schedule;
+}
+
+$georgeag_week_days = array(
+	'monday'    => 'Понедельник',
+	'tuesday'   => 'Вторник',
+	'wednesday' => 'Среда',
+	'thursday'  => 'Четверг',
+	'friday'    => 'Пятница',
+	'saturday'  => 'Суббота',
+	'sunday'    => 'Воскресенье',
+);
+
+$georgeag_schedule_fields = array();
+foreach ( $georgeag_week_days as $day_key => $day_label ) {
+	$georgeag_schedule_fields[] = array(
+		'key'    => 'field_schedule_' . $day_key,
+		'label'  => $day_label,
+		'name'   => $day_key,
+		'type'   => 'group',
+		'layout' => 'block',
+		'sub_fields' => array(
+			array(
+				'key'           => 'field_schedule_' . $day_key . '_day_off',
+				'label'         => 'Выходной',
+				'name'          => 'is_day_off',
+				'type'          => 'true_false',
+				'ui'            => 1,
+				'ui_on_text'    => 'Да',
+				'ui_off_text'   => 'Нет',
+				'default_value' => 0,
+			),
+			array(
+				'key'           => 'field_schedule_' . $day_key . '_start',
+				'label'         => 'Время начала работы',
+				'name'          => 'start_time',
+				'type'          => 'select',
+				'choices'       => georgeag_schedule_time_choices(),
+				'default_value' => '10:00',
+				'conditional_logic' => array(
+					array(
+						array(
+							'field'    => 'field_schedule_' . $day_key . '_day_off',
+							'operator' => '==',
+							'value'    => '0',
+						),
+					),
+				),
+			),
+			array(
+				'key'           => 'field_schedule_' . $day_key . '_end',
+				'label'         => 'Время окончания работы',
+				'name'          => 'end_time',
+				'type'          => 'select',
+				'choices'       => georgeag_schedule_time_choices(),
+				'default_value' => '22:00',
+				'conditional_logic' => array(
+					array(
+						array(
+							'field'    => 'field_schedule_' . $day_key . '_day_off',
+							'operator' => '==',
+							'value'    => '0',
+						),
+					),
+				),
+			),
+		),
+	);
+}
+
+acf_add_local_field_group( array(
+	'key'      => 'group_georgeag_schedule',
+	'title'    => 'График работы',
+	'fields'   => $georgeag_schedule_fields,
+	'location' => array(
+		array(
+			array(
+				'param'    => 'options_page',
+				'operator' => '==',
+				'value'    => 'georgeag-schedule',
+			),
+		),
+	),
+	'menu_order' => 0,
+	'position'   => 'normal',
+	'style'      => 'default',
+	'label_placement' => 'top',
+) );

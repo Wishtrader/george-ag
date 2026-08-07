@@ -186,7 +186,7 @@ require get_template_directory() . '/inc/acf-fields.php';
  * ACF caches field groups in DB; this forces a refresh.
  */
 function georgeag_flush_acf_cache() {
-	$flush_key = 'georgeag_acf_flush_v3';
+	$flush_key = 'georgeag_acf_flush_v4';
 	$saved     = get_option( $flush_key, '' );
 	if ( $saved !== '1' ) {
 		wp_cache_flush();

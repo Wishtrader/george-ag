@@ -800,11 +800,20 @@
   <div class="container-main py-2.5 text-center text-sm md:text-lg text-[#2D2926]">
     <span class="inline-flex items-center gap-2">
       <img src="<?php echo esc_url( get_template_directory_uri() . '/img/alarm-outline.svg' ); ?>" alt="clock" class="" />
-      <?php if ( gmdate( 'w', time() + 10800 ) == 0 ): ?>
+      <?php
+      $schedule = georgeag_get_today_schedule();
+      if ( ! empty( $schedule['is_day_off'] ) ) :
+        ?>
         сегодня музей выходной
-      <?php else: ?>
-        сегодня музей работает с 10:00 до 22:00
-      <?php endif; ?>
+      <?php
+      else :
+        $start = ! empty( $schedule['start_time'] ) ? $schedule['start_time'] : '10:00';
+        $end   = ! empty( $schedule['end_time'] ) ? $schedule['end_time'] : '22:00';
+        ?>
+        сегодня музей работает с <?php echo esc_html( $start ); ?> до <?php echo esc_html( $end ); ?>
+      <?php
+      endif;
+      ?>
     </span>
   </div>
 </div>
